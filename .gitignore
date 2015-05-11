@@ -1,0 +1,6 @@
+.idea
+node_modules
+public/components
+tmp
+uploads
+config.json

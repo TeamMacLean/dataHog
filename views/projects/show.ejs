@@ -1,0 +1,23 @@
+<% include ../head %>
+<div class="container">
+    <h3><a href="/"><i class="fa fa-chevron-left"></i> Projects</a></h3>
+
+    <h1><%- project.name %></h1>
+
+    <a class="btn btn-success" href="/<%- project.id %>/new">new run</a>
+
+    <div class="row">
+        <% if(project.runs) project.runs.map(function(run){ %>
+        <div class="col-sm-6">
+            <a href="/<%- project.id %>/<%- run.id %>">
+                <div class="tile">
+                    <i class="fa fa-cubes"></i> <%- run.name %>
+                </div>
+            </a>
+        </div>
+        <% }); %>
+    </div>
+
+</div>
+
+<% include ../foot %>

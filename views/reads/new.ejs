@@ -1,0 +1,24 @@
+<% include ../head %>
+
+<div class="container">
+    <h3><a href="/<%- run.project.id %>/<%- run.id %>"><i class="fa fa-chevron-left"></i> <%- run.name %></a></h3>
+
+    <h1>New read</h1>
+
+    <form action="/<%- run.project.id %>/<%- run.id %>/new" method="POST" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" id="name" name="name" placeholder="Enter read name" required>
+        </div>
+        <div class="form-group">
+            <label for="upload_input">File input</label>
+            <input type="file" name="upload_input" id="upload_input">
+        </div>
+        <button type="submit" class="btn btn-success">Add</button>
+    </form>
+
+
+</div>
+
+
+<% include ../foot %>

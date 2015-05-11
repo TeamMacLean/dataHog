@@ -1,0 +1,20 @@
+<% include ../head %>
+<div class="container">
+    <h3><a href="/"><i class="fa fa-chevron-left"></i> Projects</a></h3>
+
+    <h1>New project</h1>
+
+    <form action="/new" method="POST">
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" id="name" name="name" placeholder="Enter project name" required>
+
+        </div>
+        <button type="submit" class="btn btn-success">Add</button>
+    </form>
+
+</div>
+
+
+
+<% include ../foot %>

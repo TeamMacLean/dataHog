@@ -1,0 +1,23 @@
+<% include ../head %>
+<div class="container">
+    <h3><a href="/<%- run.project.id %>"><i class="fa fa-chevron-left"></i> <%- run.project.name %></a></h3>
+
+    <h1><%- run.name %></h1>
+
+    <a class="btn btn-success" href="/<%- run.project.id %>/<%- run.id %>/new">add read</a>
+
+    <div class="row">
+        <% if(run.reads) run.reads.map(function(read){ %>
+        <div class="col-sm-6">
+            <a href="/<%- run.project.id %>/<%- run.id %>/<%- read.id %>">
+                <div class="tile">
+                    <i class="fa fa-cube"></i> <%- read.name %>
+                </div>
+            </a>
+        </div>
+        <% }); %>
+    </div>
+
+</div>
+
+<% include ../foot %>
