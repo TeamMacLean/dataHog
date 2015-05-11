@@ -28,6 +28,6 @@ app.use(multer({
 }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(routes);
-app.listen(config.port, function () {
+app.listen(config.port, '0.0.0.0', function () {
   console.log('Listening on port 3000...');
 });
