@@ -4,7 +4,7 @@
 
     <h1><%- run.name %></h1>
 
-    <a class="btn btn-success" href="/<%- run.project.id %>/<%- run.id %>/new">add read</a>
+    <a class="btn btn-success" href="/<%- run.project.id %>/<%- run.id %>/new"><i class="fa fa-plus"></i> add read</a>
 
     <div class="row">
         <% if(run.reads) run.reads.map(function(read){ %>
