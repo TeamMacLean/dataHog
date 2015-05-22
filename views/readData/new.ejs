@@ -1,0 +1,49 @@
+<% include ../head %>
+
+<div class="container">
+    <h3><a href="/<%- run.project.id %>/<%- run.id %>"><i class="fa fa-chevron-left"></i> <%- run.name %></a></h3>
+
+    <h1>Add read data</h1>
+
+    <form action="/<%- run.project.id %>/<%- run.id %>/new" method="POST" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" id="name" name="name" placeholder="Enter read data name" required>
+        </div>
+
+        <% if (run.libraryType === 'paired' || run.libraryType === 'mate') { %>
+        <div class="form-group">
+            <label for="insertSize">insertSize</label>
+            <input type="text" class="form-control" id="insertSize" name="insertSize" placeholder="Enter insertSize"
+                   required>
+        </div>
+        <% } %>
+
+        <div class="form-group">
+            <label for="organisms">organisms</label>
+            <input type="text" class="form-control" id="organisms" name="organisms" placeholder="Enter organisms"
+                   required>
+        </div>
+        <div class="form-group">
+            <label for="conditions">conditions</label>
+            <input type="text" class="form-control" id="conditions" name="conditions" placeholder="Enter conditions"
+                   required>
+        </div>
+        <div class="form-group">
+            <label for="moreInfo">moreInfo</label>
+            <input type="text" class="form-control" id="moreInfo" name="moreInfo" placeholder="Enter moreInfo" required>
+        </div>
+
+
+        <div class="form-group">
+            <label for="upload_input">File input</label>
+            <input type="file" name="upload_input" id="upload_input">
+        </div>
+        <button type="submit" class="btn btn-success">Add</button>
+    </form>
+
+
+</div>
+
+
+<% include ../foot %>

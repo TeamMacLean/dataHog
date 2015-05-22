@@ -1,5 +1,6 @@
 {
   "appName": "Hog",
   "port": "3000",
+  "dataDir": "./reads",
   "tmpDir": "./uploads/"
 }

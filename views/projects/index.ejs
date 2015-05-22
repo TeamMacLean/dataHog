@@ -9,7 +9,13 @@
         <div class="col-sm-6">
             <a href="/<%- project.id %>">
                 <div class="tile">
-                    <i class="fa fa-archive"></i> <%- project.name %>
+                    <div class="title">
+                        <!--<i class="fa fa-archive"></i>--> <%- project.name %>
+                    </div>
+
+                    <div class="sub-title">
+                        <!--<i class="fa fa-user"></i>--> <%- project.responsiblePerson %> - <%- project.lab %>
+                    </div>
                 </div>
             </a>
         </div>

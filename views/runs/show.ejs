@@ -4,14 +4,24 @@
 
     <h1><%- run.name %></h1>
 
-    <a class="btn btn-success" href="/<%- run.project.id %>/<%- run.id %>/new"><i class="fa fa-plus"></i> add read</a>
+
+    <h4>sequencingProvider: <%- run.sequencingProvider %></h4>
+    <h4>sequencingTechnology: <%- run.sequencingTechnology %></h4>
+    <h4>communicationExcerpts: <%- run.communicationExcerpts %></h4>
+    <h4>sequencingProviderDatasheets: <%- run.sequencingProviderDatasheets %></h4>
+    <h4>libraryInformation: <%- run.libraryInformation %></h4>
+    <h4>libraryType: <%- run.libraryType %></h4>
+    <h4>submissionToPublicPortal: <%- run.submissionToPublicPortal %></h4>
+    <h4>galaxyDataWanted: <%- run.galaxyDataWanted %></h4>
+
+    <a class="btn btn-success" href="/<%- run.project.id %>/<%- run.id %>/new"><i class="fa fa-plus"></i> add read data</a>
 
     <div class="row">
         <% if(run.reads) run.reads.map(function(read){ %>
         <div class="col-sm-6">
             <a href="/<%- run.project.id %>/<%- run.id %>/<%- read.id %>">
                 <div class="tile">
-                    <i class="fa fa-cube"></i> <%- read.name %>
+                    <!--<i class="fa fa-cube"></i>--> <%- read.name %>
                 </div>
             </a>
         </div>

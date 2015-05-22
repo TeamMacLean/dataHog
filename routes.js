@@ -7,23 +7,72 @@ var r = thinky.r;
 var Project = thinky.createModel('Project', {
   id: type.string(),
   name: type.string(),
-  createdAt: type.date().default(r.now())
+  //safeName: type.string(),
+  responsiblePerson: type.string(),
+  lab: type.string(),
+  createdAt: type.date().default(r.now()),
+  description: type.string()
+});
+Project.pre('save', function (next) {
+  var project = this;
+  var unsafeName = project.name;
+  Project.run().then(function (result) {
+    getSafeName(unsafeName, result, function (name) {
+      project.safeName = name;
+      next();
+    });
+  });
 });
 
 
 var Run = thinky.createModel('Run', {
   id: type.string(),
   name: type.string(),
+  safeName: type.string(),
   projectID: type.string(),
-  createdAt: type.date().default(r.now())
+  createdAt: type.date().default(r.now()),
+  sequencingProvider: type.string(),
+  sequencingTechnology: type.string(),
+  communicationExcerpts: type.string(),//TODO string or file
+  sequencingProviderDatasheets: type.string(), //TODO files
+  libraryInformation: type.string(), //text area
+  libraryType: type.string(),//paired, mate, unpaired
+  submissionToPublicPortal: type.string(),
+  galaxyDataWanted: type.boolean()
+});
+Run.pre('save', function (next) {
+  var run = this;
+  var unsafeName = run.name;
+  Run.run().then(function (result) {
+    getSafeName(unsafeName, result, function (name) {
+      run.safeName = name;
+      next();
+    });
+  });
 });
 
 
 var Read = thinky.createModel('Read', {
   id: type.string(),
   name: type.string(),
+  safeName: type.string(),
   runID: type.string(),
-  createdAt: type.date().default(r.now())
+  createdAt: type.date().default(r.now()),
+  filePath: type.string(),//upload one (unpaired) or two (paired, mate) files
+  insertSize: type.number(),// (IF PARED OR MATE)
+  organisms: type.string(),// sequenced - as specific as possible
+  conditions: type.string(),
+  moreInfo: type.string()// (text box)
+});
+Read.pre('save', function (next) {
+  var read = this;
+  var unsafeName = read.name;
+  Read.run().then(function (result) {
+    getSafeName(unsafeName, result), function (name) {
+      read.safeName = name;
+      next();
+    };
+  });
 });
 
 Project.hasMany(Run, 'runs', 'id', 'projectID');
@@ -33,24 +82,30 @@ Read.belongsTo(Run, 'run', 'runID', 'id');
 
 
 //get index
-router.get('/', function (req, res, next) {
+router.get('/', function (req, res) {
   Project.then(function (projects) {
     return res.render('projects/index', {projects: projects});
   });
 });
 
 //get new project
-router.get('/new', function (req, res, next) {
+router.get('/new', function (req, res) {
   return res.render('projects/new');
 });
 
 //post new project
-router.post('/new', function (req, res, next) {
+router.post('/new', function (req, res) {
 
   var name = req.body.name;
+  var lab = req.body.lab;
+  var responsiblePerson = req.body.responsiblePerson;
+  var description = req.body.description;
 
   var project = new Project({
-    name: name
+    name: name,
+    lab: lab,
+    responsiblePerson: responsiblePerson,
+    description: description
   });
 
   project.save().then(function (result) {
@@ -60,34 +115,51 @@ router.post('/new', function (req, res, next) {
 });
 
 //get project
-router.get('/:project', function (req, res, next) {
+router.get('/:project', function (req, res) {
   var projectID = req.params.project;
 
   Project.get(projectID).getJoin({runs: true}).run().then(function (project) {
     return res.render('projects/show', {project: project});
-
   }).error(function () {
-    return next();
+    return res.render('404', {error: 'could not find project'});
   });
 });
 
 //get new run
-router.get('/:project/new', function (req, res, next) {
+router.get('/:project/new', function (req, res) {
   var projectID = req.params.project;
   Project.get(projectID).getJoin({runs: true}).run().then(function (project) {
     return res.render('runs/new', {project: project});
-  }).error(next);
-
+  }).error(function () {
+    return res.render('404', {error: 'could not create project'});
+  });
 });
 
 //post new run
-router.post('/:project/new', function (req, res, next) {
+router.post('/:project/new', function (req, res) {
   var projectID = req.params.project;
   var name = req.body.name;
 
+  var sequencingProvider = req.body.sequencingProvider;
+  var sequencingTechnology = req.body.sequencingTechnology;
+  var communicationExcerpts = req.body.communicationExcerpts;
+  var sequencingProviderDatasheets = req.body.sequencingProviderDatasheets;
+  var libraryInformation = req.body.libraryInformation;
+  var libraryType = req.body.libraryType;
+  var submissionToPublicPortal = req.body.submissionToPublicPortal;
+  var galaxyDataWanted = req.body.galaxyDataWanted === 'on';
+
   var run = new Run({
     name: name,
-    projectID: projectID
+    projectID: projectID,
+    sequencingProvider: sequencingProvider,
+    sequencingTechnology: sequencingTechnology,
+    communicationExcerpts: communicationExcerpts,
+    sequencingProviderDatasheets: sequencingProviderDatasheets,
+    libraryInformation: libraryInformation,
+    libraryType: libraryType,
+    submissionToPublicPortal: submissionToPublicPortal,
+    galaxyDataWanted: galaxyDataWanted
   });
   run.save().then(function (result) {
     return res.redirect('/' + projectID + '/' + run.id);
@@ -95,51 +167,94 @@ router.post('/:project/new', function (req, res, next) {
 });
 
 //get run
-router.get('/:project/:run', function (req, res, next) {
+router.get('/:project/:run', function (req, res) {
   var runID = req.params.run;
 
   Run.get(runID).getJoin({project: true, reads: true}).then(function (run) {
     return res.render('runs/show', {run: run});
-  }).error(next);
+  }).error(function () {
+    return res.render('404', {error: 'could not find run'});
+  })
 });
 
 //get new read
-router.get('/:project/:run/new', function (req, res, next) {
+router.get('/:project/:run/new', function (req, res) {
   var runID = req.params.run;
 
   Run.get(runID).getJoin({project: true}).run().then(function (run) {
-    return res.render('reads/new', {run: run});
-  }).error(next);
+    return res.render('readData/new', {run: run});
+  }).error(function () {
+    return res.render('404', {error: 'could not find run'});
+  })
 
 });
 
 //post new read
-router.post('/:project/:run/new', function (req, res, next) {
+router.post('/:project/:run/new', function (req, res) {
   var name = req.body.name;
   var runID = req.params.run;
   var projectID = req.params.project;
+  var filePath = req.body.filePath;
+  var insertSize = req.body.insertSize;
+  var organisms = req.body.organisms;
+  var conditions = req.body.conditions;
+  var moreInfo = req.body.moreInfo;
 
-  console.log('body', req.body);
-  console.log('files', req.files);
 
   var read = new Read({
     name: name,
-    runID: runID
+    runID: runID,
+    filePath: filePath,
+    insertSize: insertSize,
+    organisms: organisms,
+    conditions: conditions,
+    moreInfo: moreInfo
   });
 
   read.save().then(function (result) {
     return res.redirect('/' + projectID + '/' + runID + '/' + read.id);
-  }).error(next);
+  }).error(function () {
+    return res.render('404', {error: 'could not find run'});
+  })
 
 });
 
 //get read
-router.get('/:project/:run/:read', function (req, res, next) {
+router.get('/:project/:run/:read', function (req, res) {
 
   var readID = req.params.read;
   Read.get(readID).getJoin({run: true}).run().then(function (read) {
-    return res.render('reads/show', {read: read});
+    return res.render('readData/show', {read: read});
   });
 });
+
+function getSafeName(name, list, cb) { //$path, $filename
+  var safeName = toSafeName(name, this.name);
+  var canHave = false;
+  var testName = safeName;
+  var testCount = 0;
+
+
+  while (!canHave) {
+
+    var dupes = list.filter(function (res) {
+      console.log(res);
+      return res.safeName === testName;
+    });
+
+    if (dupes.length) {
+      testCount += 1;
+      testName = safeName + '_' + testCount
+    } else {
+      canHave = true;
+      cb(testName);
+    }
+  }
+}
+
+
+function toSafeName(unsafeName) {
+  return unsafeName.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+}
 
 module.exports = router;

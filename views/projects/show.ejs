@@ -4,6 +4,13 @@
 
     <h1><%- project.name %></h1>
 
+
+    <div class="">
+        <h4>Lab: <%- project.lab %></h4>
+        <h4>Responsible Person: <%- project.responsiblePerson %></h4>
+        <h4>Description: <%- project.description %></h4>
+    </div>
+
     <a class="btn btn-success" href="/<%- project.id %>/new"><i class="fa fa-plus"></i> new run</a>
 
     <div class="row">
@@ -11,12 +18,13 @@
         <div class="col-sm-6">
             <a href="/<%- project.id %>/<%- run.id %>">
                 <div class="tile">
-                    <i class="fa fa-cubes"></i> <%- run.name %>
+                    <!--<i class="fa fa-cubes"></i>--> <%- run.name %>
                 </div>
             </a>
         </div>
         <% }); %>
     </div>
+
 
 </div>
 

@@ -9,7 +9,7 @@ var config = require('./config');
 var app = express();
 app.locals.title = config.appName;
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs')
+app.set('view engine', 'ejs');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
