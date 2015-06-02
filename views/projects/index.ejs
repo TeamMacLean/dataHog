@@ -2,15 +2,15 @@
 <div class="container">
     <h1>Projects</h1>
 
-    <a class="btn btn-success" href="/new"><i class="fa fa-plus"></i> new project</a>
+    <a class="button button-primary" href="/new"><i class="fa fa-plus"></i> new project</a>
 
     <div class="row">
         <% projects.map(function(project){ %>
-        <div class="col-sm-6">
+        <div class="col6">
             <a href="/<%- project.id %>">
                 <div class="tile">
                     <div class="title">
-                        <!--<i class="fa fa-archive"></i>--> <%- project.name %>
+                        <!--<i class="fa fa-archive"></i>--> <%- project.name %> (<%- project.safeName %>)
                     </div>
 
                     <div class="sub-title">
