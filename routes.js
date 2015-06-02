@@ -72,10 +72,10 @@ Read.pre('save', function (next) {
   var read = this;
   var unsafeName = read.name;
   Read.run().then(function (result) {
-    generateSafeName(unsafeName, result), function (name) {
+    generateSafeName(unsafeName, result, function (name) {
       read.safeName = name;
       next();
-    };
+    });
   });
 });
 
