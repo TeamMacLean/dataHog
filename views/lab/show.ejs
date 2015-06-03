@@ -1,0 +1,33 @@
+<% include ../head %>
+
+<div class="container">
+
+    <h3><a href="/"><i class="fa fa-chevron-left"></i> Projects</a></h3>
+
+    <h1><%- lab %></h1>
+
+    <div class="row">
+        <% var i = 0; %>
+        <% projects.map(function(project){ %>
+        <% i++; %>
+        <div class="col6">
+            <a href="/<%- project.id %>">
+                <div class="tile">
+                    <div class="title">
+                        <!--<i class="fa fa-archive"></i>--> <%- project.name %> (<%- project.safeName %>)
+                    </div>
+
+                    <div class="sub-title">
+                        <!--<i class="fa fa-user"></i>--> <%- project.responsiblePerson %> - <%- project.lab %>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <% if (i % 2 == 0){ %>
+        <div class="clearfix"></div>
+        <% } %>
+        <% }); %>
+    </div>
+</div>
+
+<% include ../foot %>

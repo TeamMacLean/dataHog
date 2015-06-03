@@ -7,7 +7,7 @@
 
     <div class="">
         <h4>Safe Name: <%- project.safeName %></h4>
-        <h4>Lab: <%- project.lab %></h4>
+        <h4>Lab: <a href="/lab/<%- project.lab %>"><%- project.lab %></a></h4>
         <h4>Responsible Person: <%- project.responsiblePerson %></h4>
         <h4>Description: <%- project.description %></h4>
     </div>
@@ -15,14 +15,19 @@
     <a class="button button-primary" href="/<%- project.id %>/new"><i class="fa fa-plus"></i> new run</a>
 
     <div class="row">
+        <% var i = 0; %>
         <% if(project.runs) project.runs.map(function(run){ %>
+        <% i++; %>
         <div class="col6">
             <a href="/<%- project.id %>/<%- run.id %>">
                 <div class="tile">
-                    <!--<i class="fa fa-cubes"></i>--> <%- run.name %>
+                    <%- run.name %>
                 </div>
             </a>
         </div>
+        <% if (i % 2 == 0){ %>
+        <div class="clearfix"></div>
+        <% } %>
         <% }); %>
     </div>
 

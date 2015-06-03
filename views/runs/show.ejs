@@ -14,10 +14,13 @@
     <h4>submissionToPublicPortal: <%- run.submissionToPublicPortal %></h4>
     <h4>galaxyDataWanted: <%- run.galaxyDataWanted %></h4>
 
-    <a class="button button-primary" href="/<%- run.project.id %>/<%- run.id %>/new"><i class="fa fa-plus"></i> add read data</a>
+    <a class="button button-primary" href="/<%- run.project.id %>/<%- run.id %>/new"><i class="fa fa-plus"></i> add read
+        data</a>
 
     <div class="row">
+        <% var i = 0; %>
         <% if(run.reads) run.reads.map(function(read){ %>
+        <% i++; %>
         <div class="col6">
             <a href="/<%- run.project.id %>/<%- run.id %>/<%- read.id %>">
                 <div class="tile">
@@ -25,6 +28,9 @@
                 </div>
             </a>
         </div>
+        <% if (i % 2 == 0){ %>
+        <div class="clearfix"></div>
+        <% } %>
         <% }); %>
     </div>
 

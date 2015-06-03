@@ -6,19 +6,20 @@
 
     <div class="row">
         <% projects.map(function(project){ %>
-        <div class="col6">
+        <div class="col6 auto-clear">
             <a href="/<%- project.id %>">
                 <div class="tile">
                     <div class="title">
-                        <!--<i class="fa fa-archive"></i>--> <%- project.name %> (<%- project.safeName %>)
+                        <%- project.name %> (<%- project.safeName %>)
                     </div>
 
                     <div class="sub-title">
-                        <!--<i class="fa fa-user"></i>--> <%- project.responsiblePerson %> - <%- project.lab %>
+                        <%- project.responsiblePerson %> - <%- project.lab %>
                     </div>
                 </div>
             </a>
         </div>
+
         <% }); %>
     </div>
 

@@ -92,6 +92,25 @@ router.get('/', function (req, res) {
   });
 });
 
+
+//404 page
+router.get('/404', function (req, res) {
+  res.render('error', {error: 'I can\'t even'});
+});
+
+//show by lab name
+router.get('/lab/:lab', function (req, res) {
+
+  var requestedLab = req.params.lab;
+
+  Project.filter({lab: requestedLab}).run().then(function (projects) {
+
+    res.render('lab/show', {lab: requestedLab, projects: projects});
+
+  });
+
+});
+
 //get new project
 router.get('/new', function (req, res) {
   return res.render('projects/new');
@@ -118,7 +137,7 @@ router.post('/new', function (req, res) {
     //TODO createFolder
     createFolder(result.safeName, function (err) {
       if (err) {
-        return res.redirect('/error');
+        return res.render('error');
       }
       return res.redirect('/' + project.id);
     });
@@ -127,6 +146,7 @@ router.post('/new', function (req, res) {
 
 });
 
+
 //get project
 router.get('/:project', function (req, res) {
   var projectID = req.params.project;
@@ -134,7 +154,7 @@ router.get('/:project', function (req, res) {
   Project.get(projectID).getJoin({runs: true}).run().then(function (project) {
     return res.render('projects/show', {project: project});
   }).error(function () {
-    return res.render('404', {error: 'could not find project'});
+    return res.render('error', {error: 'could not find project'});
   });
 });
 
@@ -144,7 +164,7 @@ router.get('/:project/new', function (req, res) {
   Project.get(projectID).getJoin({runs: true}).run().then(function (project) {
     return res.render('runs/new', {project: project});
   }).error(function () {
-    return res.render('404', {error: 'could not create project'});
+    return res.render('error', {error: 'could not create project'});
   });
 });
 
@@ -186,7 +206,7 @@ router.get('/:project/:run', function (req, res) {
   Run.get(runID).getJoin({project: true, reads: true}).then(function (run) {
     return res.render('runs/show', {run: run});
   }).error(function () {
-    return res.render('404', {error: 'could not find run'});
+    return res.render('error', {error: 'could not find run'});
   })
 });
 
@@ -197,7 +217,7 @@ router.get('/:project/:run/new', function (req, res) {
   Run.get(runID).getJoin({project: true}).run().then(function (run) {
     return res.render('readData/new', {run: run});
   }).error(function () {
-    return res.render('404', {error: 'could not find run'});
+    return res.render('error', {error: 'could not find run'});
   })
 
 });
@@ -227,7 +247,7 @@ router.post('/:project/:run/new', function (req, res) {
   read.save().then(function (result) {
     return res.redirect('/' + projectID + '/' + runID + '/' + read.id);
   }).error(function () {
-    return res.render('404', {error: 'could not find run'});
+    return res.render('error', {error: 'could not find run'});
   })
 
 });
@@ -240,6 +260,7 @@ router.get('/:project/:run/:read', function (req, res) {
     return res.render('readData/show', {read: read});
   });
 });
+
 
 function generateSafeName(name, list, cb) { //$path, $filename
   var safeName = toSafeName(name, this.name);
@@ -275,6 +296,7 @@ function safeMakeDir(fullPath, cb) {
     }
   }
 }
+
 
 function createFolder(folderPath, cb) {
 
