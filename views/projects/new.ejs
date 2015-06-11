@@ -5,14 +5,15 @@
     <h1>New project</h1>
 
     <form action="/new" method="POST">
-        <div class="form-group">
+        <fieldset>
             <label for="name">Name</label>
-            <input type="text" class="form-control" id="name" name="name" placeholder="Enter project name" required>
-        </div>
+            <input type="text" class="form-control" id="name" name="name" required>
+        </fieldset>
 
-        <div class="form-group">
+        <fieldset>
             <label for="lab">Group</label>
             <select id="lab" name="lab" class="form-control" required>
+                <option value="">Select Group</option>
                 <option>Jonathan Jones Group</option>
                 <option>Sophien Kamoun Group</option>
                 <option>Ksenia Krasileva Group</option>
@@ -25,18 +26,16 @@
                 <option>Synthetic Biology</option>
                 <option>Tissue Culture & Transformation</option>
             </select>
-        </div>
+        </fieldset>
 
-        <div class="form-group">
+        <fieldset>
             <label for="responsiblePerson">Responsible person</label>
-            <input type="text" class="form-control" id="responsiblePerson" name="responsiblePerson"
-                   placeholder="Enter Responsible person" required>
-        </div>
-        <div class="form-group">
+            <input type="text" class="form-control" id="responsiblePerson" name="responsiblePerson" required>
+        </fieldset>
+        <fieldset>
             <label for="description">Description</label>
-            <input type="text" class="form-control" id="description" name="description"
-                   placeholder="Enter project description" required>
-        </div>
+            <input type="text" class="form-control" id="description" name="description" required>
+        </fieldset>
 
         <button type="submit" class="button button-primary">Add</button>
     </form>

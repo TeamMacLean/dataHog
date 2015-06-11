@@ -4,62 +4,70 @@
 
     <h1>New run</h1>
 
-    <form action="/<%- project.id %>/new" method="POST">
-        <div class="form-group">
+    <form action="/<%- project.id %>/new" method="POST" enctype="multipart/form-data">
+
+        <fieldset>
             <label for="name">Name</label>
-            <input type="text" class="form-control" id="name" name="name" placeholder="Enter run name" required>
-        </div>
+            <input type="text" class="form-control" id="name" name="name" required>
+        </fieldset>
 
-        <div class="form-group">
-            <label for="sequencingProvider">sequencingProvider</label>
-            <input type="text" class="form-control" id="sequencingProvider" name="sequencingProvider"
-                   placeholder="Enter sequencingProvider">
-        </div>
-
-        <div class="form-group">
-            <label for="sequencingTechnology">sequencingTechnology</label>
-            <input type="text" class="form-control" id="sequencingTechnology" name="sequencingTechnology"
-                   placeholder="Enter sequencingTechnology">
-        </div>
-
-        <div class="form-group">
-            <label for="communicationExcerpts">communicationExcerpts</label>
-            <input type="text" class="form-control" id="communicationExcerpts" name="communicationExcerpts"
-                   placeholder="Enter communicationExcerpts">
-        </div>
-
-        <div class="form-group">
-            <label for="sequencingProviderDatasheets">sequencingProviderDatasheets</label>
-            <input type="text" class="form-control" id="sequencingProviderDatasheets"
-                   name="sequencingProviderDatasheets" placeholder="Enter sequencingProviderDatasheets">
-        </div>
-
-        <div class="form-group">
-            <label for="libraryInformation">libraryInformation</label>
-            <textarea class="form-control" rows="3" id="libraryInformation" name="libraryInformation"
-                      placeholder="Enter libraryInformation" required></textarea>
-        </div>
-
-        <div class="form-group">
-            <label for="libraryType">libraryType</label>
-
+        <fieldset>
+            <label for="libraryType">library Type</label>
             <select id="libraryType" name="libraryType" class="form-control" required>
+                <option value="">Select type</option>
                 <option>paired</option>
                 <option>mate</option>
                 <option>unpaired</option>
             </select>
-        </div>
+        </fieldset>
 
-        <div class="form-group">
-            <label for="submissionToPublicPortal">submissionToPublicPortal</label>
-            <input type="text" class="form-control" id="submissionToPublicPortal" name="submissionToPublicPortal"
-                   placeholder="Enter submissionToPublicPortal">
-        </div>
+        <fieldset>
+            <label for="sequencingProvider">Sequencing Provider</label>
+            <input type="text" class="form-control" id="sequencingProvider" name="sequencingProvider">
+        </fieldset>
 
-        <div class="checkbox">
-            <label>
-                <input type="checkbox" id="galaxyDataWanted" name="galaxyDataWanted"> galaxyDataWanted
-            </label>
+        <fieldset>
+            <label for="sequencingTechnology">Sequencing Technology</label>
+            <input type="text" class="form-control" id="sequencingTechnology" name="sequencingTechnology">
+        </fieldset>
+
+        <fieldset>
+            <label for="communicationExcerpts">Communication Excerpts</label>
+            <input type="text" class="form-control" id="communicationExcerpts" name="communicationExcerpts">
+        </fieldset>
+
+        <fieldset>
+            <label for="sequencingProviderDatasheets">Sequencing Provider Datasheets</label>
+            <input type="text" class="form-control" id="sequencingProviderDatasheets"
+                   name="sequencingProviderDatasheets">
+        </fieldset>
+
+        <fieldset>
+            <label for="libraryInformation">library Information</label>
+            <textarea class="form-control" rows="3" id="libraryInformation" name="libraryInformation"
+                      required></textarea>
+        </fieldset>
+
+        <fieldset>
+            <label for="submissionToPublicPortal">Submission To Public Portal</label>
+            <input type="text" class="form-control" id="submissionToPublicPortal" name="submissionToPublicPortal">
+        </fieldset>
+
+        <fieldset>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" id="galaxyDataWanted" name="galaxyDataWanted"> galaxyDataWanted
+                </label>
+            </div>
+        </fieldset>
+
+        <div>
+
+            <div id="filesRoot">
+
+            </div>
+            <input class="button addFileInput" type="button" value="Add more files">
+
         </div>
 
         <button type="submit" class="button button-primary">Add</button>

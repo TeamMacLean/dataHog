@@ -13,7 +13,8 @@
     "tests"
   ],
   "dependencies": {
-    "fontawesome": "~4.3.0",
-    "terrier": "*"
+    "terrier": "*",
+    "spark-md5": "~0.0.5",
+    "font-awesome": "~4.3.0"
   }
 }

@@ -2,5 +2,7 @@
   "appName": "Hog",
   "port": "3000",
   "dataDir": "./reads",
-  "tmpDir": "./uploads/"
+  "tmpDir": "./uploads/",
+  "fastQCCommand": "fastqc",
+  "md5Command": "md5sum-lite"
 }
