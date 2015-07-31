@@ -2,15 +2,20 @@ var Project = require('../models/project.js');
 var Run = require('../models/run.js');
 var Read = require('../models/read.js');
 
-var util = require('./lib/util');
+var fs = require('fs');
+var path = require('path');
 
-var config = require('./config.json');
+var util = require('../lib/util');
+
+var config = require('../config.json');
 
 var Projects = {};
 
 Projects.index = function (req, res) {
   Project.then(function (projects) {
-    return res.render('projects/index', {projects: projects});
+    util.unknownFolders(config.dataDir, projects, function (unknownFolders) {
+      return res.render('projects/index', {projects: projects, unknownFolders: unknownFolders});
+    });
   });
 };
 
@@ -55,7 +60,12 @@ Projects.show = function (req, res) {
   var projectID = req.params.project;
 
   Project.get(projectID).getJoin({runs: true}).run().then(function (project) {
-    return res.render('projects/show', {project: project});
+
+    var fullPath = path.join(config.dataDir, project.safeName);
+
+    util.unknownFolders(fullPath, project.runs, function (unknownFolders) {
+      return res.render('projects/show', {project: project, unknownFolders: unknownFolders});
+    });
   }).error(function () {
     return res.render('error', {error: 'could not find project'});
   });

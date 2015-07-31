@@ -21,13 +21,27 @@
         <div class="col6">
             <a href="/<%- project.id %>/<%- run.id %>">
                 <div class="tile">
-                    <%- run.name %>
+                    <span><%- run.name %>
                 </div>
             </a>
         </div>
         <% if (i % 2 == 0){ %>
         <div class="clearfix"></div>
         <% } %>
+        <% }); %>
+    </div>
+    <div class="row">
+        <% unknownFolders.map(function(folder){ %>
+        <div class="col6 auto-clear">
+            <div class="tile disabled">
+                <div class="title">
+                    <span><%- folder %></span>
+                </div>
+                <div class="sub-title">
+                    <span>Unknown Folder</span>
+                </div>
+            </div>
+        </div>
         <% }); %>
     </div>
 

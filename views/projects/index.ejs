@@ -10,16 +10,31 @@
             <a href="/<%- project.id %>">
                 <div class="tile">
                     <div class="title">
-                        <%- project.name %> (<%- project.safeName %>)
+                        <span><%- project.name %> (<%- project.safeName %>)</span>
                     </div>
 
                     <div class="sub-title">
-                        <%- project.responsiblePerson %> - <%- project.lab %>
+                        <span><%- project.responsiblePerson %> - <%- project.lab %></span>
                     </div>
                 </div>
             </a>
         </div>
 
+        <% }); %>
+    </div>
+
+    <div class="row">
+        <% unknownFolders.map(function(folder){ %>
+        <div class="col6 auto-clear">
+            <div class="tile disabled">
+                <div class="title">
+                    <span><%- folder %></span>
+                </div>
+                <div class="sub-title">
+                    <span>Unknown Folder</span>
+                </div>
+            </div>
+        </div>
         <% }); %>
     </div>
 

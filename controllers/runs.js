@@ -5,16 +5,18 @@ var Read = require('../models/read.js');
 var async = require('async');
 var fs = require('fs');
 var path = require('path');
-var fastqc = require('./lib/fastqc');
-var md5Check = require('./lib/md5');
+var fastqc = require('../lib/fastqc');
+var md5Check = require('../lib/md5');
 
-var util = require('./lib/util');
+var util = require('../lib/util');
 
-var config = require('./config.json');
+var config = require('../config.json');
 
 var Runs = {};
 
 Runs.new = function (req, res) {
+
+
   var projectID = req.params.project;
   Project.get(projectID).getJoin({runs: true}).run().then(function (project) {
     return res.render('runs/new', {project: project});
@@ -24,7 +26,6 @@ Runs.new = function (req, res) {
 };
 
 Runs.newPost = function (req, res) {
-
 
   var projectID = req.params.project;
   var name = req.body.name;
@@ -99,9 +100,7 @@ Runs.newPost = function (req, res) {
       } else {
 
         run.save().then(function (result) {
-          //TODO get all md5sums for each file
           //TODO create new read for each file,
-          //TODO md5 check the file, if not md5sum is received, tell the user they are using an old browser
 
           var joinedPath = path.join(config.dataDir, project.safeName, result.safeName);
 

@@ -10,6 +10,7 @@ var Read = thinky.createModel('Read', {
   safeName: type.string(),
   runID: type.string(),
   createdAt: type.date().default(r.now()),
+  md5: type.string(),
   //filePath: type.string(),//upload one (unpaired) or two (paired, mate) files
   insertSize: type.number(),// (IF PARED OR MATE)
   organisms: type.string(),// sequenced - as specific as possible

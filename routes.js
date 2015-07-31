@@ -3,7 +3,7 @@ var router = express.Router();
 
 
 var Projects = require(__dirname + '/controllers/projects.js');
-var Runs = require(__dirname + '/controllers/projects.js');
+var Runs = require(__dirname + '/controllers/runs.js');
 //var Reads = require(__dirname + '/controllers/projects.js');
 var Errors = require(__dirname + '/controllers/errors.js');
 
@@ -35,7 +35,7 @@ router.post('/:project/new', Runs.newPost);
 //get run
 router.get('/:project/:run', Runs.show);
 
-//router.get('/:project/:run/fastqc', Runs.fastQC);
+router.get('/:project/:run/fastqc', Runs.fastQC);
 
 
 module.exports = router;
