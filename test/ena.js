@@ -6,8 +6,8 @@ var config = require('../config').ena;
 
 describe('ENA', function () {
 
-  if(config.password.length < 1){
-    skip();
+  if (config.username.length < 1 && config.password.length < 1) {
+    this.skip();
   }
 
   describe('.upload', function () {
