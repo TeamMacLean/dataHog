@@ -3,11 +3,13 @@ var path = require('path');
 var ena = require('../lib/ena');
 var config = require('../config').ena;
 
-var canLogIn = config.username.length < 1 && config.password.length < 1;
+console.log(config.username.length, config.password.length);
+
+var canLogIn = config.username.length > 0 && config.password.length > 0;
 
 
 describe('ENA', function () {
-  
+
   describe('.upload', function () {
 
     var fileToUpload = path.join(__dirname, '../hog.png');
