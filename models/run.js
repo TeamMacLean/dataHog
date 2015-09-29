@@ -5,19 +5,19 @@ var util = require('../lib/util');
 
 var Run = thinky.createModel('Run', {
   id: type.string(),
-  name: type.string(),
-  safeName: type.string(),
-  projectID: type.string(),
-  createdAt: type.date().default(r.now()),
-  sequencingProvider: type.string(),
-  sequencingTechnology: type.string(),
-  communicationExcerpts: type.string(),//TODO string or file
-  sequencingProviderDatasheets: type.string(), //TODO files
-  libraryInformation: type.string(), //text area
-  libraryType: type.string(),//paired, mate, unpaired
-  submissionToPublicPortal: type.string(),
-  galaxyDataWanted: type.boolean()
+  sampleID: type.string().required(),
+  sequencingProvider: type.string().required(),
+  sequencingTechnology: type.string().required(),
+  insertSize: type.string().required(),
+  communicationExcerpts: type.string().required(),
+  sequencingProviderDataSheet: type.string().required(),
+  libraryInformation: type.string().required(),
+  libraryType: type.string().required(),
+  submissionToGalaxy: type.boolean().required(), //FIXME send email if true
+
+  safeName: type.string()
 });
+
 Run.pre('save', function (next) {
   var run = this;
   var unsafeName = run.name;
@@ -31,8 +31,7 @@ Run.pre('save', function (next) {
 
 module.exports = Run;
 
-var Project = require('./project.js');
+var Sample = require('./sample.js');
 var Read = require('./read.js');
-
 Run.hasMany(Read, 'reads', 'id', 'runID');
-Run.belongsTo(Project, 'project', 'projectID', 'id');
+Run.belongsTo(Sample, 'sample', 'sampleID', 'id');

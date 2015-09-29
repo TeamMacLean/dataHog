@@ -1,4 +1,5 @@
 var Project = require('../models/project.js');
+var Sample = require('../models/sample.js');
 var Run = require('../models/run.js');
 var Read = require('../models/read.js');
 
@@ -16,10 +17,9 @@ var Runs = {};
 
 Runs.new = function (req, res) {
 
-
-  var projectID = req.params.project;
-  Project.get(projectID).getJoin({runs: true}).run().then(function (project) {
-    return res.render('runs/new', {project: project});
+  var sampleID = req.params.sample;
+  Sample.filter({safeName: sampleID}).getJoin({project: true}).run().then(function (result) {
+    return res.render('runs/new', {sample: result[0]});
   }).error(function () {
     return res.render('error', {error: 'could not create project'});
   });
@@ -27,35 +27,40 @@ Runs.new = function (req, res) {
 
 Runs.newPost = function (req, res) {
 
-  var projectID = req.params.project;
+  //var projectID = req.params.project;
+  var sampleID = req.params.sample;
   var name = req.body.name;
 
   var sequencingProvider = req.body.sequencingProvider;
   var sequencingTechnology = req.body.sequencingTechnology;
+  var insertSize = req.body.insertSize;
   var communicationExcerpts = req.body.communicationExcerpts;
-  var sequencingProviderDatasheets = req.body.sequencingProviderDatasheets;
+  var sequencingProviderDataSheet = req.body.sequencingProviderDataSheet;
   var libraryInformation = req.body.libraryInformation;
   var libraryType = req.body.libraryType;
   var submissionToPublicPortal = req.body.submissionToPublicPortal;
-  var galaxyDataWanted = req.body.galaxyDataWanted === 'on';
+  var submissionToGalaxy = req.body.submissionToGalaxy === 'on';
 
-  Project.filter({id: projectID}).run().then(function (projects) {
+  Sample.filter({safeName: sampleID}).getJoin({project: true}).run().then(function (results) {
 
-    if (projects.length < 1) {
-      return res.render('error', {error: 'project does not exists'});
+    if (results.length < 1) {
+      return res.render('error', {error: 'sample does not exists'});
     }
-    var project = projects[0];
+
+    var sample = results[0];
+
     var run = new Run({
       name: name,
-      projectID: projectID,
+      sampleID: sample.id,
       sequencingProvider: sequencingProvider,
       sequencingTechnology: sequencingTechnology,
+      insertSize: insertSize,
       communicationExcerpts: communicationExcerpts,
-      sequencingProviderDatasheets: sequencingProviderDatasheets,
+      sequencingProviderDataSheet: sequencingProviderDataSheet,
       libraryInformation: libraryInformation,
+      submissionToGalaxy: submissionToGalaxy,
       libraryType: libraryType,
       submissionToPublicPortal: submissionToPublicPortal,
-      galaxyDataWanted: galaxyDataWanted
     });
 
 
@@ -81,7 +86,8 @@ Runs.newPost = function (req, res) {
           if (err) {
             cb(err);
           } else {
-            if (sum === fileAndMD5.md5) {
+            console.log(sum, '6b40ab2d7528d645fcd0a4a39dc8c9d9', '6b40ab2d7528d645fcd0a4a39dc8c9d9' == sum);
+            if (sum == fileAndMD5.md5) {
               cb(null)
             } else {
               cb('md5sum for file ' + fileAndMD5.file.originalname + ' does not match');
@@ -94,7 +100,6 @@ Runs.newPost = function (req, res) {
 
     async.parallel(para, function (err, out) {
 
-
       if (err) {
         return res.render('error', {error: err});
       } else {
@@ -102,7 +107,7 @@ Runs.newPost = function (req, res) {
         run.save().then(function (result) {
           //TODO create new read for each file,
 
-          var joinedPath = path.join(config.dataDir, project.safeName, result.safeName);
+          var joinedPath = path.join(config.dataDir, sample.project.safeName, sample.safeName, result.safeName);
 
           util.createFolder(joinedPath, function (err) {
             if (err) {
@@ -122,7 +127,7 @@ Runs.newPost = function (req, res) {
               })
             });
 
-            return res.redirect('/' + project.id);
+            return res.redirect('/' + sample.project.safeName + '/' + sample.safeName);
           });
         });
       }
@@ -131,18 +136,20 @@ Runs.newPost = function (req, res) {
 };
 
 Runs.show = function (req, res) {
-  var runID = req.params.run;
+  var runSN = req.params.run;
 
-  Run.get(runID).getJoin({project: true, reads: true}).then(function (run) {
-    return res.render('runs/show', {run: run});
+  Run.filter({safeName: runSN}).getJoin({sample: {project: true}, reads: true}).then(function (run) {
+    return res.render('runs/show', {run: run[0]});
   }).error(function () {
     return res.render('error', {error: 'could not find run'});
   });
 };
 
 Runs.fastQC = function (req, res) {
-  var runID = req.params.run;
-  Run.get(runID).getJoin({project: true}).then(function (run) {
+
+  var RunSN = req.params.run;
+
+  Run.filter({safeName: RunSN}).getJoin({sample: true}).run().then(function (run) {
     res.send('TODO');
   }).error(function () {
     return res.render('error', {error: 'could not find run'});

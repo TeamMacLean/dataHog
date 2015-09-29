@@ -1,4 +1,4 @@
-<% include ../head %>
+<% include ../head.ejs %>
 <div class="container">
     <h3><a href="/"><i class="fa fa-chevron-left"></i> Projects</a></h3>
 
@@ -7,34 +7,30 @@
     <form action="/new" method="POST">
         <fieldset>
             <label for="name">Name</label>
-            <input type="text" class="form-control" id="name" name="name" required>
+            <input type="text" id="name" name="name" required>
         </fieldset>
 
         <fieldset>
             <label for="lab">Group</label>
-            <select id="lab" name="lab" class="form-control" required>
+            <select id="lab" name="lab" required>
                 <option value="">Select Group</option>
-                <option>Jonathan Jones Group</option>
-                <option>Sophien Kamoun Group</option>
-                <option>Ksenia Krasileva Group</option>
-                <option>Matthew Moscou Group</option>
-                <option>Silke Robatzek Group</option>
-                <option>Cyril Zipfel Group</option>
-                <option>The 2Blades Group</option>
-                <option>Bioinformatics</option>
-                <option>Proteomics</option>
-                <option>Synthetic Biology</option>
-                <option>Tissue Culture & Transformation</option>
+                <% groups.forEach(function(g){ %>
+                <option><%- g %></option>
+                <% }); %>
             </select>
         </fieldset>
 
         <fieldset>
             <label for="responsiblePerson">Responsible person</label>
-            <input type="text" class="form-control" id="responsiblePerson" name="responsiblePerson" required>
+            <input type="text" id="responsiblePerson" name="responsiblePerson" required>
         </fieldset>
         <fieldset>
-            <label for="description">Description</label>
-            <input type="text" class="form-control" id="description" name="description" required>
+            <label for="shortDescription">Short description</label>
+            <input type="text" id="shortDescription" name="shortDescription" required>
+        </fieldset>
+        <fieldset>
+            <label for="longDescription">Long description</label>
+            <input type="text" id="longDescription" name="longDescription" required>
         </fieldset>
 
         <button type="submit" class="button button-primary">Add</button>
@@ -43,4 +39,4 @@
 </div>
 
 
-<% include ../foot %>
+<% include ../foot.ejs %>

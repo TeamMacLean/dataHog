@@ -1,0 +1,36 @@
+<% include ../head %>
+<div class="container">
+    <h3><a href="/<%- sample.project.safeName %>"><i class="fa fa-chevron-left"></i> <%- sample.project.name %></a></h3>
+
+    <h1><%- sample.name %></h1>
+
+    <h4>uniqueName: <%- sample.uniqueName %></h4>
+    <h4>organism: <%- sample.organism %></h4>
+    <h4>ncbi: <%- sample.ncbi %></h4>
+    <h4>conditions: <%- sample.conditions %></h4>
+    <h4>sampleGroup: <%- sample.sampleGroup %></h4>
+
+    <a class="button button-primary" href="/<%- sample.project.safeName %>/<%- sample.safeName %>/new"><i class="fa fa-plus"></i>
+        add read
+        data</a>
+
+    <div class="row">
+        <% var i = 0; %>
+        <% if(sample.runs) sample.runs.map(function(read){ %>
+        <% i++; %>
+        <div class="col6">
+            <a href="/<%- sample.project.safeName %>/<%- sample.safeName %>/<%- read.safeName %>">
+                <div class="tile">
+                    <!--<i class="fa fa-cube"></i>--> <%- read.name %>
+                </div>
+            </a>
+        </div>
+        <% if (i % 2 == 0){ %>
+        <div class="clearfix"></div>
+        <% } %>
+        <% }); %>
+    </div>
+
+</div>
+
+<% include ../foot %>

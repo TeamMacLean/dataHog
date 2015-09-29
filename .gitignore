@@ -4,3 +4,6 @@ public/components
 tmp
 uploads
 config.json
+test.txt
+Screenshot*
+reads/*/*

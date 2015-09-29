@@ -7,7 +7,7 @@
     <div class="row">
         <% projects.map(function(project){ %>
         <div class="col6 auto-clear">
-            <a href="/<%- project.id %>">
+            <a href="/<%- project.safeName %>">
                 <div class="tile">
                     <div class="title">
                         <span><%- project.name %> (<%- project.safeName %>)</span>

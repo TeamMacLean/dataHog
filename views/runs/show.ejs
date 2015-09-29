@@ -1,6 +1,6 @@
 <% include ../head %>
 <div class="container">
-    <h3><a href="/<%- run.project.id %>"><i class="fa fa-chevron-left"></i> <%- run.project.name %></a></h3>
+    <h3><a href="/<%- run.sample.project.id %>"><i class="fa fa-chevron-left"></i> <%- run.sample.project.name %></a></h3>
 
     <h1><%- run.name %></h1>
 
@@ -12,9 +12,9 @@
     <h4>libraryInformation: <%- run.libraryInformation %></h4>
     <h4>libraryType: <%- run.libraryType %></h4>
     <h4>submissionToPublicPortal: <%- run.submissionToPublicPortal %></h4>
-    <h4>galaxyDataWanted: <%- run.galaxyDataWanted %></h4>
+    <h4>submissionToGalaxy: <%- run.submissionToGalaxy %></h4>
 
-    <a class="button button-primary" href="/<%- run.project.id %>/<%- run.id %>/new"><i class="fa fa-plus"></i> add read
+    <a class="button button-primary" href="/<%- run.sample.project.safeName %>/<%- run.sample.safeName %>/<%- run.safeName %>/new"><i class="fa fa-plus"></i> add read
         data</a>
 
     <div class="row">
@@ -22,7 +22,7 @@
         <% if(run.reads) run.reads.map(function(read){ %>
         <% i++; %>
         <div class="col6">
-            <a href="/<%- run.project.id %>/<%- run.id %>/<%- read.id %>">
+            <a href="/<%- run.project.id %>/<%- run.safeName %>/<%- read.safeName %>">
                 <div class="tile">
                     <!--<i class="fa fa-cube"></i>--> <%- read.name %>
                 </div>

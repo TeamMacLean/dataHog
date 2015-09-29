@@ -1,8 +1,17 @@
 {
   "appName": "Hog",
-  "port": "3000",
+  "port": "1337",
   "dataDir": "./reads",
   "tmpDir": "./uploads/",
   "fastQCCommand": "fastqc",
-  "md5Command": "md5sum-lite"
+  "md5Command": "md5sum-lite",
+  "md5QuietOption": "",
+  "ena": {
+    "ftpAddress": "webin.ebi.ac.uk",
+    "productionURL": "https://www.ebi.ac.uk/ena/submit/drop-box/submit/",
+    "testingURL": "https://www-test.ebi.ac.uk/ena/submit/drop-box/submit/",
+    "testMode": true,
+    "username": "",
+    "password": ""
+  }
 }

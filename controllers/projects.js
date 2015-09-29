@@ -11,6 +11,20 @@ var config = require('../config.json');
 
 var Projects = {};
 
+Projects.groups = [
+  'Jonathan Jones Group',
+  'Sophien Kamoun Group',
+  'Ksenia Krasileva Group',
+  'Matthew Moscou Group',
+  'Silke Robatzek Group',
+  'Cyril Zipfel Group',
+  'The 2Blades Group',
+  'Bioinformatics',
+  'Proteomics',
+  'Synthetic Biology',
+  'Tissue Culture & Transformation'
+].sort();
+
 Projects.index = function (req, res) {
   Project.then(function (projects) {
     util.unknownFolders(config.dataDir, projects, function (unknownFolders) {
@@ -27,21 +41,22 @@ Projects.lab = function (req, res) {
 };
 
 Projects.new = function (req, res) {
-  return res.render('projects/new');
+  return res.render('projects/new', {groups: Projects.groups});
 };
 
 Projects.newPost = function (req, res) {
   var name = req.body.name;
   var lab = req.body.lab;
   var responsiblePerson = req.body.responsiblePerson;
-  var description = req.body.description;
-
+  var shortDescription = req.body.shortDescription;
+  var longDescription = req.body.longDescription;
 
   var project = new Project({
     name: name,
     lab: lab,
     responsiblePerson: responsiblePerson,
-    description: description
+    shortDescription: shortDescription,
+    longDescription: longDescription
   });
 
   project.save().then(function (result) {
@@ -51,20 +66,24 @@ Projects.newPost = function (req, res) {
       if (err) {
         return res.render('error', {error: err});
       }
-      return res.redirect('/' + project.id);
+      return res.redirect('/' + project.safeName);
     });
-  });
+  }).error(function (err) {
+    console.error(err);
+  })
 };
 
 Projects.show = function (req, res) {
-  var projectID = req.params.project;
+  var project = req.params.project;
 
-  Project.get(projectID).getJoin({runs: true}).run().then(function (project) {
+  Project.filter({safeName: project}).getJoin({samples: true}).run().then(function (projects) {
+
+    var project = projects[0];
 
     var fullPath = path.join(config.dataDir, project.safeName);
 
-    util.unknownFolders(fullPath, project.runs, function (unknownFolders) {
-      return res.render('projects/show', {project: project, unknownFolders: unknownFolders});
+    util.unknownFolders(fullPath, project.samples, function (unknownFolders) {
+      return res.render('projects/show', {project: projects[0], unknownFolders: unknownFolders});
     });
   }).error(function () {
     return res.render('error', {error: 'could not find project'});

@@ -9,19 +9,20 @@
         <h4>Safe Name: <%- project.safeName %></h4>
         <h4>Lab: <a href="/lab/<%- project.lab %>"><%- project.lab %></a></h4>
         <h4>Responsible Person: <%- project.responsiblePerson %></h4>
-        <h4>Description: <%- project.description %></h4>
+        <h4>Short Description: <%- project.shortDescription %></h4>
+        <h4>Long Description: <%- project.longDescription %></h4>
     </div>
 
-    <a class="button button-primary" href="/<%- project.id %>/new"><i class="fa fa-plus"></i> new run</a>
+    <a class="button button-primary" href="/<%- project.safeName %>/new"><i class="fa fa-plus"></i> new sample</a>
 
     <div class="row">
         <% var i = 0; %>
-        <% if(project.runs) project.runs.map(function(run){ %>
+        <% if(project.samples) project.samples.map(function(sample){ %>
         <% i++; %>
         <div class="col6">
-            <a href="/<%- project.id %>/<%- run.id %>">
+            <a href="/<%- project.safeName %>/<%- sample.safeName %>">
                 <div class="tile">
-                    <span><%- run.name %>
+                    <span><%- sample.name %></span>
                 </div>
             </a>
         </div>
