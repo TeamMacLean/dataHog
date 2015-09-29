@@ -1,6 +1,7 @@
 <% include ../head %>
 <div class="container">
-    <h3><a href="/<%- run.sample.project.id %>"><i class="fa fa-chevron-left"></i> <%- run.sample.project.name %></a></h3>
+    <h3><a href="/<%- run.sample.project.safeName %>/<%- run.sample.safeName %>"><i
+                    class="fa fa-chevron-left"></i> <%- run.sample.project.name %></a></h3>
 
     <h1><%- run.name %></h1>
 
@@ -14,7 +15,9 @@
     <h4>submissionToPublicPortal: <%- run.submissionToPublicPortal %></h4>
     <h4>submissionToGalaxy: <%- run.submissionToGalaxy %></h4>
 
-    <a class="button button-primary" href="/<%- run.sample.project.safeName %>/<%- run.sample.safeName %>/<%- run.safeName %>/new"><i class="fa fa-plus"></i> add read
+    <a class="button button-primary"
+       href="/<%- run.sample.project.safeName %>/<%- run.sample.safeName %>/<%- run.safeName %>/new"><i
+                class="fa fa-plus"></i> add read
         data</a>
 
     <div class="row">

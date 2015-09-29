@@ -86,7 +86,6 @@ Runs.newPost = function (req, res) {
           if (err) {
             cb(err);
           } else {
-            console.log(sum, '6b40ab2d7528d645fcd0a4a39dc8c9d9', '6b40ab2d7528d645fcd0a4a39dc8c9d9' == sum);
             if (sum == fileAndMD5.md5) {
               cb(null)
             } else {
@@ -97,39 +96,53 @@ Runs.newPost = function (req, res) {
       });
     });
 
-
+    console.log('1');
     async.parallel(para, function (err, out) {
-
+      console.log('2');
       if (err) {
+        console.log('3');
         return res.render('error', {error: err});
       } else {
 
         run.save().then(function (result) {
           //TODO create new read for each file,
 
+          console.log('4');
+
           var joinedPath = path.join(config.dataDir, sample.project.safeName, sample.safeName, result.safeName);
 
-          util.createFolder(joinedPath, function (err) {
-            if (err) {
-              return res.render('error', {error: err});
-            }
+          function postReturnStuff() {
+            util.createFolder(joinedPath, function (err) {
+              console.log('5');
+              if (err) {
+                return res.render('error', {error: err});
+              }
 
-            filesAndSums.map(function (fileAndMD5) {
-              var file = fileAndMD5.file;
+              filesAndSums.map(function (fileAndMD5) {
+                console.log('6');
+                var file = fileAndMD5.file;
 
-              var newPath = path.join(joinedPath, file.originalname);
-              fs.renameSync(file.path, newPath);
+                var newPath = path.join(joinedPath, file.originalname);
+                fs.renameSync(file.path, newPath);
 
-              var fqcPath = path.join(joinedPath, '.fastqc');
-              fs.mkdirSync(fqcPath);
-              fastqc.run(newPath, fqcPath, function () {
-                //TODO callback
-              })
+                var fqcPath = path.join(joinedPath, '.fastqc');
+                fs.mkdirSync(fqcPath);
+                fastqc.run(newPath, fqcPath, function () {
+                  console.log('7');
+                })
+              });
+              console.log('8');
             });
+          }
 
-            return res.redirect('/' + sample.project.safeName + '/' + sample.safeName);
-          });
-        });
+          postReturnStuff();
+          return res.redirect('/' + sample.project.safeName + '/' + sample.safeName);
+
+
+        }).error(function () {
+          console.log('1');
+          return res.render('error', {error: 'failed to save run!'});
+        })
       }
     });
   });
