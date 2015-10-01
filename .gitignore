@@ -6,4 +6,4 @@ uploads
 config.json
 test.txt
 Screenshot*
-reads/*/*
+reads

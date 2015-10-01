@@ -60,7 +60,7 @@ Runs.newPost = function (req, res) {
       libraryInformation: libraryInformation,
       submissionToGalaxy: submissionToGalaxy,
       libraryType: libraryType,
-      submissionToPublicPortal: submissionToPublicPortal,
+      submissionToPublicPortal: submissionToPublicPortal
     });
 
 
@@ -81,7 +81,8 @@ Runs.newPost = function (req, res) {
     //make array of md5 checks
     var para = [];
     filesAndSums.map(function (fileAndMD5) {
-      para.push(function (cb) {
+
+      var fun = function (cb) {
         md5Check.run(fileAndMD5.file.path, function (err, sum) {
           if (err) {
             cb(err);
@@ -93,54 +94,97 @@ Runs.newPost = function (req, res) {
             }
           }
         });
-      });
+      };
+      para.push(fun);
     });
 
-    console.log('1');
     async.parallel(para, function (err, out) {
-      console.log('2');
       if (err) {
-        console.log('3');
         return res.render('error', {error: err});
       } else {
 
         run.save().then(function (result) {
-          //TODO create new read for each file,
-
-          console.log('4');
 
           var joinedPath = path.join(config.dataDir, sample.project.safeName, sample.safeName, result.safeName);
 
           function postReturnStuff() {
+
+            //TODO check if it exists
+
             util.createFolder(joinedPath, function (err) {
-              console.log('5');
               if (err) {
                 return res.render('error', {error: err});
               }
 
+              var first = true;
+
+              var usedFileNames = [];
+
+              console.warn(filesAndSums.length, 'files');
+
               filesAndSums.map(function (fileAndMD5) {
-                console.log('6');
+
                 var file = fileAndMD5.file;
 
-                var newPath = path.join(joinedPath, file.originalname);
+                var fileName = file.originalname;
+
+                if (usedFileNames.indexOf(fileName) > -1) {
+                  var i = 0;
+                  while (usedFileNames.indexOf(fileName) > -1) {
+                    i++;
+                    var extension = path.extname(file.originalname);
+                    var withoutExtention = path.basename(fileName, extension);
+                    fileName = withoutExtention + i + extension;
+                  }
+
+                }
+
+                usedFileNames.push(fileName);
+
+                console.warn(fileName);
+
+                var newPath = path.join(joinedPath, fileName);
                 fs.renameSync(file.path, newPath);
 
                 var fqcPath = path.join(joinedPath, '.fastqc');
-                fs.mkdirSync(fqcPath);
-                fastqc.run(newPath, fqcPath, function () {
-                  console.log('7');
-                })
+
+                function fqStuff() {
+
+                  fastqc.run(newPath, fqcPath, function () {
+
+                    var read = new Read({
+                      name: fileName,
+                      runID: result.id,
+                      MD5: fileAndMD5.md5,
+                      fastQCLocation: fqcPath,
+                      moreInfo: ''
+                    });
+                    read.save(); //TODO better save!!
+                    console.warn('saved read!!!');
+                  })
+                }
+
+                if (first) {
+                  util.safeMakeDir(fqcPath, function (err) {
+                    if (err) console.error(err);
+                    fqStuff();
+                  })
+
+                } else {
+                  fqStuff();
+                }
+
+                first = false;
               });
-              console.log('8');
             });
           }
+
+          console.warn('here!!');
 
           postReturnStuff();
           return res.redirect('/' + sample.project.safeName + '/' + sample.safeName);
 
-
         }).error(function () {
-          console.log('1');
           return res.render('error', {error: 'failed to save run!'});
         })
       }
@@ -158,15 +202,6 @@ Runs.show = function (req, res) {
   });
 };
 
-Runs.fastQC = function (req, res) {
 
-  var RunSN = req.params.run;
-
-  Run.filter({safeName: RunSN}).getJoin({sample: true}).run().then(function (run) {
-    res.send('TODO');
-  }).error(function () {
-    return res.render('error', {error: 'could not find run'});
-  });
-};
 
 module.exports = Runs;

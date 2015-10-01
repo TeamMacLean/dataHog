@@ -9,7 +9,7 @@ body {
     /*font: 14px 'Raleway', sans-serif;*/
     -webkit-font-smoothing: antialiased;
     height: auto;
-    margin-bottom: 32px;
+    /*margin-bottom: 32px;*/
 }
 
 a {
@@ -51,12 +51,20 @@ a:hover, a:focus {
     font-weight: 600;
 }
 
+.no-margin {
+    margin: 0;
+}
+
 .file-group {
     padding: 6px 10px;
     background-color: #fff;
     border: 1px solid #d1d1d1;
     border-radius: 4px;
     box-shadow: none;
+}
+
+ul.no-decoration, li.no-decoration{
+    list-style: none;
 }
 
 .hidden {

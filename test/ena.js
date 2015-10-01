@@ -3,8 +3,6 @@ var path = require('path');
 var ena = require('../lib/ena');
 var config = require('../config').ena;
 
-console.log(config.username.length, config.password.length);
-
 var canLogIn = config.username.length > 0 && config.password.length > 0;
 
 
@@ -29,9 +27,25 @@ describe('ENA', function () {
   describe('.submit', function () {
 
     it('should upload ok', function (done) {
-      if (!canLogIn) this.skip();
-      done(); //TODO
-      //ena.submit(SUBMISSION, STUDY, SAMPLE, EXPERIMENT, RUN, ANALYSIS, DAC, POLICY, DATASET, PROJECT);
+      if (!canLogIn) this.skip('this is text');
+
+      var experiment = path.join(__dirname, './submitData/experiment.xml');
+      var run = path.join(__dirname, './submitData/run.xml');
+      var sample = path.join(__dirname, './submitData/sample.xml');
+      var study = path.join(__dirname, './submitData/study.xml');
+      var submission = path.join(__dirname, './submitData/submission.xml');
+
+      var end = function (err, result) {
+
+        if (err) {
+          done(err);
+        } else {
+          console.log(result);
+          done();
+        }
+      };
+
+      ena.submit(experiment, run, sample, study, submission, end);
     })
   })
 });

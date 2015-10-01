@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ROOT request="ERA000092&amp;display=xml">
+    <SUBMISSION accession="ERA000092" alias="Zebrafish transcriptome analysis" submission_date="2009-05-22T00:00:00.000+01:00" center_name="The Wellcome Trust Sanger Institute" lab_name="Stemple lab">
+        <IDENTIFIERS>
+            <PRIMARY_ID>ERA000092</PRIMARY_ID>
+            <SUBMITTER_ID namespace="SC">Zebrafish transcriptome analysis</SUBMITTER_ID>
+        </IDENTIFIERS>
+        <TITLE>Submitted by The Wellcome Trust Sanger Institute on 22-MAY-2009</TITLE>
+        <SUBMISSION_LINKS>
+            <SUBMISSION_LINK>
+                <XREF_LINK>
+                    <DB>ENA-STUDY</DB>
+                    <ID>ERP000016</ID>
+                </XREF_LINK>
+            </SUBMISSION_LINK>
+            <SUBMISSION_LINK>
+                <XREF_LINK>
+                    <DB>ENA-SAMPLE</DB>
+                    <ID>ERS000081-ERS000090</ID>
+                </XREF_LINK>
+            </SUBMISSION_LINK>
+            <SUBMISSION_LINK>
+                <XREF_LINK>
+                    <DB>ENA-EXPERIMENT</DB>
+                    <ID>ERX000398-ERX000425</ID>
+                </XREF_LINK>
+            </SUBMISSION_LINK>
+            <SUBMISSION_LINK>
+                <XREF_LINK>
+                    <DB>ENA-RUN</DB>
+                    <ID>ERR003990-ERR004029</ID>
+                </XREF_LINK>
+            </SUBMISSION_LINK>
+            <SUBMISSION_LINK>
+                <XREF_LINK>
+                    <DB>ENA-FASTQ-FILES</DB>
+                    <ID>http://www.ebi.ac.uk/ena/data/view/reports/sra/fastq_files/ERA000092</ID>
+                </XREF_LINK>
+            </SUBMISSION_LINK>
+        </SUBMISSION_LINKS>
+        <SUBMISSION_ATTRIBUTES>
+            <SUBMISSION_ATTRIBUTE>
+                <TAG>ENA-SPOT-COUNT</TAG>
+                <VALUE>376310076</VALUE>
+            </SUBMISSION_ATTRIBUTE>
+            <SUBMISSION_ATTRIBUTE>
+                <TAG>ENA-BASE-COUNT</TAG>
+                <VALUE>41115318416</VALUE>
+            </SUBMISSION_ATTRIBUTE>
+        </SUBMISSION_ATTRIBUTES>
+    </SUBMISSION>
+</ROOT>

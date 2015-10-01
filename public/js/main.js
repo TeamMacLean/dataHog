@@ -6,6 +6,8 @@ var filesRoot;
 
 $(function () {
   initAddFileInput();
+
+
 });
 
 function initAddFileInput() {
@@ -17,6 +19,8 @@ function initAddFileInput() {
     resetSelectedFiles();
   });
 
+  //TODO for chris
+  updatePairedOrMated();
 
   function updatePairedOrMated() {
     var libTypeText = $('#libraryType option:selected').text();
@@ -71,8 +75,8 @@ function addFileInput() {
     var isSecondInput = pairedOrMated && anything;
     var onlyInput = !pairedOrMated && !anything;
 
-    if(!onlyInput){
-      if(!isSecondInput){
+    if (!onlyInput) {
+      if (!isSecondInput) {
         label.text('1/2');
       } else {
         label.text('2/2');

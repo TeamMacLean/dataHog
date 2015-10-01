@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ROOT request="ERS000081&amp;display=xml">
+    <SAMPLE accession="ERS000081" alias="1_dpf_sample1" center_name="The Wellcome Trust Sanger Institute">
+        <IDENTIFIERS>
+            <PRIMARY_ID>ERS000081</PRIMARY_ID>
+            <EXTERNAL_ID namespace="BioSample">SAMEA708831</EXTERNAL_ID>
+            <SUBMITTER_ID namespace="SC">1_dpf_sample1</SUBMITTER_ID>
+        </IDENTIFIERS>
+        <TITLE>Danio rerio</TITLE>
+        <SAMPLE_NAME>
+            <TAXON_ID>7955</TAXON_ID>
+            <ANONYMIZED_NAME>1 dpf</ANONYMIZED_NAME>
+            <COMMON_NAME>Zebrafish embryo 1 dpf</COMMON_NAME>
+            <SCIENTIFIC_NAME>Danio rerio</SCIENTIFIC_NAME>
+        </SAMPLE_NAME>
+        <DESCRIPTION>RNA extracted from zebrafish embryo at 1 dpf</DESCRIPTION>
+        <SAMPLE_LINKS>
+            <SAMPLE_LINK>
+                <XREF_LINK>
+                    <DB>ENA-STUDY</DB>
+                    <ID>ERP000016</ID>
+                </XREF_LINK>
+            </SAMPLE_LINK>
+            <SAMPLE_LINK>
+                <XREF_LINK>
+                    <DB>ENA-EXPERIMENT</DB>
+                    <ID>ERX000398-ERX000399</ID>
+                </XREF_LINK>
+            </SAMPLE_LINK>
+            <SAMPLE_LINK>
+                <XREF_LINK>
+                    <DB>ENA-RUN</DB>
+                    <ID>ERR003990-ERR003994</ID>
+                </XREF_LINK>
+            </SAMPLE_LINK>
+            <SAMPLE_LINK>
+                <XREF_LINK>
+                    <DB>ENA-SUBMISSION</DB>
+                    <ID>ERA000092</ID>
+                </XREF_LINK>
+            </SAMPLE_LINK>
+            <SAMPLE_LINK>
+                <XREF_LINK>
+                    <DB>ENA-FASTQ-FILES</DB>
+                    <ID>http://www.ebi.ac.uk/ena/data/warehouse/filereport?accession=ERS000081&amp;result=read_run&amp;fields=run_accession,fastq_ftp,fastq_md5,fastq_bytes</ID>
+                </XREF_LINK>
+            </SAMPLE_LINK>
+            <SAMPLE_LINK>
+                <XREF_LINK>
+                    <DB>ENA-SUBMITTED-FILES</DB>
+                    <ID>http://www.ebi.ac.uk/ena/data/warehouse/filereport?accession=ERS000081&amp;result=read_run&amp;fields=run_accession,submitted_ftp,submitted_md5,submitted_bytes,submitted_format</ID>
+                </XREF_LINK>
+            </SAMPLE_LINK>
+        </SAMPLE_LINKS>
+        <SAMPLE_ATTRIBUTES>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>Sex</TAG>
+                <VALUE>Mixed</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>Strain</TAG>
+                <VALUE>Tuebingen</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>ENA-SPOT-COUNT</TAG>
+                <VALUE>36035438</VALUE>
+            </SAMPLE_ATTRIBUTE>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>ENA-BASE-COUNT</TAG>
+                <VALUE>4183100362</VALUE>
+            </SAMPLE_ATTRIBUTE>
+        </SAMPLE_ATTRIBUTES>
+    </SAMPLE>
+</ROOT>

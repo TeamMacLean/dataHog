@@ -5,7 +5,7 @@ var router = express.Router();
 var Projects = require(__dirname + '/controllers/projects.js');
 var Runs = require(__dirname + '/controllers/runs.js');
 var Samples = require(__dirname + '/controllers/samples.js');
-//var Reads = require(__dirname + '/controllers/projects.js');
+var Reads = require(__dirname + '/controllers/reads.js');
 var Errors = require(__dirname + '/controllers/errors.js');
 
 //get index
@@ -44,10 +44,13 @@ router.post('/:project/:sample/new', Runs.newPost);
 //show run
 router.get('/:project/:sample/:run', Runs.show);
 
+
+
+//show read
+router.get('/:project/:sample/:run/:read', Reads.show);
+
 //show run qc
-router.get('/:project/:sample/:run/fastqc', Runs.fastQC);
-
-
+router.get('/:project/:sample/:run/:read/fastqc', Reads.fastQC);
 
 
 module.exports = router;
