@@ -8,10 +8,11 @@ var config = require('../config.json');
 
 Samples.new = function (req, res) {
 
-  var project = req.params.project;
+  var projectSN = req.params.project;
 
-  Project.filter({safeName: project}).run().then(function (project) {
-    res.render('samples/new', {project: project[0]});
+  Project.filter({safeName: projectSN}).run().then(function (results) {
+
+    res.render('samples/new', {project: results[0]});
   }).error(function () {
     return res.render('error', {error: 'could not find project'});
   });
@@ -66,9 +67,20 @@ Samples.newPost = function (req, res) {
 
 Samples.show = function (req, res) {
   var sampleSafeName = req.params.sample;
+  var projectSN = req.params.project;
 
   Sample.filter({safeName: sampleSafeName}).getJoin({project: true, runs: true}).run().then(function (result) {
-    res.render('samples/show', {sample: result[0]});
+
+    var withP = result.filter(function (r) {
+      return r.project.safeName === projectSN;
+    });
+
+    if (withP.length > 1) {
+      console.error('multiple samples', withP);
+    }
+    var sample = withP[0];
+
+    res.render('samples/show', {sample: sample});
   })
     .error(function (err) {
       return res.render('error', {error: 'could not find sample'});

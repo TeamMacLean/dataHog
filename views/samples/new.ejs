@@ -2,7 +2,7 @@
 <div class="container">
     <h3><a href="/<%- project.safeName %>"><i class="fa fa-chevron-left"></i> <%- project.name %></a></h3>
 
-    <h1>New Sample</h1>
+    <h2>New Sample</h2>
 
     <form action="/<%- project.safeName %>/new" method="POST" enctype="multipart/form-data">
 
@@ -40,72 +40,6 @@
 </div>
 
 
-<script src="/components/taxlookup/dist/taxlookup.min.js"></script>
-<script>
 
-
-    var ncbi = $('#ncbi');
-    var ul = $('#listByText');
-    var org = $('#organism');
-    //    var custom = $('#custom-org');
-
-    function updateFromNumber() {
-
-        var val = ncbi.val();
-        tax.eFetch(val, function (err, out) {
-
-            console.log(out);
-
-            if (out && out.Taxon) {
-                org.val(out.Taxon.ScientificName);
-            }
-        });
-
-
-    }
-
-    function updateFromText() {
-        var val = org.val();
-        tax.eSpell(val, function (err, res) {
-            if (res) {
-                tax.eSearch(res, function (err, out) {
-                    if (out.length > 0) {
-
-                        ul.empty();
-                        var li = $('<li></li>');
-                        var a = $('<a href="#ncbi">' + res + '</a>');
-                        li.append(a);
-                        a.on('click', function () {
-                            ncbi.val(out[0]);
-                            ul.empty();
-                            updateFromNumber();
-                        });
-                        ul.append(a)
-
-                    }
-                });
-            }
-        });
-    }
-
-    ncbi.on('input', function () {
-        var val = ncbi.val();
-        if (!isNaN(val)) {
-            updateFromNumber();
-        }
-
-    })
-
-    org.on('input', function () {
-        var val = org.val();
-
-
-        if (isNaN(val)) {
-            updateFromText();
-        }
-
-
-    });
-</script>
 
 <% include ../foot %>

@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-
+var Groups = require(__dirname + '/controllers/groups.js');
 var Projects = require(__dirname + '/controllers/projects.js');
 var Runs = require(__dirname + '/controllers/runs.js');
 var Samples = require(__dirname + '/controllers/samples.js');
@@ -9,13 +9,10 @@ var Reads = require(__dirname + '/controllers/reads.js');
 var Errors = require(__dirname + '/controllers/errors.js');
 
 //get index
-router.get('/', Projects.index);
-
-//404 page
-router.get('/404', Errors.show);
+router.get('/', Groups.index);
 
 //show by lab name
-router.get('/lab/:lab', Projects.lab);
+router.get('/groups/:group', Groups.show);
 
 //get new project
 router.get('/new', Projects.new);
@@ -42,15 +39,15 @@ router.get('/:project/:sample/new', Runs.new);
 router.post('/:project/:sample/new', Runs.newPost);
 
 //show run
-router.get('/:project/:sample/:run', Runs.show);
-
-
+router.get('/:project/:sample/:run', Runs.show);//TODO
 
 //show read
-router.get('/:project/:sample/:run/:read', Reads.show);
+router.get('/:project/:sample/:run/:read', Reads.show);//TODO
 
 //show run qc
-router.get('/:project/:sample/:run/:read/fastqc', Reads.fastQC);
+router.get('/:project/:sample/:run/:read/fastqc', Reads.fastQC);//TODO
 
+//404 page
+router.get(['/404', '/:404'], Errors.show);
 
 module.exports = router;

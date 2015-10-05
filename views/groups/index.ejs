@@ -1,0 +1,28 @@
+<% include ../head %>
+
+<div class="container">
+
+    <h1>Labs</h1>
+
+    <div class="row">
+        <% var i = 0; %>
+        <% groups.map(function(group){ %>
+        <% i++; %>
+        <div class="col6">
+            <a href="/groups/<%- group %>">
+                <div class="tile">
+                    <div class="title">
+                        <%- group %>
+                    </div>
+
+                </div>
+            </a>
+        </div>
+        <% if (i % 2 == 0){ %>
+        <div class="clearfix"></div>
+        <% } %>
+        <% }); %>
+    </div>
+</div>
+
+<% include ../foot %>

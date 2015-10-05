@@ -2,15 +2,25 @@
 <div class="container">
     <h3><a href="/<%- sample.project.safeName %>"><i class="fa fa-chevron-left"></i> <%- sample.project.name %></a></h3>
 
-    <h1><%- sample.name %></h1>
 
-    <h4>uniqueName: <%- sample.uniqueName %></h4>
-    <h4>organism: <%- sample.organism %></h4>
-    <h4>ncbi: <%- sample.ncbi %></h4>
-    <h4>conditions: <%- sample.conditions %></h4>
-    <h4>sampleGroup: <%- sample.sampleGroup %></h4>
+    <h2><%- sample.name %></h2>
 
-    <a class="button button-primary" href="/<%- sample.project.safeName %>/<%- sample.safeName %>/new"><i class="fa fa-plus"></i>
+    <label>Unique name</label>
+
+    <p><%- sample.uniqueName %></p>
+    <label>Organism</label>
+
+    <p><%- sample.organism %></p>
+    <label>NCBI</label>
+
+    <p><%- sample.ncbi %></p>
+    <label>Conditions</label>
+
+    <p><%- sample.conditions %></p>
+
+
+    <a class="button button-primary" href="/<%- sample.project.safeName %>/<%- sample.safeName %>/new"><i
+                class="fa fa-plus"></i>
         add read
         data</a>
 

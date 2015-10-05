@@ -2,6 +2,8 @@ var Project = require('../models/project.js');
 var Run = require('../models/run.js');
 var Read = require('../models/read.js');
 
+var Groups = require('./groups');
+
 var fs = require('fs');
 var path = require('path');
 
@@ -11,37 +13,18 @@ var config = require('../config.json');
 
 var Projects = {};
 
-Projects.groups = [
-  'Jonathan Jones Group',
-  'Sophien Kamoun Group',
-  'Ksenia Krasileva Group',
-  'Matthew Moscou Group',
-  'Silke Robatzek Group',
-  'Cyril Zipfel Group',
-  'The 2Blades Group',
-  'Bioinformatics',
-  'Proteomics',
-  'Synthetic Biology',
-  'Tissue Culture & Transformation'
-].sort();
 
-Projects.index = function (req, res) {
-  Project.then(function (projects) {
-    util.unknownFolders(config.dataDir, projects, function (unknownFolders) {
-      return res.render('projects/index', {projects: projects, unknownFolders: unknownFolders});
-    });
-  });
-};
+//Projects.index = function (req, res) {
+//  Project.then(function (projects) {
+//    util.unknownFolders(config.dataDir, projects, function (unknownFolders) {
+//      return res.render('projects/index', {projects: projects, unknownFolders: unknownFolders});
+//    });
+//  });
+//};
 
-Projects.lab = function (req, res) {
-  var requestedLab = req.params.lab;
-  Project.filter({lab: requestedLab}).run().then(function (projects) {
-    res.render('lab/show', {lab: requestedLab, projects: projects});
-  });
-};
 
 Projects.new = function (req, res) {
-  return res.render('projects/new', {groups: Projects.groups});
+  return res.render('projects/new', {groups: Groups.groups});
 };
 
 Projects.newPost = function (req, res) {
@@ -73,10 +56,14 @@ Projects.newPost = function (req, res) {
   })
 };
 
-Projects.show = function (req, res) {
+Projects.show = function (req, res, next) {
   var project = req.params.project;
 
   Project.filter({safeName: project}).getJoin({samples: true}).run().then(function (projects) {
+
+    if (projects.length < 1) {
+      return next();
+    }
 
     var project = projects[0];
 

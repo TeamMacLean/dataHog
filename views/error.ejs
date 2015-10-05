@@ -3,7 +3,10 @@
 
     <h3><a href="/">< Projects</a></h3>
 
-    <h1 class="center" style="font-size:4em;">Error!</h1>
+    <% var thisTitle = title ? title : 'Error!'; %>
+
+    <h1 class="center" style="font-size:4em;"><%- thisTitle %></h1>
+
     <h3 class="red center"><%- error %></h3>
 </div>
 

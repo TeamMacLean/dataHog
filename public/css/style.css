@@ -63,10 +63,16 @@ a:hover, a:focus {
     box-shadow: none;
 }
 
-ul.no-decoration, li.no-decoration{
+ul.no-decoration, li.no-decoration {
     list-style: none;
 }
 
 .hidden {
     display: none;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }

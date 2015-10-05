@@ -5,12 +5,13 @@
     <h1>New project</h1>
 
     <form action="/new" method="POST">
-        <fieldset>
+
+        <fieldset data-tooltip="a short name for the study" class="tooltip-bottom">
             <label for="name">Name</label>
             <input type="text" id="name" name="name" required>
         </fieldset>
 
-        <fieldset>
+        <fieldset data-tooltip="The group/lab you are a member of" class="tooltip-bottom">
             <label for="lab">Group</label>
             <select id="lab" name="lab" required>
                 <option value="">Select Group</option>
@@ -20,15 +21,15 @@
             </select>
         </fieldset>
 
-        <fieldset>
-            <label for="responsiblePerson">Responsible person</label>
-            <input type="text" id="responsiblePerson" name="responsiblePerson" required>
+        <fieldset data-tooltip="email address of the person to be contacted about the data in future" class="tooltip-bottom">
+            <label for="responsiblePerson">Data owner</label>
+            <input type="email" id="responsiblePerson" name="responsiblePerson" required>
         </fieldset>
-        <fieldset>
+        <fieldset data-tooltip="Basic overview" class="tooltip-bottom">
             <label for="shortDescription">Short description</label>
             <input type="text" id="shortDescription" name="shortDescription" required></textarea>
         </fieldset>
-        <fieldset>
+        <fieldset data-tooltip="As much details as you can give" class="tooltip-bottom">
             <label for="longDescription">Long description</label>
             <textarea rows="3" id="longDescription" name="longDescription" required></textarea>
         </fieldset>

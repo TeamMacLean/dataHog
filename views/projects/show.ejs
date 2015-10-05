@@ -2,16 +2,30 @@
 <div class="container">
     <h3><a href="/"><i class="fa fa-chevron-left"></i> Projects</a></h3>
 
-    <h1><%- project.name %></h1>
+
+    <h2><%- project.name %></h2>
 
 
-    <div class="">
-        <h4>Safe Name: <%- project.safeName %></h4>
-        <h4>Lab: <a href="/lab/<%- project.lab %>"><%- project.lab %></a></h4>
-        <h4>Responsible Person: <%- project.responsiblePerson %></h4>
-        <h4>Short Description: <%- project.shortDescription %></h4>
-        <h4>Long Description: <%- project.longDescription %></h4>
-    </div>
+    <label>Safe Name:</label>
+
+    <p><%- project.safeName %></p>
+
+
+    <label>Group:</label>
+
+    <p><a href="/groups/<%- project.group %>"><%- project.group %></a></p>
+
+    <label>Responsible Person:</label>
+
+    <p><%- project.responsiblePerson %></p>
+
+    <label>Short Description:</label>
+
+    <p><%- project.shortDescription %></p>
+
+    <label>Long Description:</label>
+
+    <p><%- project.longDescription %></p>
 
     <a class="button button-primary" href="/<%- project.safeName %>/new"><i class="fa fa-plus"></i> new sample</a>
 

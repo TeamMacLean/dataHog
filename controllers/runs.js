@@ -17,9 +17,20 @@ var Runs = {};
 
 Runs.new = function (req, res) {
 
-  var sampleID = req.params.sample;
-  Sample.filter({safeName: sampleID}).getJoin({project: true}).run().then(function (result) {
-    return res.render('runs/new', {sample: result[0]});
+  var sampleSN = req.params.sample;
+  var projectSN = req.params.project;
+
+  Sample.filter({safeName: sampleSN}).getJoin({project: true}).run().then(function (results) {
+
+    var filtered = results.filter(function (r) {
+      return r.project.safeName === projectSN;
+    });
+
+    if (filtered.length > 1) {
+      console.error('too many samples', filtered);
+    }
+
+    return res.render('runs/new', {sample: filtered[0]});
   }).error(function () {
     return res.render('error', {error: 'could not create project'});
   });
@@ -27,8 +38,8 @@ Runs.new = function (req, res) {
 
 Runs.newPost = function (req, res) {
 
-  //var projectID = req.params.project;
-  var sampleID = req.params.sample;
+  var projectSN = req.params.project;
+  var sampleSN = req.params.sample;
   var name = req.body.name;
 
   var sequencingProvider = req.body.sequencingProvider;
@@ -41,13 +52,17 @@ Runs.newPost = function (req, res) {
   var submissionToPublicPortal = req.body.submissionToPublicPortal;
   var submissionToGalaxy = req.body.submissionToGalaxy === 'on';
 
-  Sample.filter({safeName: sampleID}).getJoin({project: true}).run().then(function (results) {
+  Sample.filter({safeName: sampleSN}).getJoin({project: true}).run().then(function (results) {
 
-    if (results.length < 1) {
-      return res.render('error', {error: 'sample does not exists'});
+
+    var filtered = results.filter(function (r) {
+      return r.project.safeName === projectSN;
+    });
+
+    if (filtered.length > 1) {
+      console.error('too many samples', filtered);
     }
-
-    var sample = results[0];
+    var sample = filtered[0];
 
     var run = new Run({
       name: name,
@@ -194,14 +209,26 @@ Runs.newPost = function (req, res) {
 
 Runs.show = function (req, res) {
   var runSN = req.params.run;
+  var sampleSN = req.params.sample;
+  var projectSN = req.params.project;
 
-  Run.filter({safeName: runSN}).getJoin({sample: {project: true}, reads: true}).then(function (run) {
-    return res.render('runs/show', {run: run[0]});
+  Run.filter({safeName: runSN}).getJoin({sample: {project: true}, reads: true}).then(function (results) {
+
+    var filtered = results.filter(function (r) {
+      return r.sample.safeName === sampleSN && r.sample.project.safeName === projectSN;
+    });
+
+    if (filtered.length > 1) {
+      console.error('too many runs', filtered);
+    }
+
+    var run = filtered[0];
+
+    return res.render('runs/show', {run: run});
   }).error(function () {
     return res.render('error', {error: 'could not find run'});
   });
 };
-
 
 
 module.exports = Runs;

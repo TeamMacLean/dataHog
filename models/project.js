@@ -7,7 +7,7 @@ var Project = thinky.createModel('Project', {
   id: type.string(),
   name: type.string().required(),
   responsiblePerson: type.string().required(),
-  lab: type.string().required(),
+  group: type.string().required(),
   shortDescription: type.string().required(),
   longDescription: type.string().required(),
   createdAt: type.date().default(r.now()),
