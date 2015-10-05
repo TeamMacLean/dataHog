@@ -7,7 +7,7 @@ var async = require('async');
 var fs = require('fs');
 var path = require('path');
 var fastqc = require('../lib/fastqc');
-var md5Check = require('../lib/md5');
+var md5 = require('md5');
 
 var util = require('../lib/util');
 
@@ -20,17 +20,17 @@ Runs.new = function (req, res) {
   var sampleSN = req.params.sample;
   var projectSN = req.params.project;
 
-  Sample.filter({safeName: sampleSN}).getJoin({project: true}).run().then(function (results) {
+  Sample.filter({safeName: sampleSN}).getJoin({project: true}).filter({project: {safeName: projectSN}}).run().then(function (results) {
 
-    var filtered = results.filter(function (r) {
-      return r.project.safeName === projectSN;
-    });
+    //var filtered = results.filter(function (r) {
+    //  return r.project.safeName === projectSN;
+    //});
 
-    if (filtered.length > 1) {
-      console.error('too many samples', filtered);
+    if (results.length > 1) {
+      console.error('too many samples', results);
     }
 
-    return res.render('runs/new', {sample: filtered[0]});
+    return res.render('runs/new', {sample: results[0]});
   }).error(function () {
     return res.render('error', {error: 'could not create project'});
   });
@@ -49,20 +49,19 @@ Runs.newPost = function (req, res) {
   var sequencingProviderDataSheet = req.body.sequencingProviderDataSheet;
   var libraryInformation = req.body.libraryInformation;
   var libraryType = req.body.libraryType;
-  var submissionToPublicPortal = req.body.submissionToPublicPortal;
   var submissionToGalaxy = req.body.submissionToGalaxy === 'on';
 
-  Sample.filter({safeName: sampleSN}).getJoin({project: true}).run().then(function (results) {
+  Sample.filter({safeName: sampleSN}).getJoin({project: true}).filter({project: {safeName: projectSN}}).run().then(function (results) {
 
 
-    var filtered = results.filter(function (r) {
-      return r.project.safeName === projectSN;
-    });
+    //var filtered = results.filter(function (r) {
+    //  return r.project.safeName === projectSN;
+    //});
 
-    if (filtered.length > 1) {
-      console.error('too many samples', filtered);
+    if (results.length > 1) {
+      console.error('too many samples', results);
     }
-    var sample = filtered[0];
+    var sample = results[0];
 
     var run = new Run({
       name: name,
@@ -74,31 +73,30 @@ Runs.newPost = function (req, res) {
       sequencingProviderDataSheet: sequencingProviderDataSheet,
       libraryInformation: libraryInformation,
       submissionToGalaxy: submissionToGalaxy,
-      libraryType: libraryType,
-      submissionToPublicPortal: submissionToPublicPortal
+      libraryType: libraryType
     });
 
 
     //get all file and md5 info from post
-    var looking = true;
+
+
     var filesAndSums = [];
-    var loop = 0;
-    while (looking) {
-      loop++;
-      var file = req.files['file-' + loop];
-      if (file) {
-        filesAndSums.push({file: file, md5: req.body['MD5-' + loop]});
-      } else {
-        looking = false;
+    for (var p in req.files) {
+      if (req.files.hasOwnProperty(p)) {
+        var file = req.files[p];
+        var num = p.split('-')[1];
+        filesAndSums.push({file: file, md5: req.body['MD5-' + num]});
       }
     }
+
 
     //make array of md5 checks
     var para = [];
     filesAndSums.map(function (fileAndMD5) {
 
       var fun = function (cb) {
-        md5Check.run(fileAndMD5.file.path, function (err, sum) {
+        fs.readFile(fileAndMD5.file.path, function (err, buf) {
+          var sum = md5(buf);
           if (err) {
             cb(err);
           } else {
@@ -212,17 +210,22 @@ Runs.show = function (req, res) {
   var sampleSN = req.params.sample;
   var projectSN = req.params.project;
 
-  Run.filter({safeName: runSN}).getJoin({sample: {project: true}, reads: true}).then(function (results) {
+  Run.filter({safeName: runSN}).getJoin({sample: {project: true}, reads: true}).filter({
+    sample: {
+      safeName: sampleSN,
+      project: {safeName: projectSN}
+    }
+  }).then(function (results) {
 
-    var filtered = results.filter(function (r) {
-      return r.sample.safeName === sampleSN && r.sample.project.safeName === projectSN;
-    });
+    //var filtered = results.filter(function (r) {
+    //  return r.sample.safeName === sampleSN && r.sample.project.safeName === projectSN;
+    //});
 
-    if (filtered.length > 1) {
-      console.error('too many runs', filtered);
+    if (results.length > 1) {
+      console.error('too many runs', results);
     }
 
-    var run = filtered[0];
+    var run = results[0];
 
     return res.render('runs/show', {run: run});
   }).error(function () {

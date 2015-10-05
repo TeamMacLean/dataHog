@@ -10,10 +10,7 @@ var Sample = thinky.createModel('Sample', {
   organism: type.string().required(),
   ncbi: type.string().required(),
   conditions: type.string().required(),
-  uniqueName: type.string().required(),
   sampleGroup: type.string().required(),
-
-
   safeName: type.string()
 });
 
@@ -21,10 +18,14 @@ var Sample = thinky.createModel('Sample', {
 Sample.pre('save', function (next) {
   var sample = this;
   var unsafeName = sample.name;
-  Project.run().then(function (result) {
+  Sample.run().then(function (result) {
     util.generateSafeName(unsafeName, result, function (name) {
       sample.safeName = name;
-      next();
+      //now create sampleGroup
+      Project.get(sample.projectID).run().then(function (result) {
+        sample.sampleGroup = result.safeName + '_' + name
+        next();
+      });
     });
   });
 });

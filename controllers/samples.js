@@ -27,21 +27,16 @@ Samples.newPost = function (req, res) {
     var project = projects[0];
 
     var name = req.body.name;
-    var uniqueName = req.body.uniqueName;
-    //TODO check if already exists name or unique name
     var organism = req.body.organism;
     var ncbi = req.body.ncbi;
     var conditions = req.body.conditions;
-    var sampleGroup = project.safeName + '-' + util.toSafeName(uniqueName);
 
     var newSample = new Sample({
       name: name,
       projectID: project.id,
-      uniqueName: uniqueName,
       organism: organism,
       ncbi: ncbi,
-      conditions: conditions,
-      sampleGroup: sampleGroup
+      conditions: conditions
     });
 
     newSample.save().then(function (result) {
@@ -69,16 +64,12 @@ Samples.show = function (req, res) {
   var sampleSafeName = req.params.sample;
   var projectSN = req.params.project;
 
-  Sample.filter({safeName: sampleSafeName}).getJoin({project: true, runs: true}).run().then(function (result) {
+  Sample.filter({safeName: sampleSafeName}).getJoin({project: true, runs: true}).filter({project:{safeName:projectSN}}).run().then(function (results) {
 
-    var withP = result.filter(function (r) {
-      return r.project.safeName === projectSN;
-    });
-
-    if (withP.length > 1) {
-      console.error('multiple samples', withP);
+    if (results.length > 1) {
+      console.error('multiple samples', results);
     }
-    var sample = withP[0];
+    var sample = results[0];
 
     res.render('samples/show', {sample: sample});
   })

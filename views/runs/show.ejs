@@ -1,21 +1,38 @@
 <% include ../head %>
 <div class="container">
     <h3><a href="/<%- run.sample.project.safeName %>/<%- run.sample.safeName %>"><i
-                    class="fa fa-chevron-left"></i> <%- run.sample.project.name %></a></h3>
-
-    <h1>Run</h1>
+                    class="fa fa-chevron-left"></i> <%- run.sample.name %></a></h3>
 
     <h2><%- run.name %></h2>
 
+    <label>Sequencing provider</label>
 
-    <h4>sequencingProvider: <%- run.sequencingProvider %></h4>
-    <h4>sequencingTechnology: <%- run.sequencingTechnology %></h4>
-    <h4>communicationExcerpts: <%- run.communicationExcerpts %></h4>
-    <h4>sequencingProviderDatasheets: <%- run.sequencingProviderDatasheets %></h4>
-    <h4>libraryInformation: <%- run.libraryInformation %></h4>
-    <h4>libraryType: <%- run.libraryType %></h4>
-    <h4>submissionToPublicPortal: <%- run.submissionToPublicPortal %></h4>
-    <h4>submissionToGalaxy: <%- run.submissionToGalaxy %></h4>
+    <p><%- run.sequencingProvider %></p>
+
+    <label>Sequencing technology</label>
+
+    <p><%- run.sequencingTechnology %></p>
+
+    <label>Communication excerpts</label>
+
+    <p><%- run.communicationExcerpts %></p>
+
+    <label>Sequencing provider datasheets</label>
+
+    <p><%- run.sequencingProviderDataSheet %></p>
+
+    <label>Library information</label>
+
+    <p> <%- run.libraryInformation %></p>
+
+    <label>Library type</label>
+
+    <p><%- run.libraryType %></p>
+
+    <label>Submission to Galaxy</label>
+
+    <p><%- run.submissionToGalaxy %></p>
+
 
     <a class="button button-primary"
        href="/<%- run.sample.project.safeName %>/<%- run.sample.safeName %>/<%- run.safeName %>/new"><i

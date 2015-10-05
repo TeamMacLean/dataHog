@@ -11,7 +11,6 @@ var Read = thinky.createModel('Read', {
   MD5: type.string().required(),
   fastQCLocation: type.string().required(),
   moreInfo: type.string().required(),
-
   safeName: type.string()
 });
 

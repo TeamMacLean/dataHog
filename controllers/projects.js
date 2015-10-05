@@ -29,14 +29,14 @@ Projects.new = function (req, res) {
 
 Projects.newPost = function (req, res) {
   var name = req.body.name;
-  var lab = req.body.lab;
+  var group = req.body.group;
   var responsiblePerson = req.body.responsiblePerson;
   var shortDescription = req.body.shortDescription;
   var longDescription = req.body.longDescription;
 
   var project = new Project({
     name: name,
-    lab: lab,
+    group: group,
     responsiblePerson: responsiblePerson,
     shortDescription: shortDescription,
     longDescription: longDescription
