@@ -5,8 +5,8 @@
   "scripts": {
     "start": "node server",
     "test": "mocha",
-    "coverage": "istanbul cover test/bionode-fasta.js --report lcovonly -- | tap-spec && rm -rf ./coverage",
-    "coveralls": "istanbul cover test/bionode-fasta.js --report lcovonly -- | tap-spec && cat ./coverage/lcov.info | ./node_modules/.bin/coveralls && rm -rf ./coverage"
+    "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info",
+    "coveralls": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
   },
   "dependencies": {
     "async": "^1.2.1",
