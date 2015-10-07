@@ -2,10 +2,12 @@ sudo: false
 language: node_js
 node_js:
   - "0.10"
+  - "0.11"
   - "0.12"
   - "4.0"
+  - "4.1"
 before_script: "cp config-example.json config.json"
 after_script:
-  - npm run coveralls && npm run codeconv
+  - npm run coveralls
 matrix:
   fast_finish: true
