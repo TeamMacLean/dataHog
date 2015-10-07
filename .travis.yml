@@ -6,6 +6,6 @@ node_js:
   - "4.0"
 before_script: "cp config-example.json config.json"
 after_script:
-  - npm run coveralls
+  - npm run coveralls && npm run codeconv
 matrix:
   fast_finish: true
