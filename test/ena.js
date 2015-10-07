@@ -26,6 +26,10 @@ describe('ENA', function () {
   });
   describe('.submit', function () {
 
+    it('should be a fake test to know if coverage is working', function (done) {
+      done();
+    });
+
     it('should upload ok', function (done) {
       if (!canLogIn) this.skip('this is text');
 
@@ -45,7 +49,7 @@ describe('ENA', function () {
         }
       };
 
-      ena.submit(submission, study, sample, experiment, run);
+      ena.submit(submission, study, sample, experiment, run, end);
     })
   })
 });
