@@ -140,12 +140,17 @@ Runs.newPost = function (req, res) {
             var fileBuff = read(file.path);
 
             var compressed = isBzip2(fileBuff) || isGzip(fileBuff);
+            var fileExtention = path.extname(file.originalname);
+
+            if (!compressed && ['fq', 'fasq'].indexOf(fileExtention) < 0) {
+              var err = new Error('not compressed and not a fastq/fq file extention');
+              return res.render('error', {error: err});
+            }
 
             if (!compressed) { //not compressed
 
-              var fileExtention = path.extname(file.originalname);
 
-              var oldPath = 'TODO';
+              var oldPath = file.path;
               var newPath = oldPath + '.gz';
 
               var inp = fs.createReadStream(oldPath);

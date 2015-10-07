@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "start": "node server",
-    "test": "mocha"
+    "test": "mocha",
+    "coverage": "istanbul cover test/bionode-fasta.js --report lcovonly -- | tap-spec && rm -rf ./coverage",
+    "coveralls": "istanbul cover test/bionode-fasta.js --report lcovonly -- | tap-spec && cat ./coverage/lcov.info | ./node_modules/.bin/coveralls && rm -rf ./coverage"
   },
   "dependencies": {
     "async": "^1.2.1",
@@ -15,6 +17,7 @@
     "express": "~4.12.2",
     "fs-extra": "^0.24.0",
     "ftp": "^0.3.10",
+    "is-bzip2": "^1.0.0",
     "is-gzip": "^1.0.0",
     "md5": "^2.0.0",
     "morgan": "~1.5.1",
@@ -24,6 +27,8 @@
   },
   "devDependencies": {
     "chai": "^3.3.0",
+    "coveralls": "^2.11.4",
+    "istanbul": "^0.3.22",
     "mocha": "^2.3.3"
   }
 }
