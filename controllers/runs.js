@@ -8,6 +8,11 @@ var fs = require('fs-extra');
 var path = require('path');
 var fastqc = require('../lib/fastqc');
 var md5 = require('md5');
+var gzip = zlib.createGzip();
+
+var isGzip = require('is-gzip');
+var isBzip2 = require('is-bzip2');
+var read = require('fs').readFileSync;
 
 
 var config = require('../config.json');
@@ -122,8 +127,37 @@ Runs.newPost = function (req, res) {
               error: 'md5 sums do not match for ' + sadFiles
             })
           }
+
+          //TODO process gzip bzip2 stuff here!
+
+          var allCompressedReads = [];
+
+          happyFiles.map(function (hf) {
+
+            var file = hf.file;
+            var md5 = hf.md5;
+
+            var fileBuff = read(file.path);
+
+            var compressed = isBzip2(fileBuff) || isGzip(fileBuff);
+
+            if (!compressed) { //not compressed
+
+              var fileExtention = path.extname(file.originalname);
+
+              var oldPath = 'TODO';
+              var newPath = oldPath + '.gz';
+
+              var inp = fs.createReadStream(oldPath);
+              var out = fs.createWriteStream(newPath);
+              inp.pipe(gzip).pipe(out); //TODO is this SYNC? (hope so)
+            }
+            allCompressedReads.push({file: file, md5: md5});
+          });
+
+
           var usedFileNames = [];
-          happyFiles.map(function (fileAndMD5) {
+          allCompressedReads.map(function (fileAndMD5) {
             var file = fileAndMD5.file;
             var fileName = file.originalname;
             if (usedFileNames.indexOf(fileName) > -1) {

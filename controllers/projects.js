@@ -1,27 +1,13 @@
 var Project = require('../models/project.js');
 var Run = require('../models/run.js');
 var Read = require('../models/read.js');
-
 var Groups = require('./groups');
-
 var fs = require('fs-extra');
 var path = require('path');
-
 var util = require('../lib/util');
-
 var config = require('../config.json');
 
 var Projects = {};
-
-
-//Projects.index = function (req, res) {
-//  Project.then(function (projects) {
-//    util.unknownFolders(config.dataDir, projects, function (unknownFolders) {
-//      return res.render('projects/index', {projects: projects, unknownFolders: unknownFolders});
-//    });
-//  });
-//};
-
 
 Projects.new = function (req, res) {
   return res.render('projects/new', {groups: Groups.groups});
