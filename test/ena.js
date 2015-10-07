@@ -45,7 +45,7 @@ describe('ENA', function () {
         }
       };
 
-      ena.submit(experiment, run, sample, study, submission, end);
+      ena.submit(submission, study, sample, experiment, run);
     })
   })
 });

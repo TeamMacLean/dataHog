@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SAMPLE_GROUP_SET>
+    <SAMPLE_GROUP alias="ena-SAMPLE_GROUP-JIC-11-09-2015-09:49:44:559-158" center_name="JIC" accession="ERG005809">
+        <IDENTIFIERS>
+            <PRIMARY_ID>ERG005809</PRIMARY_ID>
+            <SUBMITTER_ID namespace="JIC">ena-SAMPLE_GROUP-JIC-11-09-2015-09:49:44:559-158</SUBMITTER_ID>
+        </IDENTIFIERS>
+        <TITLE>Ath - mob54-3/56-1BC variant detection</TITLE>
+        <DESCRIPTOR>
+            <CHECKLIST_REF accession="ERC000011" alias="ENA default sample checklist" center_name="JIC">
+                <IDENTIFIERS>
+                    <PRIMARY_ID>ERC000011</PRIMARY_ID>
+                    <SUBMITTER_ID namespace="JIC">ENA default sample checklist</SUBMITTER_ID>
+                </IDENTIFIERS>
+            </CHECKLIST_REF>
+            <SAMPLE_REF refname="Ath_mob54-3" refcenter="JIC" accession="ERS845419">
+                <IDENTIFIERS>
+                    <PRIMARY_ID>ERS845419</PRIMARY_ID>
+                    <SUBMITTER_ID namespace="JIC">Ath_mob54-3</SUBMITTER_ID>
+                </IDENTIFIERS>
+            </SAMPLE_REF>
+            <SAMPLE_REF refname="Ath_mob56-1BC" refcenter="JIC" accession="ERS845420">
+                <IDENTIFIERS>
+                    <PRIMARY_ID>ERS845420</PRIMARY_ID>
+                    <SUBMITTER_ID namespace="JIC">Ath_mob56-1BC</SUBMITTER_ID>
+                </IDENTIFIERS>
+            </SAMPLE_REF>
+        </DESCRIPTOR>
+    </SAMPLE_GROUP>
+</SAMPLE_GROUP_SET>

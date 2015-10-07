@@ -13,13 +13,13 @@
     "debug": "~2.1.1",
     "ejs": "~2.3.1",
     "express": "~4.12.2",
+    "fs-extra": "^0.24.0",
     "ftp": "^0.3.10",
     "md5": "^2.0.0",
     "morgan": "~1.5.1",
     "multer": "^0.1.8",
     "request": "^2.64.0",
-    "thinky": "^2.0.2",
-    "xml2js": "^0.4.12"
+    "thinky": "^2.0.2"
   },
   "devDependencies": {
     "chai": "^3.3.0",

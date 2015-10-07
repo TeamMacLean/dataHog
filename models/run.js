@@ -9,24 +9,26 @@ var Run = thinky.createModel('Run', {
   sequencingProvider: type.string().required(),
   sequencingTechnology: type.string().required(),
   insertSize: type.string().required(),
-  communicationExcerpts: type.string().required(),
-  sequencingProviderDataSheet: type.string().required(),
+  additionalData: [type.string().required()],
   libraryInformation: type.string().required(),
   libraryType: type.string().required(),
   submissionToGalaxy: type.boolean().required(), //FIXME send email if true
-
   safeName: type.string()
 });
 
 Run.pre('save', function (next) {
   var run = this;
   var unsafeName = run.name;
-  Run.run().then(function (result) {
-    util.generateSafeName(unsafeName, result, function (name) {
-      run.safeName = name;
-      next();
+  if (!run.safeName) {
+    Run.run().then(function (result) {
+      util.generateSafeName(unsafeName, result, function (name) {
+        run.safeName = name;
+        next();
+      });
     });
-  });
+  } else {
+    console.log("has safeName", run.safeName);
+  }
 });
 
 module.exports = Run;

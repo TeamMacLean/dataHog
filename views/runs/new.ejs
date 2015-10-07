@@ -16,7 +16,7 @@
         <fieldset>
             <label for="libraryType">library Type</label>
             <select id="libraryType" name="libraryType" required>
-                <option value="">Select type</option>
+                <option value=""></option>
                 <option>paired</option>
                 <option>mate</option>
                 <option>unpaired</option>
@@ -30,7 +30,130 @@
 
         <fieldset>
             <label for="sequencingTechnology">Sequencing Technology</label>
-            <input type="text" id="sequencingTechnology" name="sequencingTechnology" required>
+            <select id="sequencingTechnology" name="sequencingTechnology" required>
+                <option value=""></option>
+                <option value="454 GS">454 GS</option>
+                <option value="454 GS 20">454 GS 20</option>
+                <option value="454 GS FLX">454 GS FLX</option>
+                <option value="454 GS FLX+">454 GS FLX+</option>
+                <option value="454 GS FLX Titanium">454 GS FLX Titanium</option>
+                <option value="454 GS Junior">454 GS Junior</option>
+                <option value="Illumina Genome Analyzer">Illumina Genome Analyzer</option>
+                <option value="Illumina Genome Analyzer II">Illumina Genome Analyzer II</option>
+                <option value="Illumina Genome Analyzer IIx">Illumina Genome Analyzer IIx</option>
+                <option value="Illumina HiSeq 2500">Illumina HiSeq 2500</option>
+                <option value="Illumina HiSeq 2000">Illumina HiSeq 2000</option>
+                <option value="Illumina HiSeq 1500">Illumina HiSeq 1500</option>
+                <option value="Illumina HiSeq 1000">Illumina HiSeq 1000</option>
+                <option value="Illumina HiScanSQ">Illumina HiScanSQ</option>
+                <option value="Illumina MiSeq">Illumina MiSeq</option>
+                <option value="Illumina HiSeq X Ten">Illumina HiSeq X Ten</option>
+                <option value="Illumina NextSeq 500">Illumina NextSeq 500</option>
+                <option value="AB SOLiD System">AB SOLiD System</option>
+                <option value="AB SOLiD System 2.0">AB SOLiD System 2.0</option>
+                <option value="AB SOLiD System 3.0">AB SOLiD System 3.0</option>
+                <option value="AB SOLiD 3 Plus System">AB SOLiD 3 Plus System</option>
+                <option value="AB SOLiD 4 System">AB SOLiD 4 System</option>
+                <option value="AB SOLiD 4hq System">AB SOLiD 4hq System</option>
+                <option value="AB SOLiD PI System">AB SOLiD PI System</option>
+                <option value="AB 5500 Genetic Analyzer">AB 5500 Genetic Analyzer</option>
+                <option value="AB 5500xl Genetic Analyzer">AB 5500xl Genetic Analyzer</option>
+                <option value="Ion Torrent PGM">Ion Torrent PGM</option>
+                <option value="Ion Torrent Proton">Ion Torrent Proton</option>
+                <option value="PacBio RS">PacBio RS</option>
+                <option value="PacBio RS II">PacBio RS II</option>
+                <option value="AB 3730xL Genetic Analyzer">AB 3730xL Genetic Analyzer</option>
+                <option value="AB 3730 Genetic Analyzer">AB 3730 Genetic Analyzer</option>
+                <option value="AB 3500xL Genetic Analyzer">AB 3500xL Genetic Analyzer</option>
+                <option value="AB 3500 Genetic Analyzer">AB 3500 Genetic Analyzer</option>
+                <option value="AB 3130xL Genetic Analyzer">AB 3130xL Genetic Analyzer</option>
+                <option value="AB 3130 Genetic Analyzer">AB 3130 Genetic Analyzer</option>
+                <option value="AB 310 Genetic Analyzer">AB 310 Genetic Analyzer</option>
+            </select>
+        </fieldset>
+
+        <fieldset>
+            <label>Library source</label>
+            <select class="textBox" required>
+                <option value=""></option>
+                <option value="GENOMIC">GENOMIC</option>
+                <option value="TRANSCRIPTOMIC">TRANSCRIPTOMIC</option>
+                <option value="METAGENOMIC">METAGENOMIC</option>
+                <option value="METATRANSCRIPTOMIC">METATRANSCRIPTOMIC</option>
+                <option value="SYNTHETIC">SYNTHETIC</option>
+                <option value="VIRAL RNA">VIRAL RNA</option>
+                <option value="OTHER">OTHER</option>
+            </select>
+        </fieldset>
+
+        <fieldset>
+            <label>Library selection</label>
+            <select class="textBox" required>
+                <option value=""></option>
+                <option value="RANDOM">RANDOM</option>
+                <option value="PCR">PCR</option>
+                <option value="RANDOM PCR">RANDOM PCR</option>
+                <option value="RT-PCR">RT-PCR</option>
+                <option value="HMPR">HMPR</option>
+                <option value="MF">MF</option>
+                <option value="repeat fractionation">repeat fractionation</option>
+                <option value="size fractionation">size fractionation</option>
+                <option value="MSLL">MSLL</option>
+                <option value="cDNA">cDNA</option>
+                <option value="ChIP">ChIP</option>
+                <option value="MNase">MNase</option>
+                <option value="DNase">DNase</option>
+                <option value="Hybrid Selection">Hybrid Selection</option>
+                <option value="Reduced Representation">Reduced Representation</option>
+                <option value="Restriction Digest">Restriction Digest</option>
+                <option value="5-methylcytidine antibody">5-methylcytidine antibody</option>
+                <option value="MBD2 protein methyl-CpG binding domain">MBD2 protein methyl-CpG binding domain</option>
+                <option value="CAGE">CAGE</option>
+                <option value="RACE">RACE</option>
+                <option value="MDA">MDA</option>
+                <option value="padlock probes capture method">padlock probes capture method</option>
+                <option value="Oligo-dT">Oligo-dT</option>
+                <option value="Inverse rRNA selection">Inverse rRNA selection</option>
+                <option value="other">other</option>
+                <option value="unspecified">unspecified</option>
+            </select>
+        </fieldset>
+
+        <fieldset>
+            <label>Library stratergy</label>
+            <select class="textBox" required>
+                <option value=""></option>
+                <option value="WGS">WGS</option>
+                <option value="WGA">WGA</option>
+                <option value="WXS">WXS</option>
+                <option value="RNA-Seq">RNA-Seq</option>
+                <option value="miRNA-Seq">miRNA-Seq</option>
+                <option value="ncRNA-Seq">ncRNA-Seq</option>
+                <option value="WCS">WCS</option>
+                <option value="CLONE">CLONE</option>
+                <option value="POOLCLONE">POOLCLONE</option>
+                <option value="AMPLICON">AMPLICON</option>
+                <option value="CLONEEND">CLONEEND</option>
+                <option value="FINISHING">FINISHING</option>
+                <option value="ChIP-Seq">ChIP-Seq</option>
+                <option value="MNase-Seq">MNase-Seq</option>
+                <option value="DNase-Hypersensitivity">DNase-Hypersensitivity</option>
+                <option value="Bisulfite-Seq">Bisulfite-Seq</option>
+                <option value="EST">EST</option>
+                <option value="FL-cDNA">FL-cDNA</option>
+                <option value="CTS">CTS</option>
+                <option value="MRE-Seq">MRE-Seq</option>
+                <option value="MeDIP-Seq">MeDIP-Seq</option>
+                <option value="MBD-Seq">MBD-Seq</option>
+                <option value="Tn-Seq">Tn-Seq</option>
+                <option value="VALIDATION">VALIDATION</option>
+                <option value="FAIRE-seq">FAIRE-seq</option>
+                <option value="SELEX">SELEX</option>
+                <option value="RIP-Seq">RIP-Seq</option>
+                <option value="ChIA-PET">ChIA-PET</option>
+                <option value="RAD-Seq">RAD-Seq</option>
+                <option value="OTHER">OTHER</option>
+            </select>
         </fieldset>
 
         <fieldset>
@@ -38,21 +161,21 @@
             <input type="number" id="insertSize" name="insertSize" required>
         </fieldset>
 
-        <fieldset>
-            <label for="communicationExcerpts">Communication Excerpts</label>
-            <input type="text" id="communicationExcerpts" name="communicationExcerpts" required>
+        <fieldset class="file-group" id="additionalDataDiv">
+            <label>Additional data</label>
+
+            <div id="additionalData">
+            </div>
+            <input class="button addFileInput" type="button" value="Add more additional data">
+
         </fieldset>
 
-        <fieldset>
-            <label for="sequencingProviderDataSheet">Sequencing Provider Datasheet</label>
-            <input type="text" id="sequencingProviderDataSheet"
-                   name="sequencingProviderDataSheet" required>
-        </fieldset>
+        <fieldset id="md5Inputs" class="file-group">
+            <label>Read data</label>
 
-        <fieldset>
-            <label for="libraryInformation">Library Information</label>
-            <textarea rows="3" id="libraryInformation" name="libraryInformation"
-                      required></textarea>
+            <div id="filesRoot">
+            </div>
+            <input class="button addFileInput" type="button" value="Add more read data">
         </fieldset>
 
         <fieldset>
@@ -64,16 +187,7 @@
             </div>
         </fieldset>
 
-        <div>
-
-            <div id="filesRoot">
-
-            </div>
-            <input class="button addFileInput" type="button" value="Add more files">
-
-        </div>
-
-        <button type="submit" class="button button-primary">Add</button>
+        <button type="submit" class="button button-primary">Submit</button>
     </form>
 
 </div>

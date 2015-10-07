@@ -4,7 +4,7 @@ var Read = require('../models/read.js');
 
 var Groups = require('./groups');
 
-var fs = require('fs');
+var fs = require('fs-extra');
 var path = require('path');
 
 var util = require('../lib/util');
@@ -45,7 +45,7 @@ Projects.newPost = function (req, res) {
   project.save().then(function (result) {
 
     var joinedPath = path.join(config.dataDir, result.safeName);
-    util.createFolder(joinedPath, function (err) {
+    fs.ensureDir(joinedPath, function (err) {
       if (err) {
         return res.render('error', {error: err});
       }

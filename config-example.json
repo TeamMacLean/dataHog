@@ -1,12 +1,11 @@
 {
-  "appName": "Hog",
+  "appName": "DataHog",
   "port": "1337",
   "dataDir": "./reads",
   "tmpDir": "./uploads/",
   "fastQCCommand": "fastqc",
-  "md5Command": "md5sum-lite",
-  "md5QuietOption": "",
   "ena": {
+    "center":"The Sainsbury Laboratory",
     "ftpAddress": "webin.ebi.ac.uk",
     "productionURL": "https://www.ebi.ac.uk/ena/submit/drop-box/submit/",
     "testingURL": "https://www-test.ebi.ac.uk/ena/submit/drop-box/submit/",

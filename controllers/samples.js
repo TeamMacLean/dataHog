@@ -2,7 +2,8 @@ var Samples = {};
 var Project = require('../models/project');
 var Sample = require('../models/sample');
 
-var util = require('../lib/util');
+var fs = require('fs-extra');
+
 var path = require('path');
 var config = require('../config.json');
 
@@ -43,7 +44,7 @@ Samples.newPost = function (req, res) {
 
       var joinedPath = path.join(config.dataDir, project.safeName, result.safeName);
 
-      util.createFolder(joinedPath, function (err) {
+      fs.ensureFile(joinedPath, function (err) {
         if (err) {
           return res.render('error', {error: err});
         } else {
@@ -64,7 +65,10 @@ Samples.show = function (req, res) {
   var sampleSafeName = req.params.sample;
   var projectSN = req.params.project;
 
-  Sample.filter({safeName: sampleSafeName}).getJoin({project: true, runs: true}).filter({project:{safeName:projectSN}}).run().then(function (results) {
+  Sample.filter({safeName: sampleSafeName}).getJoin({
+    project: true,
+    runs: true
+  }).filter({project: {safeName: projectSN}}).run().then(function (results) {
 
     if (results.length > 1) {
       console.error('multiple samples', results);

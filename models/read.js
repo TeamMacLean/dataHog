@@ -11,18 +11,21 @@ var Read = thinky.createModel('Read', {
   MD5: type.string().required(),
   fastQCLocation: type.string().required(),
   moreInfo: type.string().required(),
-  safeName: type.string()
+  safeName: type.string(),
+  path: type.string()
 });
 
 Read.pre('save', function (next) {
   var read = this;
   var unsafeName = read.name;
-  Read.run().then(function (result) {
-    util.generateSafeName(unsafeName, result, function (name) {
-      read.safeName = name;
-      next();
+  if (!read.safeName) {
+    Read.run().then(function (result) {
+      util.generateSafeName(unsafeName, result, function (name) {
+        read.safeName = name;
+        next();
+      });
     });
-  });
+  }
 });
 
 module.exports = Read;

@@ -4,12 +4,11 @@ var Run = require('../models/run.js');
 var Read = require('../models/read.js');
 
 var async = require('async');
-var fs = require('fs');
+var fs = require('fs-extra');
 var path = require('path');
 var fastqc = require('../lib/fastqc');
 var md5 = require('md5');
 
-var util = require('../lib/util');
 
 var config = require('../config.json');
 
@@ -21,10 +20,6 @@ Runs.new = function (req, res) {
   var projectSN = req.params.project;
 
   Sample.filter({safeName: sampleSN}).getJoin({project: true}).filter({project: {safeName: projectSN}}).run().then(function (results) {
-
-    //var filtered = results.filter(function (r) {
-    //  return r.project.safeName === projectSN;
-    //});
 
     if (results.length > 1) {
       console.error('too many samples', results);
@@ -45,18 +40,12 @@ Runs.newPost = function (req, res) {
   var sequencingProvider = req.body.sequencingProvider;
   var sequencingTechnology = req.body.sequencingTechnology;
   var insertSize = req.body.insertSize;
-  var communicationExcerpts = req.body.communicationExcerpts;
-  var sequencingProviderDataSheet = req.body.sequencingProviderDataSheet;
   var libraryInformation = req.body.libraryInformation;
   var libraryType = req.body.libraryType;
   var submissionToGalaxy = req.body.submissionToGalaxy === 'on';
 
   Sample.filter({safeName: sampleSN}).getJoin({project: true}).filter({project: {safeName: projectSN}}).run().then(function (results) {
 
-
-    //var filtered = results.filter(function (r) {
-    //  return r.project.safeName === projectSN;
-    //});
 
     if (results.length > 1) {
       console.error('too many samples', results);
@@ -69,141 +58,162 @@ Runs.newPost = function (req, res) {
       sequencingProvider: sequencingProvider,
       sequencingTechnology: sequencingTechnology,
       insertSize: insertSize,
-      communicationExcerpts: communicationExcerpts,
-      sequencingProviderDataSheet: sequencingProviderDataSheet,
       libraryInformation: libraryInformation,
       submissionToGalaxy: submissionToGalaxy,
       libraryType: libraryType
     });
 
-
-    //get all file and md5 info from post
-
-
     var filesAndSums = [];
-    for (var p in req.files) {
-      if (req.files.hasOwnProperty(p)) {
-        var file = req.files[p];
-        var num = p.split('-')[1];
-        filesAndSums.push({file: file, md5: req.body['MD5-' + num]});
+    var additionalFiles = [];
+
+    function processAllFiles() {
+
+      for (var p in req.files) {
+        if (req.files.hasOwnProperty(p)) {
+          if (p.indexOf('file') > -1) {
+            var file = req.files[p];
+            var num = p.split('-')[1];
+            filesAndSums.push({file: file, md5: req.body['MD5-' + num]});
+          } else if (p.indexOf('additional') > -1) {
+            additionalFiles.push(req.files[p]);
+          }
+        }
       }
     }
 
+    run.save().then(function (savedRun) {
+        processAllFiles();
+        var pathToNewRunFolder = path.join(config.dataDir, sample.project.safeName, sample.safeName, savedRun.safeName);
 
-    //make array of md5 checks
-    var para = [];
-    filesAndSums.map(function (fileAndMD5) {
-
-      var fun = function (cb) {
-        fs.readFile(fileAndMD5.file.path, function (err, buf) {
-          var sum = md5(buf);
+        fs.ensureDir(pathToNewRunFolder, function (err) {
           if (err) {
-            cb(err);
-          } else {
-            if (sum == fileAndMD5.md5) {
-              cb(null)
-            } else {
-              cb('md5sum for file ' + fileAndMD5.file.originalname + ' does not match');
-            }
+            return res.render('error', {error: err});
           }
+          runInOrder();
         });
-      };
-      para.push(fun);
-    });
 
-    async.parallel(para, function (err, out) {
-      if (err) {
-        return res.render('error', {error: err});
-      } else {
+        function runInOrder() {
+          async.series([addReads, addAdditional], renderOK);
+        }
 
-        run.save().then(function (result) {
+        function renderOK() {
+          Run.get(savedRun.id).getJoin({sample: {project: true}, reads: true}).then(function (result) {
+            var url = path.join('/', result.sample.project.safeName, result.sample.safeName, result.safeName);
+            return res.redirect(url);
+          })
+        }
 
-          var joinedPath = path.join(config.dataDir, sample.project.safeName, sample.safeName, result.safeName);
+        function addReads(cb) {
 
-          function postReturnStuff() {
+          var happyFiles = [];
+          var sadFiles = [];
+          filesAndSums.map(function (fsum) {
+            var buf = fs.readFileSync(fsum.file.path);
+            var sum = md5(buf);
+            if (sum == fsum.md5) {
+              happyFiles.push(fsum)
+            } else {
+              sadFiles.push(fsum);
+            }
+          });
+          if (sadFiles.length > 0) {
+            console.warn('some bad md5 sums');
+            return res.render('error', {
+              error: 'md5 sums do not match for ' + sadFiles
+            })
+          }
+          var usedFileNames = [];
+          happyFiles.map(function (fileAndMD5) {
+            var file = fileAndMD5.file;
+            var fileName = file.originalname;
+            if (usedFileNames.indexOf(fileName) > -1) {
+              var i = 0;
+              while (usedFileNames.indexOf(fileName) > -1) {
+                i++;
+                var extension = path.extname(file.originalname);
+                var withoutExtention = path.basename(fileName, extension);
+                fileName = withoutExtention + i + extension;
+              }
+            }
+            usedFileNames.push(fileName);
+            var newPath = path.join(pathToNewRunFolder, fileName);
+            fs.renameSync(file.path, newPath);
+            var fqcPath = path.join(pathToNewRunFolder, '.fastqc');
+            console.log('new path', fqcPath);
 
-            //TODO check if it exists
-
-            util.createFolder(joinedPath, function (err) {
+            fs.ensureDir(pathToNewRunFolder, function (err) {
               if (err) {
                 return res.render('error', {error: err});
               }
+              fqcStuff();
+            });
+            function fqcStuff() {
+              console.log('adding read', fileName);
+              var read = new Read({
+                name: fileName,
+                runID: savedRun.id,
+                MD5: fileAndMD5.md5,
+                fastQCLocation: fqcPath,
+                moreInfo: '',
+                path: newPath
+              });
+              read.save().then(function (savedRead) {
+                fastqc.run(newPath, fqcPath, function () {
+                  console.log('created fastqc report');
+                })
+              }).error(function (err) {
+                return res.render('error', {error: err});
+              });
+            }
+          });
+          cb();
+        }
 
-              var first = true;
-
-              var usedFileNames = [];
-
-              console.warn(filesAndSums.length, 'files');
-
-              filesAndSums.map(function (fileAndMD5) {
-
-                var file = fileAndMD5.file;
-
-                var fileName = file.originalname;
-
-                if (usedFileNames.indexOf(fileName) > -1) {
-                  var i = 0;
-                  while (usedFileNames.indexOf(fileName) > -1) {
-                    i++;
-                    var extension = path.extname(file.originalname);
-                    var withoutExtention = path.basename(fileName, extension);
-                    fileName = withoutExtention + i + extension;
-                  }
-
+        function addAdditional(cb) {
+          var joinedPathWithAddition = path.join(pathToNewRunFolder, 'additional');
+          fs.ensureDir(pathToNewRunFolder, function (err) {
+            if (err) {
+              return res.render('error', {error: err});
+            }
+            moveAdditional();
+          });
+          function moveAdditional() {
+            var usedNames = [];
+            var justPaths = [];
+            additionalFiles.map(function (f) {
+              var fileName = f.originalname;
+              if (usedNames.indexOf(fileName) > -1) {
+                var i = 0;
+                while (usedNames.indexOf(fileName) > -1) {
+                  i++;
+                  var extension = path.extname(f.originalname);
+                  var withoutExtention = path.basename(fileName, extension);
+                  fileName = withoutExtention + i + extension;
                 }
-
-                usedFileNames.push(fileName);
-
-                console.warn(fileName);
-
-                var newPath = path.join(joinedPath, fileName);
-                fs.renameSync(file.path, newPath);
-
-                var fqcPath = path.join(joinedPath, '.fastqc');
-
-                function fqStuff() {
-
-                  fastqc.run(newPath, fqcPath, function () {
-
-                    var read = new Read({
-                      name: fileName,
-                      runID: result.id,
-                      MD5: fileAndMD5.md5,
-                      fastQCLocation: fqcPath,
-                      moreInfo: ''
-                    });
-                    read.save(); //TODO better save!!
-                    console.warn('saved read!!!');
-                  })
+              }
+              usedNames.push(fileName);
+              var newPath = path.join(joinedPathWithAddition, fileName);
+              justPaths.push(newPath);
+              fs.rename(f.path, newPath, function (err) {
+                if (err) {
+                  console.error('error!', err);
                 }
-
-                if (first) {
-                  util.safeMakeDir(fqcPath, function (err) {
-                    if (err) console.error(err);
-                    fqStuff();
-                  })
-
-                } else {
-                  fqStuff();
-                }
-
-                first = false;
               });
             });
+            Run.get(savedRun.id).update({additionalData: justPaths}).run().then(function (savedRun) {
+              cb();
+            })
+              .error(function (err) {
+                console.error(err);
+              })
           }
 
-          console.warn('here!!');
-
-          postReturnStuff();
-          return res.redirect('/' + sample.project.safeName + '/' + sample.safeName);
-
-        }).error(function () {
-          return res.render('error', {error: 'failed to save run!'});
-        })
+        }
       }
-    });
-  });
+    )
+  })
 };
+
 
 Runs.show = function (req, res) {
   var runSN = req.params.run;

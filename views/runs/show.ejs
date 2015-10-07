@@ -13,13 +13,24 @@
 
     <p><%- run.sequencingTechnology %></p>
 
-    <label>Communication excerpts</label>
+    <label>Additional Info</label>
 
-    <p><%- run.communicationExcerpts %></p>
+    <% if(run.additionalData){ %>
+    <% run.additionalData.map(function(data){ %>
 
-    <label>Sequencing provider datasheets</label>
+    <%
+        var str = data;
+        var n = str.lastIndexOf('/');
+        var result = str.substring(n + 1);
+    %>
 
-    <p><%- run.sequencingProviderDataSheet %></p>
+    <p><i class="fa fa-file-o"></i> <a href="#"><%- result %></a></p>
+
+    <% }); %>
+
+    <% } else { %>
+    <p>none</p>
+    <% } %>
 
     <label>Library information</label>
 

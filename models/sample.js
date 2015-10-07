@@ -18,16 +18,18 @@ var Sample = thinky.createModel('Sample', {
 Sample.pre('save', function (next) {
   var sample = this;
   var unsafeName = sample.name;
-  Sample.run().then(function (result) {
-    util.generateSafeName(unsafeName, result, function (name) {
-      sample.safeName = name;
-      //now create sampleGroup
-      Project.get(sample.projectID).run().then(function (result) {
-        sample.sampleGroup = result.safeName + '_' + name
-        next();
+  if (!sample.safeName) {
+    Sample.run().then(function (result) {
+      util.generateSafeName(unsafeName, result, function (name) {
+        sample.safeName = name;
+        //now create sampleGroup
+        Project.get(sample.projectID).run().then(function (result) {
+          sample.sampleGroup = result.safeName + '_' + name
+          next();
+        });
       });
     });
-  });
+  }
 });
 
 module.exports = Sample;

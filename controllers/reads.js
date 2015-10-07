@@ -16,14 +16,23 @@ Reads.show = function (req, res, next) {
   var runSN = req.params.run;
   var readSN = req.params.read;
 
+  console.log(projectSN,sampleSN,runSN)
+
   Read.filter({safeName: readSN}).getJoin({run: {sample: {project: true}}}).filter({
     run: {
       safeName: runSN,
       sample: {safeName: sampleSN, project: {safeName: projectSN}}
     }
   }).run().then(function (results) {
+
+    if (results.length < 1) {
+      return next();
+    }
+
     var read = results[0];
-    res.render('readData/show', {read: read});
+    return res.render('readData/show', {read: read});
+  }).error(function (err) {
+    return res.render('error', {error: err});
   })
 
 };

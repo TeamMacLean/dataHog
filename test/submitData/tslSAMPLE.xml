@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SAMPLE_SET>
+    <SAMPLE alias="Ath_mob56-1BC" center_name="JIC" accession="ERS845420">
+        <IDENTIFIERS>
+            <PRIMARY_ID>ERS845420</PRIMARY_ID>
+            <SUBMITTER_ID namespace="JIC">Ath_mob56-1BC</SUBMITTER_ID>
+        </IDENTIFIERS>
+        <TITLE>Ath - mob54-3/56-1BC variant detection</TITLE>
+        <SAMPLE_NAME>
+            <TAXON_ID>3702</TAXON_ID>
+            <SCIENTIFIC_NAME>Arabidopsis thaliana</SCIENTIFIC_NAME>
+            <COMMON_NAME>thale cress</COMMON_NAME>
+        </SAMPLE_NAME>
+        <SAMPLE_ATTRIBUTES>
+            <SAMPLE_ATTRIBUTE>
+                <TAG>ENA-CHECKLIST</TAG>
+                <VALUE>ERC000011</VALUE>
+            </SAMPLE_ATTRIBUTE>
+        </SAMPLE_ATTRIBUTES>
+    </SAMPLE>
+</SAMPLE_SET>

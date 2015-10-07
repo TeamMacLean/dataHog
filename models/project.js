@@ -18,12 +18,14 @@ var Project = thinky.createModel('Project', {
 Project.pre('save', function (next) {
   var project = this;
   var unsafeName = project.name;
-  Project.run().then(function (result) {
-    util.generateSafeName(unsafeName, result, function (name) {
-      project.safeName = name;
-      next();
+  if (!project.safeName) {
+    Project.run().then(function (result) {
+      util.generateSafeName(unsafeName, result, function (name) {
+        project.safeName = name;
+        next();
+      });
     });
-  });
+  }
 });
 
 module.exports = Project;

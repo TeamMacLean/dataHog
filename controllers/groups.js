@@ -22,6 +22,13 @@ Groups.index = function (req, res, next) {
 
 Groups.show = function (req, res) {
   var requestedGroup = req.params.group;
+
+  if (requestedGroup === 'all') {
+    Project.run().then(function (projects) {
+      res.render('groups/show', {group: requestedGroup, projects: projects});
+    });
+  }
+
   Project.filter({group: requestedGroup}).run().then(function (projects) {
     res.render('groups/show', {group: requestedGroup, projects: projects});
   });

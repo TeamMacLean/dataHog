@@ -14,7 +14,6 @@
   ],
   "dependencies": {
     "font-awesome": "~4.3.0",
-    "spark-md5": "~0.0.5",
     "taxlookup": "*",
     "terrier": "*"
   }
