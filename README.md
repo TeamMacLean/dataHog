@@ -1,4 +1,6 @@
 # Data Hog
+> TSL read storage system
+<img align="right" height="300" src="img/bower-logo.png">
 
 [![Build Status](https://travis-ci.org/TeamMacLean/dataHog.svg)](https://travis-ci.org/TeamMacLean/dataHog)
 [![Code Climate](https://codeclimate.com/github/TeamMacLean/dataHog/badges/gpa.svg)](https://codeclimate.com/github/TeamMacLean/dataHog)

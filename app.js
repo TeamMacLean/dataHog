@@ -6,6 +6,7 @@ var bodyParser = require('body-parser');
 var routes = require('./routes');
 var config = require('./config');
 var fs = require('fs');
+var init = require('./lib/init');
 
 if (!config.appName || !config.port || !config.dataDir || !config.tmpDir) {
   console.error('please fill out config.json');
@@ -20,6 +21,10 @@ if (!fs.existsSync(config.dataDir)) {
 if (!fs.existsSync(config.tmpDir)) {
   console.error('tmpDir', config.tmpDir, 'does not exist');
 }
+
+//TODO generate groups database entries
+
+init.reloadAllGroups();
 
 var app = express();
 app.locals.title = config.appName;
