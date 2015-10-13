@@ -49,11 +49,18 @@ function resetSelectedFiles() {
 }
 
 function removeFileInput(a) {
-  if (fileInputCount > 1) {
+
+  var min = 1;
+
+  if (pairedOrMated) {
+    min = 2;
+  }
+
+  if (fileInputCount > min) {
     fileInputCount--;
     a.target.parentElement.remove();
   } else {
-    alert('at least one dataset required');
+    alert('at least ' + min + ' dataset required');
   }
 }
 

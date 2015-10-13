@@ -30,13 +30,13 @@ function compressFile(filename, callback) {
 
   if (callback) {
 
-    console.log('calling callback');
 
     output.on('finish', function () {
       callback(compressedPath)
     });
   }
 }
+
 Runs.new = function (req, res) {
 
   var sampleSN = req.params.sample;
@@ -146,14 +146,15 @@ Runs.newPost = function (req, res) {
 
       function addAdditional(cb) {
         var joinedPathWithAddition = path.join(pathToNewRunFolder, 'additional');
-        fs.ensureDir(pathToNewRunFolder, function (err) {
+
+        fs.ensureDir(joinedPathWithAddition, function (err) {
           if (err) {
             return fail(err);
           } else {
             moveAdditional();
           }
         });
-        function moveAdditional() {
+        function moveAdditional() { //TODO FIX
           var usedNames = [];
           var justPaths = [];
           additionalFiles.map(function (f) {
@@ -299,7 +300,6 @@ Runs.newPost = function (req, res) {
               }
             });
             function fqcStuff() {
-              console.log('adding read', md5AndPath.originalName);
               var read = new Read({
                 name: md5AndPath.originalName,
                 runID: savedRun.id,
@@ -311,8 +311,6 @@ Runs.newPost = function (req, res) {
               read.save().then(function (savedRead) {
 
                 savedReads.push(savedRead);
-
-                console.warn('running fastq files', newFullPath, 'into fastqc folder', fqcPath);
 
                 fastqc.run(newFullPath, fqcPath, function () {
                   console.log('created fastqc report');
@@ -331,7 +329,6 @@ Runs.newPost = function (req, res) {
     });
   });
 };
-
 
 Runs.show = function (req, res) {
   var runSN = req.params.run;
