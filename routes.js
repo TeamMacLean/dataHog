@@ -7,12 +7,15 @@ var Runs = require(__dirname + '/controllers/runs.js');
 var Samples = require(__dirname + '/controllers/samples.js');
 var Reads = require(__dirname + '/controllers/reads.js');
 var Errors = require(__dirname + '/controllers/errors.js');
-
+var Index = require(__dirname + '/controllers/index.js');
 //get index
-router.get('/', Groups.index);
+router.get('/', Index.index);
+router.get('/groups', Groups.index);
 
 //show by lab name
 router.get('/groups/:group', Groups.show);
+
+router.get('/groups/:group/:new', Projects.new);
 
 //get new project
 router.get('/new', Projects.new);
@@ -39,13 +42,13 @@ router.get('/:project/:sample/new', Runs.new);
 router.post('/:project/:sample/new', Runs.newPost);
 
 //show run
-router.get('/:project/:sample/:run', Runs.show);//TODO
+router.get('/:project/:sample/:run', Runs.show);
 
 //show read
-router.get('/:project/:sample/:run/:read', Reads.show);//TODO
+router.get('/:project/:sample/:run/:read', Reads.show);
 
 //show run qc
-router.get('/:project/:sample/:run/:read/fastqc', Reads.fastQC);//TODO
+router.get('/:project/:sample/:run/:read/fastqc', Reads.fastQC);
 
 //404 page
 router.get(['/404', '/:404'], Errors.show);

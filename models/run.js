@@ -10,7 +10,6 @@ var Run = thinky.createModel('Run', {
   sequencingTechnology: type.string().required(),
   insertSize: type.string().required(),
   additionalData: [type.string().required()],
-  libraryInformation: type.string().required(),
   libraryType: type.string().required(),
   submissionToGalaxy: type.boolean().required(), //FIXME send email if true
   safeName: type.string()

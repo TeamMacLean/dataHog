@@ -10,7 +10,20 @@ var config = require('../config.json');
 var Projects = {};
 
 Projects.new = function (req, res) {
-  return res.render('projects/new', {groups: Groups.groups});
+
+  var group = req.params.group;
+
+  var groupList = Groups.groups.slice();
+
+  if (group) {
+    var index = groupList.indexOf(group);
+
+    if (index > -1) {
+      groupList.splice(index, 1);
+    }
+  }
+
+  return res.render('projects/new', {groups: Groups.groups, selectedGroup: group});
 };
 
 Projects.newPost = function (req, res) {

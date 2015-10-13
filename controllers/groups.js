@@ -1,20 +1,10 @@
 var Project = require('../models/project.js');
 
+var config = require('../config');
+
 var Groups = {};
 
-Groups.groups = [
-  'Jonathan Jones Group',
-  'Sophien Kamoun Group',
-  'Ksenia Krasileva Group',
-  'Matthew Moscou Group',
-  'Silke Robatzek Group',
-  'Cyril Zipfel Group',
-  'The 2Blades Group',
-  'Bioinformatics',
-  'Proteomics',
-  'Synthetic Biology',
-  'Tissue Culture & Transformation'
-].sort();
+Groups.groups = config.groups.sort();
 
 Groups.index = function (req, res, next) {
   res.render('groups/index', {groups: Groups.groups});

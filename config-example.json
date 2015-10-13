@@ -5,12 +5,16 @@
   "tmpDir": "./uploads/",
   "fastQCCommand": "fastqc",
   "ena": {
-    "center":"The Sainsbury Laboratory",
+    "center": "The Sainsbury Laboratory",
     "ftpAddress": "webin.ebi.ac.uk",
     "productionURL": "https://www.ebi.ac.uk/ena/submit/drop-box/submit/",
     "testingURL": "https://www-test.ebi.ac.uk/ena/submit/drop-box/submit/",
     "testMode": true,
     "username": "",
     "password": ""
-  }
+  },
+  "groups": [
+    "groups1",
+    "group2"
+  ]
 }

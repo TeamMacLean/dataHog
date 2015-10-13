@@ -14,14 +14,19 @@
         <fieldset data-tooltip="The group/lab you are a member of" class="tooltip-bottom">
             <label for="group">Group</label>
             <select id="group" name="group" required>
+                <% if(selectedGroup){ %>
+                <option><%- selectedGroup %></option>
+                <% } else { %>
                 <option value="">Select Group</option>
+                <% } %>
                 <% groups.forEach(function(g){ %>
                 <option><%- g %></option>
                 <% }); %>
             </select>
         </fieldset>
 
-        <fieldset data-tooltip="email address of the person to be contacted about the data in future" class="tooltip-bottom">
+        <fieldset data-tooltip="email address of the person to be contacted about the data in future"
+                  class="tooltip-bottom">
             <label for="responsiblePerson">Data owner</label>
             <input type="email" id="responsiblePerson" name="responsiblePerson" required>
         </fieldset>
