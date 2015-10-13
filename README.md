@@ -13,19 +13,15 @@ npm install -g bower
 bower install
 ```
 
-Optional:
-```
-npm install -g pm2
-npm install -g nodemon
-```
-
 Start in development:
 ```
+npm install -g nodemon
 nodemon server.js
 ```
 
 Start in production:
 ```
+npm install -g pm2
 pm2 start --name datahog server.js
 ```
 
