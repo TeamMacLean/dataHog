@@ -1,0 +1,35 @@
+[
+	{
+		"name": "group1",
+		"projects": [
+			{
+				"name": "project 2",
+				"samples": []
+			},
+			{
+				"name": "project1",
+				"samples": [
+					{
+						"name": "sample1",
+						"runs": [
+							{
+								"name": "run1",
+								"additionalFiles": [],
+								"rawFiles": [],
+								"processedFiles": []
+							}
+						]
+					}
+				]
+			}
+		]
+	},
+	{
+		"name": "group2",
+		"projects": []
+	},
+	{
+		"name": "group3",
+		"projects": []
+	}
+]

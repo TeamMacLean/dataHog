@@ -1,0 +1,12 @@
+              Group
+                |
+             Project
+                |
+              Sample
+                |
+               Run
+                |
+  -------------Read-----------
+  |             |            |
+Processed     .fastqc    Additional
+ Read                      Files
