@@ -1,4 +1,5 @@
 var Project = require('../models/project.js');
+var Group = require('../models/group');
 var Run = require('../models/run.js');
 var Read = require('../models/read.js');
 var Groups = require('./groups');
@@ -13,17 +14,11 @@ Projects.new = function (req, res) {
 
   var group = req.params.group;
 
-  var groupList = Groups.groups.slice();
+Group.filter({safeName:group}).run().then(function(groups){
+  return res.render('projects/new', {selectedGroup: groups[0]});
 
-  if (group) {
-    var index = groupList.indexOf(group);
+})
 
-    if (index > -1) {
-      groupList.splice(index, 1);
-    }
-  }
-
-  return res.render('projects/new', {groups: Groups.groups, selectedGroup: group});
 };
 
 Projects.newPost = function (req, res) {
@@ -33,32 +28,36 @@ Projects.newPost = function (req, res) {
   var shortDescription = req.body.shortDescription;
   var longDescription = req.body.longDescription;
 
-  var project = new Project({
-    name: name,
-    group: group,
-    responsiblePerson: responsiblePerson,
-    shortDescription: shortDescription,
-    longDescription: longDescription
-  });
-
-  project.save().then(function (result) {
-
-    var joinedPath = path.join(config.dataDir, result.safeName);
-    fs.ensureDir(joinedPath, function (err) {
-      if (err) {
-        return res.render('error', {error: err});
-      }
-      return res.redirect('/' + project.safeName);
+  Group.filter({safeName:group}).run().then(function(groups){
+    var project = new Project({
+      name: name,
+      group: group,
+      responsiblePerson: responsiblePerson,
+      shortDescription: shortDescription,
+      longDescription: longDescription
     });
-  }).error(function (err) {
-    console.error(err);
-  })
+
+    project.save().then(function (result) {
+
+      var joinedPath = path.join(config.dataDir, result.safeName);
+      fs.ensureDir(joinedPath, function (err) {
+        if (err) {
+          return res.render('error', {error: err});
+        }
+        return res.redirect('/' + project.safeName);
+      });
+    }).error(function (err) {
+      console.error(err);
+    })
+  });
 };
 
 Projects.show = function (req, res, next) {
   var project = req.params.project;
+  var group = req.params.group;
 
-  Project.filter({safeName: project}).getJoin({samples: true}).run().then(function (projects) {
+
+  Project.filter({safeName: project}).getJoin({samples: true, group:true}).filter({group:{safeName:group}}).run().then(function (projects) {
 
     if (projects.length < 1) {
       return next();
