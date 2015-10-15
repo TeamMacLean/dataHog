@@ -9,7 +9,12 @@ var Groups = {};
 
 Groups.index = function (req, res, next) {
   Group.run().then(function (groups) {
-    res.render('groups/index', {groups: groups.sort()});
+
+    groups.sort(function (a, b) {
+      return a.safeName.localeCompare(b.safeName);
+    });
+
+    res.render('groups/index', {groups: groups});
   })
 };
 
