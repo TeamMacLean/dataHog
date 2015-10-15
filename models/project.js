@@ -32,5 +32,5 @@ module.exports = Project;
 
 var Sample = require('./sample.js');
 var Group = require('./group');
-Project.belongsTo(Group,'group','id','groupID');
+Project.belongsTo(Group,'group','groupID','id');
 Project.hasMany(Sample, 'samples', 'id', 'projectID');

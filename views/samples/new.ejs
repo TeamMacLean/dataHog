@@ -1,10 +1,12 @@
 <% include ../head %>
 <div class="container">
-    <h3><a href="/<%- project.safeName %>"><i class="fa fa-chevron-left"></i> <%- project.name %></a></h3>
+    <h3><a href="/<%- project.group.safeName %>/<%- project.safeName %>"><i
+                    class="fa fa-chevron-left"></i> <%- project.name %></a></h3>
 
     <h2>New Sample</h2>
 
-    <form action="/<%- project.safeName %>/new" method="POST" enctype="multipart/form-data">
+    <form action="/<%- project.group.safeName %>/<%- project.safeName %>/new" method="POST"
+          enctype="multipart/form-data">
 
         <fieldset>
             <label for="name">Title</label>

@@ -16,7 +16,7 @@ router.get('/groups', Groups.index);
 router.get('/:group', Groups.show);
 
 //get new project
-router.get('/:group/:new', Projects.new);
+router.get('/:group/new', Projects.new);
 
 //post new project
 router.post('/:group/new', Projects.newPost);

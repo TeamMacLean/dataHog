@@ -9,10 +9,10 @@
         <% groups.map(function(group){ %>
         <% i++; %>
         <div class="col6">
-            <a href="/groups/<%- group %>">
+            <a href="/<%- group.safeName %>">
                 <div class="tile">
                     <div class="title">
-                        <%- group %>
+                        <%- group.name %>
                     </div>
 
                 </div>

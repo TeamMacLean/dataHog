@@ -13,7 +13,7 @@
 
     <label>Group:</label>
 
-    <p><a href="/groups/<%- project.group %>"><%- project.group %></a></p>
+    <p><a href="/<%- project.group.safeName %>"><%- project.group.name %></a></p>
 
     <label>Responsible Person:</label>
 
@@ -27,7 +27,7 @@
 
     <p><%- project.longDescription %></p>
 
-    <a class="button button-primary" href="/<%- project.safeName %>/new"><i class="fa fa-plus"></i> new sample</a>
+    <a class="button button-primary" href="/<%-project.group.safeName%>/<%- project.safeName %>/new"><i class="fa fa-plus"></i> new sample</a>
 
     <div class="row">
         <% var i = 0; %>

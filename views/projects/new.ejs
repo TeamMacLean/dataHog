@@ -4,7 +4,7 @@
 
     <h1>New project</h1>
 
-    <form action="/new" method="POST">
+    <form action="/<%- selectedGroup.safeName %>/new" method="POST">
 
         <fieldset data-tooltip="a short name for the study" class="tooltip-bottom">
             <label for="name">Name</label>
@@ -14,14 +14,7 @@
         <fieldset data-tooltip="The group/lab you are a member of" class="tooltip-bottom">
             <label for="group">Group</label>
             <select id="group" name="group" required>
-                <% if(selectedGroup){ %>
-                <option><%- selectedGroup %></option>
-                <% } else { %>
-                <option value="">Select Group</option>
-                <% } %>
-                <% groups.forEach(function(g){ %>
-                <option><%- g %></option>
-                <% }); %>
+                <option value="<%- selectedGroup.id %>"><%- selectedGroup.name %></option>
             </select>
         </fieldset>
 

@@ -7,6 +7,11 @@
 [![Coverage Status](https://coveralls.io/repos/TeamMacLean/dataHog/badge.svg?branch=master&service=github)](https://coveralls.io/github/TeamMacLean/dataHog?branch=master)
 
 
+## Dependencies
+* RethinkDB
+* NodeJS
+* Bower
+
 ## Install
 
 ```

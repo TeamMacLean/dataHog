@@ -1,18 +1,16 @@
 var Samples = {};
 var Project = require('../models/project');
 var Sample = require('../models/sample');
-
 var fs = require('fs-extra');
-
 var path = require('path');
 var config = require('../config.json');
 
 Samples.new = function (req, res) {
 
   var projectSN = req.params.project;
+  var groupSN = req.params.group;
 
-  Project.filter({safeName: projectSN}).run().then(function (results) {
-
+  Project.filter({safeName: projectSN}).getJoin({group: true}).filter({group: {safeName: groupSN}}).run().then(function (results) {
     res.render('samples/new', {project: results[0]});
   }).error(function () {
     return res.render('error', {error: 'could not find project'});
