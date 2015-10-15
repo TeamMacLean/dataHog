@@ -39,18 +39,25 @@ function compressFile(filename, callback) {
 
 Runs.new = function (req, res) {
 
+  var groupSN = req.params.group;
   var sampleSN = req.params.sample;
   var projectSN = req.params.project;
 
-  Sample.filter({safeName: sampleSN}).getJoin({project: true}).filter({project: {safeName: projectSN}}).run().then(function (results) {
+  Sample.filter({safeName: sampleSN}).getJoin({project: {group: true}}).filter({
+    project: {
+      safeName: projectSN,
+      group: {safeName: groupSN}
+    }
+  }).run().then(function (results) {
 
     if (results.length > 1) {
       console.error('too many samples', results);
     }
 
+
     return res.render('runs/new', {sample: results[0]});
-  }).error(function () {
-    return res.render('error', {error: 'could not create project'});
+  }).error(function (err) {
+    return res.render('error', {error: err});
   });
 };
 
