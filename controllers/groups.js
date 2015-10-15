@@ -8,17 +8,22 @@ var Groups = {};
 
 
 Groups.index = function (req, res, next) {
-  Group.run().then(function(groups){
-    res.render('groups/index', {groups:groups});
+  Group.run().then(function (groups) {
+    res.render('groups/index', {groups: groups.sort()});
   })
 };
 
-Groups.show = function (req, res) {
+Groups.show = function (req, res, next) {
   var requestedGroup = req.params.group;
-  Group.filter({safeName:requestedGroup}).getJoin({projects:true}).then(function(groups){
-      var group = groups[0];
-      var projects = group.projects;
-      res.render('groups/show', {group: group, projects: projects});
+  Group.filter({safeName: requestedGroup}).getJoin({projects: true}).then(function (groups) {
+
+    if (groups.length < 1) {
+      next();
+    }
+
+    var group = groups[0];
+    var projects = group.projects;
+    res.render('groups/show', {group: group, projects: projects});
   });
 };
 

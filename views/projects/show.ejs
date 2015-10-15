@@ -1,6 +1,6 @@
 <% include ../head %>
 <div class="container">
-    <h3><a href="/"><i class="fa fa-chevron-left"></i> Projects</a></h3>
+    <h3><a href="/<%- project.group.safeName %>"><i class="fa fa-chevron-left"></i> Projects</a></h3>
 
 
     <h2><%- project.name %></h2>
@@ -27,14 +27,15 @@
 
     <p><%- project.longDescription %></p>
 
-    <a class="button button-primary" href="/<%-project.group.safeName%>/<%- project.safeName %>/new"><i class="fa fa-plus"></i> new sample</a>
+    <a class="button button-primary" href="/<%- project.group.safeName %>/<%- project.safeName %>/new"><i
+                class="fa fa-plus"></i> new sample</a>
 
     <div class="row">
         <% var i = 0; %>
         <% if(project.samples) project.samples.map(function(sample){ %>
         <% i++; %>
         <div class="col6">
-            <a href="/<%- project.safeName %>/<%- sample.safeName %>">
+            <a href="/<%- project.group.safeName %>/<%- project.safeName %>/<%- sample.safeName %>">
                 <div class="tile">
                     <span><%- sample.name %></span>
                 </div>

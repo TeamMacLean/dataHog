@@ -28,28 +28,33 @@ Projects.newPost = function (req, res) {
   var shortDescription = req.body.shortDescription;
   var longDescription = req.body.longDescription;
 
-  //Group.filter({safeName:group}).run().then(function(groups){
-  var project = new Project({
-    name: name,
-    groupID: groupID,
-    responsiblePerson: responsiblePerson,
-    shortDescription: shortDescription,
-    longDescription: longDescription
-  });
+  Group.get(groupID).run().then(function (group) {
 
-  project.save().then(function (result) {
 
-    var joinedPath = path.join(config.dataDir, result.safeName);
-    fs.ensureDir(joinedPath, function (err) {
-      if (err) {
-        return res.render('error', {error: err});
-      }
-      return res.redirect('/' + project.safeName);
+    var project = new Project({
+      name: name,
+      groupID: group.id,
+      responsiblePerson: responsiblePerson,
+      shortDescription: shortDescription,
+      longDescription: longDescription
     });
-  }).error(function (err) {
-    console.error(err);
+
+    project.save().then(function (result) {
+
+      var joinedPath = path.join(config.dataDir, group.safeName, result.safeName);
+      fs.ensureDir(joinedPath, function (err) {
+        if (err) {
+          return res.render('error', {error: err});
+        }
+
+        var url = path.join('/', group.safeName, project.safeName);
+
+        return res.redirect(url);
+      });
+    }).error(function (err) {
+      console.error(err);
+    });
   });
-  //});
 };
 
 Projects.show = function (req, res, next) {
@@ -68,7 +73,7 @@ Projects.show = function (req, res, next) {
 
     var project = projects[0];
 
-    var fullPath = path.join(config.dataDir, project.safeName);
+    var fullPath = path.join(config.dataDir, project.group.safeName, project.safeName);
 
     util.unknownFolders(fullPath, project.samples, function (unknownFolders) {
       return res.render('projects/show', {project: projects[0], unknownFolders: unknownFolders});

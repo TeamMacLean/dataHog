@@ -22,7 +22,7 @@ Samples.newPost = function (req, res) {
 
   var projectSafeName = req.params.project;
 
-  Project.filter({safeName: projectSafeName}).run().then(function (projects) {
+  Project.filter({safeName: projectSafeName}).getJoin({group: true}).run().then(function (projects) {
     var project = projects[0];
 
     var name = req.body.name;
@@ -40,13 +40,15 @@ Samples.newPost = function (req, res) {
 
     newSample.save().then(function (result) {
 
-      var joinedPath = path.join(config.dataDir, project.safeName, result.safeName);
+      var joinedPath = path.join(config.dataDir, project.group.safeName, project.safeName, result.safeName);
 
-      fs.ensureFile(joinedPath, function (err) {
+      fs.ensureDir(joinedPath, function (err) {
         if (err) {
           return res.render('error', {error: err});
         } else {
-          return res.redirect('/' + projectSafeName + '/' + result.safeName);
+
+          var url = path.join('/', project.group.safeName, project.safeName, result.safeName);
+          return res.redirect(url);
         }
       });
     }).error(function (err) {
@@ -64,7 +66,7 @@ Samples.show = function (req, res) {
   var projectSN = req.params.project;
 
   Sample.filter({safeName: sampleSafeName}).getJoin({
-    project: true,
+    project: {group: true},
     runs: true
   }).filter({project: {safeName: projectSN}}).run().then(function (results) {
 

@@ -1,6 +1,7 @@
 <% include ../head %>
 <div class="container">
-    <h3><a href="/<%- sample.project.safeName %>"><i class="fa fa-chevron-left"></i> <%- sample.project.name %></a></h3>
+    <h3><a href="/<%- sample.project.group.safeName %>/<%- sample.project.safeName %>"><i
+                    class="fa fa-chevron-left"></i> <%- sample.project.name %></a></h3>
 
 
     <h2><%- sample.name %></h2>
@@ -19,7 +20,8 @@
     <p><%- sample.conditions %></p>
 
 
-    <a class="button button-primary" href="/<%- sample.project.safeName %>/<%- sample.safeName %>/new"><i
+    <a class="button button-primary"
+       href="/<%- sample.project.group.safeName %>/<%- sample.project.safeName %>/<%- sample.safeName %>/new"><i
                 class="fa fa-plus"></i>
         add read
         data</a>
