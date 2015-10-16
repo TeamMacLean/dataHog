@@ -1,4 +1,3 @@
-var should = require('chai').should();
 var path = require('path');
 var ena = require('../lib/ena');
 var config = require('../config').ena;

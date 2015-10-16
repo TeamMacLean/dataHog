@@ -1,11 +1,15 @@
-var should = require('chai').should();
 var util = require('../lib/util');
 
 describe('util', function () {
   describe('.toSafeName', function () {
-    it('should convert "this is not safe" to "this_is_not_safe"', function () {
+    it('should convert "this is not safe" to "this_is_not_safe"', function (done) {
       var safe = util.toSafeName('this is not safe');
-      safe.should.equal('this_is_not_safe');
+
+      if (safe === 'this_is_not_safe') {
+        done();
+      } else {
+        done(new Error(safe + ' != this_is_not_safe'))
+      }
     })
   });
   describe('.generateSafeName', function () {
@@ -15,8 +19,12 @@ describe('util', function () {
       var list = [{safeName: 'lucy'}, {safeName: 'bob'}, {safeName: 'tina'}, {safeName: 'alice'}];
 
       util.generateSafeName(name, list, function (safeName) {
-        safeName.should.equal('bob_2');
-        done();
+        if (safeName === 'bob_2') {
+          done();
+        } else {
+          done(new Error(safeName + ' != bob_2'));
+        }
+
       })
 
     })

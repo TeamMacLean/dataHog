@@ -1,4 +1,3 @@
-var should = require('chai').should();
 
 describe('Legacy Data', function () {
   describe('run', function () {
