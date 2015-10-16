@@ -39,13 +39,13 @@ describe('Server', function () {
     var testProjectName = 'Test Project';
 
     before(function (done) {
-
-
-      new Group({name: testGroupName}).save().then(function (result) {
-        testGroupSafeName = result.safeName;
-        testGroupID = result.id;
-        Init.ensureBaseFolders(done);
-      })
+      Init.ensureBaseFolders(function(){
+        new Group({name: testGroupName}).save().then(function (result) {
+          testGroupSafeName = result.safeName;
+          testGroupID = result.id;
+          done();
+        })
+      });
     });
 
     it('should show test group', function (done) {
