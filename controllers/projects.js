@@ -47,8 +47,6 @@ Projects.newPost = function (req, res) {
 
         var url = path.join('/', group.safeName, project.safeName);
 
-        console.log('redirecting to', url);
-
         return res.redirect(url);
       });
     }).error(function (err) {

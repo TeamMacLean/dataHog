@@ -5,11 +5,10 @@ var async = require('async');
 
 var Group = require('../models/group');
 var Project = require('../models/project');
-
-
 var Init = require('../lib/init');
 
 describe('Server', function () {
+
   describe('start', function () {
     it('should get the index page OK', function (done) {
       request(app)
@@ -20,7 +19,7 @@ describe('Server', function () {
   });
 
   describe('404', function () {
-    it('should get 404', function (done) {
+    it('should get a 404', function (done) {
       request(app)
         .get('/gdagadfgsdfgsdfg')
         .expect('Content-Type', "text/html; charset=utf-8")
@@ -38,7 +37,7 @@ describe('Server', function () {
     var testProjectName = 'Test Project';
 
     before(function (done) {
-      Init.ensureBaseFolders(function(){
+      Init.ensureBaseFolders(function () {
         new Group({name: testGroupName}).save().then(function (result) {
           testGroupSafeName = result.safeName;
           testGroupID = result.id;
