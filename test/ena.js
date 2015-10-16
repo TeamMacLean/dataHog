@@ -6,6 +6,7 @@ var config = require('../config').ena;
 var canLogIn = config.username.length > 0 && config.password.length > 0;
 
 
+
 describe('ENA', function () {
 
   describe('.upload', function () {

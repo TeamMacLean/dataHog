@@ -49,7 +49,6 @@ describe('Server', function () {
     });
 
     it('should show test group', function (done) {
-
       request(app)
         .get('/' + testGroupSafeName)
         .expect('Content-Type', "text/html; charset=utf-8")
