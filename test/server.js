@@ -22,7 +22,6 @@ describe('Server', function () {
     it('should get a 404', function (done) {
       request(app)
         .get('/gdagadfgsdfgsdfg')
-        .expect('Content-Type', "text/html; charset=utf-8")
         .expect(404, done);
     })
   });
