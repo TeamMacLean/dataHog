@@ -7,6 +7,9 @@ var async = require('async');
 var Group = require('../models/group');
 var Project = require('../models/project');
 
+
+var Init = require('../lib/init');
+
 describe('Server', function () {
   describe('start', function () {
     it('should get the index page OK', function (done) {
@@ -36,10 +39,12 @@ describe('Server', function () {
     var testProjectName = 'Test Project';
 
     before(function (done) {
+
+
       new Group({name: testGroupName}).save().then(function (result) {
         testGroupSafeName = result.safeName;
         testGroupID = result.id;
-        done();
+        Init.ensureBaseFolders(done);
       })
     });
 
