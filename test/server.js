@@ -9,17 +9,14 @@ var Init = require('../lib/init');
 
 describe('Server', function () {
 
+  this.timeout(5000);
+
   describe('start', function () {
     it('should get the index page OK', function (done) {
       request(app)
         .get('/')
         .expect('Content-Type', "text/html; charset=utf-8")
-        .expect(200)
-        .end(function (err, res) {
-          console.error(err);
-          if (err) return done(err);
-          done();
-        });
+        .expect(200, done)
     })
   });
 
@@ -27,12 +24,7 @@ describe('Server', function () {
     it('should get a 404', function (done) {
       request(app)
         .get('/gdagadfgsdfgsdfg')
-        .expect(404)
-        .end(function (err, res) {
-          console.error(err);
-          if (err) return done(err);
-          done();
-        });
+        .expect(404, done)
     })
   });
 
@@ -77,13 +69,7 @@ describe('Server', function () {
       request(app)
         .get('/' + testGroupSafeName)
         .expect('Content-Type', "text/html; charset=utf-8")
-        .expect(200)
-        .end(function (err, res) {
-          console.error(err);
-
-          if (err) return done(err);
-          done();
-        });
+        .expect(200, done)
     });
 
     it('should create a new project', function (done) {
@@ -94,12 +80,7 @@ describe('Server', function () {
         .field('name', testProjectName)
         .field('shortDescription', 'this is a short description')
         .field('longDescription', 'this is a long description')
-        .expect(302)
-        .end(function (err, res) {
-          console.error(err);
-          if (err) return done(err);
-          done();
-        });
+        .expect(302, done)
     });
 
 
