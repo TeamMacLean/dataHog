@@ -25,6 +25,8 @@ if (!fs.existsSync(config.tmpDir)) {
 //TODO generate groups database entries
 
 init.reloadAllGroups();
+init.ensureBaseFolders();
+init.checkForBadFolders();
 
 var app = express();
 app.locals.title = config.appName;

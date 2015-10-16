@@ -60,12 +60,6 @@ describe('Server', function () {
         .field('shortDescription', 'this is a short description')
         .field('longDescription', 'this is a long description')
         .expect(302, done);
-      //.end(function (err, res) {
-      //  console.log(err);
-      //  console.log(res.body);
-      //  done();
-      //});
-
     });
 
 

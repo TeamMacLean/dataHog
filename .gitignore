@@ -2,11 +2,11 @@
 node_modules
 public/components
 tmp
-uploads
+uploads/*
+reads/*
 config.json
 test.txt
 Screenshot*
-reads
 
 
 dataHog.iml
