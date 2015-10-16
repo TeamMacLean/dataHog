@@ -9,7 +9,7 @@ var Init = require('../lib/init');
 
 describe('Server', function () {
 
-  this.timeout(5000);
+  this.timeout(3000); //FOR TRAVIS, timing out on requests.
 
   describe('start', function () {
     it('should get the index page OK', function (done) {
