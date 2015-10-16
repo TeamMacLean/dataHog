@@ -75,7 +75,11 @@ describe('Server', function () {
       request(app)
         .get('/' + testGroupSafeName)
         .expect('Content-Type', "text/html; charset=utf-8")
-        .expect(200, done);
+        .expect(200)
+        .end(function (err, res) {
+          if (err) return done(err);
+          done();
+        });
     });
 
     it('should create a new project', function (done) {
