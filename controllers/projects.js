@@ -2,7 +2,6 @@ var Project = require('../models/project.js');
 var Group = require('../models/group');
 var Run = require('../models/run.js');
 var Read = require('../models/read.js');
-//var Groups = require('./groups');
 var fs = require('fs-extra');
 var path = require('path');
 var util = require('../lib/util');
@@ -13,12 +12,9 @@ var Projects = {};
 Projects.new = function (req, res) {
 
   var group = req.params.group;
-
   Group.filter({safeName: group}).run().then(function (groups) {
     return res.render('projects/new', {selectedGroup: groups[0]});
-
   })
-
 };
 
 Projects.newPost = function (req, res) {
@@ -39,15 +35,19 @@ Projects.newPost = function (req, res) {
       longDescription: longDescription
     });
 
+
     project.save().then(function (result) {
 
       var joinedPath = path.join(config.dataDir, group.safeName, result.safeName);
       fs.ensureDir(joinedPath, function (err) {
         if (err) {
+          console.error(err);
           return res.render('error', {error: err});
         }
 
         var url = path.join('/', group.safeName, project.safeName);
+
+        console.log('redirecting to', url);
 
         return res.redirect(url);
       });

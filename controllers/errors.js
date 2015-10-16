@@ -1,7 +1,7 @@
 var Errors = {};
 
 Errors.show = function (req, res) {
-  res.render('error', {title: '404', error: 'I can\'t even'});
+  res.status(404).render('error', {title: '404', error: 'I can\'t even'});
 };
 
 module.exports = Errors;
