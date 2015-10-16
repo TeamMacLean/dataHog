@@ -1,11 +1,13 @@
 var request = require('supertest');
 var app = require('../app');
-
+var rimraf = require('rimraf');
+var path = require('path');
 var async = require('async');
-
 var Group = require('../models/group');
 var Project = require('../models/project');
 var Init = require('../lib/init');
+var fs = require('fs-extra');
+var config = require('../config');
 
 describe('Server', function () {
 
@@ -30,10 +32,14 @@ describe('Server', function () {
 
   describe('new project', function () {
 
-    var testGroupName = 'Test Group';
+    //TODO make it safe to delete the folders, make these names unique...use timestamps!!
+
+    var timestamp = Date.now();
+
+    var testGroupName = 'Test Group ' + timestamp;
     var testGroupSafeName = undefined;
     var testGroupID = undefined;
-    var testProjectName = 'Test Project';
+    var testProjectName = 'Test Project ' + timestamp;
 
     before(function (done) {
       Init.ensureBaseFolders(function () {
@@ -55,15 +61,27 @@ describe('Server', function () {
               project.delete().then(cb2)
             }, function () {
 
-              //TODO delete test_group + test_project folders
+              var pathToCheck = config.dataDir;
+              var files = fs.readdirSync(pathToCheck);
 
-              done();
+              async.each(files, function (file, cvv) {
+                if (file.indexOf(timestamp) > -1) {
+                  var deletePath = path.join(config.dataDir, file);
+                  rimraf(deletePath, function (err) {
+                    console.log('deleted', deletePath);
+                    cvv(err);
+                  })
+                } else {
+                  cvv();
+                }
+              }, function (err) {
+                done(err);
+              });
             })
           });
         });
       });
     });
-
 
     it('should show test group', function (done) {
       request(app)
