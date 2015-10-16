@@ -18,23 +18,19 @@ describe('Server', function () {
     })
   });
 
-
-  //TODO no idea why this fails on travis
-  //describe('404', function () {
-  //  it('should get a 404', function (done) {
-  //    request(app)
-  //      .get('/gdagadfgsdfgsdfg')
-  //      .expect(404, done);
-  //  })
-  //});
+  describe('404', function () {
+    it('should get a 404', function (done) {
+      request(app)
+        .get('/gdagadfgsdfgsdfg')
+        .expect(404, done);
+    })
+  });
 
   describe('new project', function () {
 
     var testGroupName = 'Test Group';
     var testGroupSafeName = undefined;
     var testGroupID = undefined;
-
-
     var testProjectName = 'Test Project';
 
     before(function (done) {
@@ -56,12 +52,16 @@ describe('Server', function () {
             async.each(projects, function (project, cb2) {
               project.delete().then(cb2)
             }, function () {
+
+              //TODO delete test_group + test_project folders
+
               done();
             })
           });
         });
       });
     });
+
 
     it('should show test group', function (done) {
       request(app)
