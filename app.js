@@ -13,6 +13,10 @@ if (!config.appName || !config.port || !config.dataDir || !config.tmpDir) {
   process.exit(1);
 }
 
+init.reloadAllGroups();
+init.ensureBaseFolders();
+init.checkForBadFolders();
+
 if (!fs.existsSync(config.dataDir)) {
   console.error('dataDir', config.dataDir, 'does not exist');
 }
@@ -23,10 +27,6 @@ if (!fs.existsSync(config.tmpDir)) {
 }
 
 //TODO generate groups database entries
-
-init.reloadAllGroups();
-init.ensureBaseFolders();
-init.checkForBadFolders();
 
 var app = express();
 app.locals.title = config.appName;
