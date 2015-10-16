@@ -14,7 +14,11 @@ describe('Server', function () {
       request(app)
         .get('/')
         .expect('Content-Type', "text/html; charset=utf-8")
-        .expect(200, done);
+        .expect(200)
+        .end(function (err, res) {
+          if (err) return done(err);
+          done();
+        });
     })
   });
 
@@ -22,7 +26,11 @@ describe('Server', function () {
     it('should get a 404', function (done) {
       request(app)
         .get('/gdagadfgsdfgsdfg')
-        .expect(404, done);
+        .expect(404)
+        .end(function (err, res) {
+          if (err) return done(err);
+          done();
+        });
     })
   });
 
@@ -78,7 +86,11 @@ describe('Server', function () {
         .field('name', testProjectName)
         .field('shortDescription', 'this is a short description')
         .field('longDescription', 'this is a long description')
-        .expect(302, done);
+        .expect(302)
+        .end(function (err, res) {
+          if (err) return done(err);
+          done();
+        });
     });
 
 
