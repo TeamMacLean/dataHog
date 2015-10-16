@@ -7,10 +7,12 @@ node_js:
   - "4.0"
   - "4.1"
 before_install:
-  - sudo add-apt-repository ppa:rethinkdb/ppa && sudo apt-get update && sudo apt-get install rethinkdb
+    - sudo add-apt-repository ppa:rethinkdb/ppa -y
+    - sudo apt-get update -qq
+    - sudo apt-get install rethinkdb -y
 before_script:
   - cp config-example.json config.json
-  - sudo /etc/init.d/rethinkdb restart
+  - rethinkdb --daemon
 after_script:
   - npm run coveralls
 matrix:
