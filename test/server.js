@@ -3,7 +3,7 @@ var request = require('supertest');
 var app = require('../app');
 
 describe('Server', function () {
-  describe('.start', function () {
+  describe('start', function () {
     it('should get the index page OK', function (done) {
       request(app)
         .get('/')

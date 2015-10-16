@@ -6,7 +6,6 @@
 [![Code Climate](https://codeclimate.com/github/TeamMacLean/dataHog/badges/gpa.svg)](https://codeclimate.com/github/TeamMacLean/dataHog)
 [![Coverage Status](https://coveralls.io/repos/TeamMacLean/dataHog/badge.svg?branch=master&service=github)](https://coveralls.io/github/TeamMacLean/dataHog?branch=master)
 
-
 ## Dependencies
 * RethinkDB
 * NodeJS

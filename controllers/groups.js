@@ -1,7 +1,5 @@
 var Project = require('../models/project.js');
-
 var Group = require('../models/group');
-
 var config = require('../config');
 
 var Groups = {};
