@@ -16,6 +16,7 @@ describe('Server', function () {
         .expect('Content-Type', "text/html; charset=utf-8")
         .expect(200)
         .end(function (err, res) {
+          console.error(err);
           if (err) return done(err);
           done();
         });
@@ -28,6 +29,7 @@ describe('Server', function () {
         .get('/gdagadfgsdfgsdfg')
         .expect(404)
         .end(function (err, res) {
+          console.error(err);
           if (err) return done(err);
           done();
         });
@@ -77,6 +79,8 @@ describe('Server', function () {
         .expect('Content-Type', "text/html; charset=utf-8")
         .expect(200)
         .end(function (err, res) {
+          console.error(err);
+
           if (err) return done(err);
           done();
         });
@@ -92,6 +96,7 @@ describe('Server', function () {
         .field('longDescription', 'this is a long description')
         .expect(302)
         .end(function (err, res) {
+          console.error(err);
           if (err) return done(err);
           done();
         });
