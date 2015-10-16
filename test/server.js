@@ -11,7 +11,7 @@ var config = require('../config');
 
 describe('Server', function () {
 
-  this.timeout(3000); //FOR TRAVIS, timing out on requests.
+  this.timeout(5000); //FOR TRAVIS, timing out on requests.
 
   describe('start', function () {
     it('should get the index page OK', function (done) {
@@ -32,14 +32,12 @@ describe('Server', function () {
 
   describe('new project', function () {
 
-    //TODO make it safe to delete the folders, make these names unique...use timestamps!!
-
     var timestamp = Date.now();
 
-    var testGroupName = 'Test Group ' + timestamp;
+    var testGroupName = 'hogTestGroup' + timestamp;
     var testGroupSafeName = undefined;
     var testGroupID = undefined;
-    var testProjectName = 'Test Project ' + timestamp;
+    var testProjectName = 'hogTestProject ' + timestamp;
 
     before(function (done) {
       Init.ensureBaseFolders(function () {
