@@ -5,7 +5,8 @@
 
     <h2>Add read data</h2>
 
-    <form action="/<%- sample.project.group.safeName %>/<%- sample.project.safeName %>/<%- sample.safeName %>/new" method="POST"
+    <form action="/<%- sample.project.group.safeName %>/<%- sample.project.safeName %>/<%- sample.safeName %>/new"
+          method="POST"
           enctype="multipart/form-data">
 
         <fieldset>
@@ -73,8 +74,8 @@
         </fieldset>
 
         <fieldset>
-            <label>Library source</label>
-            <select class="textBox" required>
+            <label for="librarySource">Library source</label>
+            <select id="librarySource" name="librarySource" class="textBox" required>
                 <option value=""></option>
                 <option value="GENOMIC">GENOMIC</option>
                 <option value="TRANSCRIPTOMIC">TRANSCRIPTOMIC</option>
@@ -87,8 +88,8 @@
         </fieldset>
 
         <fieldset>
-            <label>Library selection</label>
-            <select class="textBox" required>
+            <label for="librarySelection">Library selection</label>
+            <select id="librarySelection" name="librarySelection" class="textBox" required>
                 <option value=""></option>
                 <option value="RANDOM">RANDOM</option>
                 <option value="PCR">PCR</option>
@@ -120,8 +121,8 @@
         </fieldset>
 
         <fieldset>
-            <label>Library strategy</label>
-            <select class="textBox" required>
+            <label for="libraryStrategy">Library strategy</label>
+            <select id="libraryStrategy" name="libraryStrategy" class="textBox" required>
                 <option value=""></option>
                 <option value="WGS">WGS</option>
                 <option value="WGA">WGA</option>

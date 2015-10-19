@@ -6,12 +6,17 @@ var util = require('../lib/util');
 var Run = thinky.createModel('Run', {
   id: type.string(),
   sampleID: type.string().required(),
+
+  name: type.string().required(),
+  libraryType: type.string().required(),
   sequencingProvider: type.string().required(),
   sequencingTechnology: type.string().required(),
+  librarySource: type.string().required(),
+  librarySelection: type.string().required(),
+  libraryStrategy: type.string().required(),
   insertSize: type.string().required(),
   additionalData: [type.string().required()],
-  libraryType: type.string().required(),
-  submissionToGalaxy: type.boolean().required(), //FIXME send email if true
+  submissionToGalaxy: type.boolean().required(), //TODO send email if true
   safeName: type.string()
 });
 
@@ -25,8 +30,6 @@ Run.pre('save', function (next) {
         next();
       });
     });
-  } else {
-    console.log("has safeName", run.safeName);
   }
 });
 

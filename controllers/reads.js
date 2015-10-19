@@ -16,9 +16,7 @@ Reads.show = function (req, res, next) {
   var runSN = req.params.run;
   var readSN = req.params.read;
 
-  console.log(projectSN,sampleSN,runSN)
-
-  Read.filter({safeName: readSN}).getJoin({run: {sample: {project: true}}}).filter({
+  Read.filter({safeName: readSN}).getJoin({run: {sample: {project: {group: true}}}}).filter({
     run: {
       safeName: runSN,
       sample: {safeName: sampleSN, project: {safeName: projectSN}}
@@ -45,7 +43,7 @@ Reads.fastQC = function (req, res) {
   var readSN = req.params.read;
 
 
-  Read.filter({safeName: readSN}).getJoin({run: {sample: {project: true}}})
+  Read.filter({safeName: readSN}).getJoin({run: {sample: {project: {group: true}}}})
     .filter({
       run: {
         safeName: runSN,
@@ -56,7 +54,9 @@ Reads.fastQC = function (req, res) {
 
       var read = results[0];
 
-      var htmlPath = path.join(__dirname, '../', read.fastQCLocation, read.name + '_fastqc.html');
+      var strippedReadName = read.name.replace('.gz', '').replace('.bz2', '');
+
+      var htmlPath = path.join(__dirname, '../', read.fastQCLocation, strippedReadName + '_fastqc.html');
 
       fs.stat(htmlPath, function (err, stat) {
         if (!err) {

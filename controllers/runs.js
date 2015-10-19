@@ -65,6 +65,7 @@ Runs.newPost = function (req, res) {
 
   var projectSN = req.params.project;
   var sampleSN = req.params.sample;
+  var groupSN = req.params.group;
   var name = req.body.name;
 
   var sequencingProvider = req.body.sequencingProvider;
@@ -73,13 +74,22 @@ Runs.newPost = function (req, res) {
   var libraryType = req.body.libraryType;
   var submissionToGalaxy = req.body.submissionToGalaxy === 'on';
 
+  var librarySource = req.body.librarySource;
+  var librarySelection = req.body.librarySelection;
+  var libraryStrategy = req.body.libraryStrategy;
+
 
   var savedReads = [];
   var pathToNewRunFolder = null;
   var currentRun = null;
 
 
-  Sample.filter({safeName: sampleSN}).getJoin({project: true}).filter({project: {safeName: projectSN}}).run().then(function (results) {
+  Sample.filter({safeName: sampleSN}).getJoin({project: {group: true}}).filter({
+    project: {
+      safeName: projectSN,
+      group: {safeName: groupSN}
+    }
+  }).run().then(function (results) {
 
 
     if (results.length > 1) {
@@ -90,6 +100,9 @@ Runs.newPost = function (req, res) {
     var run = new Run({
       name: name,
       sampleID: sample.id,
+      librarySource: librarySource,
+      librarySelection: librarySelection,
+      libraryStrategy: libraryStrategy,
       sequencingProvider: sequencingProvider,
       sequencingTechnology: sequencingTechnology,
       insertSize: insertSize,
@@ -140,7 +153,7 @@ Runs.newPost = function (req, res) {
     run.save().then(function (savedRun) {
       currentRun = savedRun;
       processAllFiles();
-      pathToNewRunFolder = path.join(config.dataDir, sample.project.safeName, sample.safeName, savedRun.safeName);
+      pathToNewRunFolder = path.join(config.dataDir, sample.project.group.safeName, sample.project.safeName, sample.safeName, savedRun.safeName);
 
       fs.ensureDir(pathToNewRunFolder, function (err) {
         if (err) {
@@ -200,8 +213,8 @@ Runs.newPost = function (req, res) {
       }
 
       function renderOK() {
-        Run.get(savedRun.id).getJoin({sample: {project: true}, reads: true}).then(function (result) {
-          var url = path.join('/', result.sample.project.safeName, result.sample.safeName, result.safeName);
+        Run.get(savedRun.id).getJoin({sample: {project: {group: true}}, reads: true}).then(function (result) {
+          var url = path.join('/', result.sample.project.group.safeName, result.sample.project.safeName, result.sample.safeName, result.safeName);
           return res.redirect(url);
         })
       }
@@ -342,22 +355,21 @@ Runs.show = function (req, res) {
   var sampleSN = req.params.sample;
   var projectSN = req.params.project;
 
-  Run.filter({safeName: runSN}).getJoin({sample: {project: true}, reads: true}).filter({
+  Run.filter({safeName: runSN}).getJoin({sample: {project: {group: true}}, reads: true}).filter({
     sample: {
       safeName: sampleSN,
       project: {safeName: projectSN}
     }
   }).then(function (results) {
 
-    //var filtered = results.filter(function (r) {
-    //  return r.sample.safeName === sampleSN && r.sample.project.safeName === projectSN;
-    //});
 
     if (results.length > 1) {
       console.error('too many runs', results);
     }
 
     var run = results[0];
+
+
 
     return res.render('runs/show', {run: run});
   }).error(function () {

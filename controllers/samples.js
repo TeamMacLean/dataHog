@@ -64,16 +64,18 @@ Samples.newPost = function (req, res) {
 Samples.show = function (req, res) {
   var sampleSafeName = req.params.sample;
   var projectSN = req.params.project;
+  var groupSN = req.params.group;
 
   Sample.filter({safeName: sampleSafeName}).getJoin({
     project: {group: true},
     runs: true
-  }).filter({project: {safeName: projectSN}}).run().then(function (results) {
+  }).filter({project: {safeName: projectSN, group: {safeName: groupSN}}}).run().then(function (results) {
 
     if (results.length > 1) {
       console.error('multiple samples', results);
     }
     var sample = results[0];
+
 
     res.render('samples/show', {sample: sample});
   })

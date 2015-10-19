@@ -73,6 +73,8 @@ Projects.show = function (req, res, next) {
 
     var fullPath = path.join(config.dataDir, project.group.safeName, project.safeName);
 
+
+
     util.unknownFolders(fullPath, project.samples, function (unknownFolders) {
       return res.render('projects/show', {project: projects[0], unknownFolders: unknownFolders});
     });

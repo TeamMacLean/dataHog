@@ -31,7 +31,7 @@
         <% if(sample.runs) sample.runs.map(function(read){ %>
         <% i++; %>
         <div class="col6">
-            <a href="/<%- sample.project.safeName %>/<%- sample.safeName %>/<%- read.safeName %>">
+            <a href="/<%- sample.project.group.safeName %>/<%- sample.project.safeName %>/<%- sample.safeName %>/<%- read.safeName %>">
                 <div class="tile">
                     <!--<i class="fa fa-cube"></i>--> <%- read.name %>
                 </div>
