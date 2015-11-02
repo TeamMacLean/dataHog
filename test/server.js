@@ -12,22 +12,19 @@ var thinky = require('../lib/thinky');
 
 describe('Server', function () {
 
-  this.timeout(10000);
-
+  //this.timeout(10000);
   //FIXME!
-  //before(function (done) {
-  //  var promises = [];
-  //  for (var name in thinky.models) {
-  //    if (thinky.models.hasOwnProperty(name)) {
-  //      console.log(name);
-  //      console.log(thinky.models[name]);
-  //      promises.push(thinky.models[name].ready());
-  //    }
-  //  }
-  //  Promise.all(promises).then(function () {
-  //    done();
-  //  })
-  //});
+  before(function (done) {
+    var promises = [];
+    for (var name in thinky.models) {
+      if (thinky.models.hasOwnProperty(name)) {
+        promises.push(thinky.models[name].ready());
+      }
+    }
+    Promise.all(promises).then(function () {
+      done();
+    })
+  });
 
   describe('start', function () {
     it('should get the index page OK', function (done) {
