@@ -24,10 +24,10 @@
     "multer": "^0.1.8",
     "request": "^2.64.0",
     "rimraf": "^2.4.3",
-    "thinky": "^2.1.11"
+    "thinky": "^2.1.11",
+    "bluebird": "^3.0.5"
   },
   "devDependencies": {
-    "bluebird": "^3.0.5",
     "chai": "^3.4.0",
     "coveralls": "^2.11.4",
     "istanbul": "^0.3.22",

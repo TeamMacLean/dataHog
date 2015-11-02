@@ -9,23 +9,14 @@ var Init = require('../lib/init');
 var fs = require('fs-extra');
 var config = require('../config');
 var thinky = require('../lib/thinky');
-var Promise = require('bluebird');
+
 
 describe('Server', function () {
 
 
-
   before(function (done) {
     this.timeout(10000);
-    var promises = [];
-    for (var name in thinky.models) {
-      if (thinky.models.hasOwnProperty(name)) {
-        promises.push(thinky.models[name].ready());
-      }
-    }
-    Promise.all(promises).then(function () {
-      done();
-    })
+    Init.ensureReadyDB(done);
   });
 
   describe('start', function () {
@@ -113,7 +104,6 @@ describe('Server', function () {
         .field('longDescription', 'this is a long description')
         .expect(302, done)
     });
-
 
   });
 
