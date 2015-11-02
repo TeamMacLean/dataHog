@@ -87,12 +87,21 @@ describe('Server', function () {
       });
     });
 
-    describe('new project', function () {
-
+    describe('check test group exists', function () {
       it('should show test group', function (done) {
         request(app)
           .get('/' + testGroupSafeName)
           .expect('Content-Type', "text/html; charset=utf-8")
+          .expect(200, done)
+      });
+    });
+
+    describe('new project', function () {
+
+
+      it('should load new project page', function (done) {
+        request(app)
+          .get('/' + testGroupSafeName + '/new')
           .expect(200, done)
       });
 
