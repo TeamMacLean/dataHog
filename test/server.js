@@ -8,13 +8,11 @@ var Project = require('../models/project');
 var Init = require('../lib/init');
 var fs = require('fs-extra');
 var config = require('../config');
-
 var thinky = require('../lib/thinky');
 
 describe('Server', function () {
 
   this.timeout(10000);
-
 
   //FIXME!
   //before(function (done) {
