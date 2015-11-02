@@ -13,9 +13,10 @@ var Promise = require('bluebird');
 
 describe('Server', function () {
 
-  //this.timeout(10000);
-  //FIXME!
+
+
   before(function (done) {
+    this.timeout(10000);
     var promises = [];
     for (var name in thinky.models) {
       if (thinky.models.hasOwnProperty(name)) {
