@@ -9,6 +9,7 @@ var Init = require('../lib/init');
 var fs = require('fs-extra');
 var config = require('../config');
 var thinky = require('../lib/thinky');
+var Promise = require('bluebird');
 
 describe('Server', function () {
 
