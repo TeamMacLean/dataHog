@@ -9,9 +9,27 @@ var Init = require('../lib/init');
 var fs = require('fs-extra');
 var config = require('../config');
 
+var thinky = require('../lib/thinky');
+
 describe('Server', function () {
 
-  this.timeout(5000); //FOR TRAVIS, timing out on requests.
+  this.timeout(10000);
+
+
+  //FIXME!
+  //before(function (done) {
+  //  var promises = [];
+  //  for (var name in thinky.models) {
+  //    if (thinky.models.hasOwnProperty(name)) {
+  //      console.log(name);
+  //      console.log(thinky.models[name]);
+  //      promises.push(thinky.models[name].ready());
+  //    }
+  //  }
+  //  Promise.all(promises).then(function () {
+  //    done();
+  //  })
+  //});
 
   describe('start', function () {
     it('should get the index page OK', function (done) {

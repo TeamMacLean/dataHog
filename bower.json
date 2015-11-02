@@ -15,6 +15,7 @@
   "dependencies": {
     "font-awesome": "~4.3.0",
     "taxlookup": "*",
-    "terrier": "*"
+    "terrier": "*",
+    "react": "~0.14.0"
   }
 }

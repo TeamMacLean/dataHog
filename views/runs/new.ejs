@@ -167,7 +167,6 @@
 
             <div id="additionalData">
             </div>
-            <input class="button addFileInput" type="button" value="Add more additional data">
 
         </fieldset>
 
@@ -176,7 +175,6 @@
 
             <div id="filesRoot">
             </div>
-            <input class="button addFileInput" type="button" value="Add more read data">
         </fieldset>
 
         <fieldset>
@@ -190,6 +188,14 @@
 
         <button type="submit" class="button button-primary">Submit</button>
     </form>
+
+    <script>
+        var additional = document.getElementById('additionalData');
+        fileUploader(additional, false, 'file').setMin(2).setPaired();
+
+        var md5files = document.getElementById('filesRoot');
+        fileUploader(md5files, true, 'file', 'md5').setMin(6);
+    </script>
 
 </div>
 

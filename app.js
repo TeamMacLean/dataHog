@@ -1,12 +1,27 @@
 var express = require('express');
 var path = require('path');
-//var logger = require('morgan');
 var multer = require('multer');
 var bodyParser = require('body-parser');
 var routes = require('./routes');
 var config = require('./config');
 var fs = require('fs');
 var init = require('./lib/init');
+
+var thinky = require('./lib/thinky');
+
+//if (thinky._dbReady) {
+//  console.log('its already ready');
+//} else {
+//  console.log('gotta wait for it to be ready');
+//  thinky._onDbReady.push(function () {
+//    console.log('its ready now');
+//  })
+//}
+
+//console.log(thinky.models);
+
+
+
 
 if (!config.appName || !config.port || !config.dataDir || !config.tmpDir) {
   console.error('please fill out config.json');
