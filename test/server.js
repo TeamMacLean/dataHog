@@ -36,14 +36,14 @@ describe('Server', function () {
     })
   });
 
-  describe('new project', function () {
+  describe('add', function () {
 
     var timestamp = Date.now();
 
-    var testGroupName = 'hogTestGroup' + timestamp;
+    var testGroupName = 'hogtestgroup' + timestamp;
     var testGroupSafeName = undefined;
     var testGroupID = undefined;
-    var testProjectName = 'hogTestProject ' + timestamp;
+    var testProjectName = 'hogtestproject' + timestamp;
 
     before(function (done) {
       Init.ensureBaseFolders(function () {
@@ -87,24 +87,40 @@ describe('Server', function () {
       });
     });
 
-    it('should show test group', function (done) {
-      request(app)
-        .get('/' + testGroupSafeName)
-        .expect('Content-Type', "text/html; charset=utf-8")
-        .expect(200, done)
+    describe('new project', function () {
+
+      it('should show test group', function (done) {
+        request(app)
+          .get('/' + testGroupSafeName)
+          .expect('Content-Type', "text/html; charset=utf-8")
+          .expect(200, done)
+      });
+
+      it('should create a new project', function (done) {
+        request(app)
+          .post('/' + testGroupSafeName + '/new')
+          .field('group', testGroupID)
+          .field('responsiblePerson', 'example@example.org')
+          .field('name', testProjectName)
+          .field('shortDescription', 'this is a short description')
+          .field('longDescription', 'this is a long description')
+          .expect(302, done);
+      });
+
+      it('should show project ok', function (done) {
+        var getURL = '/' + testGroupSafeName + '/' + testProjectName;
+        request(app)
+          .get(getURL)
+          .expect(200, done);
+      })
+
     });
 
-    it('should create a new project', function (done) {
-      request(app)
-        .post('/' + testGroupSafeName + '/new')
-        .field('group', testGroupID)
-        .field('responsiblePerson', 'example@example.org')
-        .field('name', testProjectName)
-        .field('shortDescription', 'this is a short description')
-        .field('longDescription', 'this is a long description')
-        .expect(302, done)
-    });
 
-  });
+    describe('new sample', function () {
+
+    })
+  })
+
 
 });
