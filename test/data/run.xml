@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?><RUN_SET>
+    <RUN alias="thisisatest" run_date="2008-02-07T00:00:00.000Z" run_center="JIC" center_name="JIC">
+        <IDENTIFIERS>
+            <SUBMITTER_ID namespace="JIC">thisisatest</SUBMITTER_ID>
+        </IDENTIFIERS>
+        <EXPERIMENT_REF accession="ERX000536" refname="PssB728a_assembly" refcenter="JIC">
+            <IDENTIFIERS>
+                <SUBMITTER_ID namespace="JIC">PssB728a_assembly</SUBMITTER_ID>
+            </IDENTIFIERS>
+        </EXPERIMENT_REF>
+        <DATA_BLOCK>
+            <FILES>
+                <FILE filename="test.fastq.gz" filetype="fastq" quality_scoring_system="log-odds" ascii_offset="@" quality_encoding="ascii" checksum="ee9e99f9277bc98c74ec63efa107c58d" checksum_method="MD5"/>
+            </FILES>
+        </DATA_BLOCK>
+        <RUN_ATTRIBUTES>
+            <RUN_ATTRIBUTE>
+                <TAG>run</TAG>
+                <VALUE>1</VALUE>
+            </RUN_ATTRIBUTE>
+            <RUN_ATTRIBUTE>
+                <TAG>total_bases</TAG>
+                <VALUE>255681576</VALUE>
+                <UNITS>bp</UNITS>
+            </RUN_ATTRIBUTE>
+            <RUN_ATTRIBUTE>
+                <TAG>actual_read_length</TAG>
+                <VALUE>72</VALUE>
+            </RUN_ATTRIBUTE>
+        </RUN_ATTRIBUTES>
+    </RUN>
+</RUN_SET>

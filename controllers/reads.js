@@ -1,14 +1,18 @@
 var Reads = {};
 
-var Project = require('../models/project.js');
-var Sample = require('../models/sample.js');
-var Run = require('../models/run.js');
+//var Project = require('../models/project.js');
+//var Sample = require('../models/sample.js');
+//var Run = require('../models/run.js');
 var Read = require('../models/read.js');
-
 var fs = require('fs');
-
 var path = require('path');
 
+/**
+ * render one read
+ * @param req {request}
+ * @param res {response}
+ * @param next {callback}
+ */
 Reads.show = function (req, res, next) {
 
   var projectSN = req.params.project;
@@ -35,6 +39,11 @@ Reads.show = function (req, res, next) {
 
 };
 
+/**
+ * render fastq report
+ * @param req {request}
+ * @param res {response}
+ */
 Reads.fastQC = function (req, res) {
 
   var projectSN = req.params.project;

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?><STUDY_SET>
+    <STUDY alias="thisisatest" center_name="JIC">
+        <IDENTIFIERS>
+            <SUBMITTER_ID namespace="JIC">thisisatest</SUBMITTER_ID>
+        </IDENTIFIERS>
+        <DESCRIPTOR>
+            <STUDY_TITLE>Identification of causative SNPs in the mob54-3/mob56-1BC mutants derived from bak1-5 remutagenesis</STUDY_TITLE>
+            <STUDY_ABSTRACT>mob54-3 and mob56-1BC were isolated in a forward genetic screen to look for suppressor mutants of bak1-5. The bak1-5 mutant is strongly affected in PTI signalling, such as PAMP-triggered ROS burst. The mob54-3 mutation strongly restores PAMP-triggered ROS and also other PTI related phenotypes. Furthermore, genetic characterization revealed that the mob54-3 mutation is semi-dominant, therefore, the affected gene is likely to be a gain of function mutation in a positive regulator of PTI. The mob56-1 mutation strongly restores PAMP-triggered seedling growth inhibition and also other PTI related phenotypes. Furthermore, genetic characterization revealed that the mob56-1 mutation is fully recessive. Therefore, the affected gene is likely to be a loss of function mutation in a negative regulator of PTI.</STUDY_ABSTRACT>
+            <STUDY_DESCRIPTION>mob54-3 and mob56-1BC were isolated in a forward genetic screen to look for suppressor mutants of bak1-5. The bak1-5 mutant is strongly affected in PTI signalling, such as PAMP-triggered ROS burst. The mob54-3 mutation strongly restores PAMP-triggered ROS and also other PTI related phenotypes. Furthermore, genetic characterization revealed that the mob54-3 mutation is semi-dominant, therefore, the affected gene is likely to be a gain of function mutation in a positive regulator of PTI. The mob56-1 mutation strongly restores PAMP-triggered seedling growth inhibition and also other PTI related phenotypes. Furthermore, genetic characterization revealed that the mob56-1 mutation is fully recessive. Therefore, the affected gene is likely to be a loss of function mutation in a negative regulator of PTI.</STUDY_DESCRIPTION>
+            <CENTER_PROJECT_NAME>Variant detection in A. thaliana mob mutants mob54-3/mob56-1BC</CENTER_PROJECT_NAME>
+            <STUDY_TYPE existing_study_type="Other"/>
+        </DESCRIPTOR>
+    </STUDY>
+</STUDY_SET>

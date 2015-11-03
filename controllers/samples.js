@@ -5,6 +5,11 @@ var fs = require('fs-extra');
 var path = require('path');
 var config = require('../config.json');
 
+/**
+ * render new sample form
+ * @param req {request}
+ * @param res {response}
+ */
 Samples.new = function (req, res) {
 
   var projectSN = req.params.project;
@@ -16,8 +21,13 @@ Samples.new = function (req, res) {
     return res.render('error', {error: 'could not find project'});
   });
 
-
 };
+
+/**
+ * post new sample
+ * @param req {request}
+ * @param res {response}
+ */
 Samples.newPost = function (req, res) {
 
   var projectSafeName = req.params.project;
@@ -61,6 +71,11 @@ Samples.newPost = function (req, res) {
 
 };
 
+/**
+ * render one sample
+ * @param req {request}
+ * @param res {response}
+ */
 Samples.show = function (req, res) {
   var sampleSafeName = req.params.sample;
   var projectSN = req.params.project;

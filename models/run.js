@@ -1,6 +1,6 @@
 var thinky = require('../lib/thinky.js');
 var type = thinky.type;
-var r = thinky.r;
+//var r = thinky.r;
 var util = require('../lib/util');
 
 var Run = thinky.createModel('Run', {
@@ -15,7 +15,7 @@ var Run = thinky.createModel('Run', {
   librarySelection: type.string().required(),
   libraryStrategy: type.string().required(),
   insertSize: type.string().required(),
-  additionalData: [type.string().required()],
+  additionalFiles: [type.string().required()],
   submissionToGalaxy: type.boolean().required(), //TODO send email if true
   safeName: type.string()
 });

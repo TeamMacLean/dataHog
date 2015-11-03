@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?><SAMPLE_SET>
+    <SAMPLE alias="thisisatest" center_name="JIC">
+        <IDENTIFIERS>
+            <SUBMITTER_ID namespace="JIC">thisisatest</SUBMITTER_ID>
+        </IDENTIFIERS>
+        <SAMPLE_NAME>
+            <TAXON_ID>205918</TAXON_ID>
+            <COMMON_NAME>Pseudomonas syringae pathovar syringae B728a</COMMON_NAME>
+            <SCIENTIFIC_NAME>Pseudomonas syringae pv. syringae B728a</SCIENTIFIC_NAME>
+        </SAMPLE_NAME>
+    </SAMPLE>
+</SAMPLE_SET>

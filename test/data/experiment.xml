@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EXPERIMENT_SET>
+    <EXPERIMENT alias="thisisatest" center_name="JIC">
+        <IDENTIFIERS>
+            <SUBMITTER_ID namespace="JIC">thisisatest</SUBMITTER_ID>
+        </IDENTIFIERS>
+        <STUDY_REF refname="thisisatest" refcenter="JIC">
+            <IDENTIFIERS>
+                <SUBMITTER_ID namespace="JIC">thisisatest</SUBMITTER_ID>
+            </IDENTIFIERS>
+        </STUDY_REF>
+        <DESIGN>
+            <DESIGN_DESCRIPTION>Solexa sequencing of Pseudomonas syringae pathovar syringae B728a</DESIGN_DESCRIPTION>
+            <SAMPLE_DESCRIPTOR refname="thisisatest" refcenter="JIC">
+                <IDENTIFIERS>
+                    <SUBMITTER_ID namespace="JIC">thisisatest</SUBMITTER_ID>
+                </IDENTIFIERS>
+            </SAMPLE_DESCRIPTOR>
+            <LIBRARY_DESCRIPTOR>
+                <LIBRARY_NAME>PssB728a</LIBRARY_NAME>
+                <LIBRARY_STRATEGY>WGS</LIBRARY_STRATEGY>
+                <LIBRARY_SOURCE>GENOMIC</LIBRARY_SOURCE>
+                <LIBRARY_SELECTION>RANDOM</LIBRARY_SELECTION>
+                <LIBRARY_LAYOUT>
+                    <PAIRED NOMINAL_LENGTH="500" NOMINAL_SDEV="0.0"/>
+                </LIBRARY_LAYOUT>
+                <LIBRARY_CONSTRUCTION_PROTOCOL>Standard Solexa protocol</LIBRARY_CONSTRUCTION_PROTOCOL>
+            </LIBRARY_DESCRIPTOR>
+            <SPOT_DESCRIPTOR>
+                <SPOT_DECODE_SPEC>
+                    <SPOT_LENGTH>72</SPOT_LENGTH>
+                    <READ_SPEC>
+                        <READ_INDEX>0</READ_INDEX>
+                        <READ_CLASS>Application Read</READ_CLASS>
+                        <READ_TYPE>Forward</READ_TYPE>
+                        <BASE_COORD>1</BASE_COORD>
+                    </READ_SPEC>
+                    <READ_SPEC>
+                        <READ_INDEX>1</READ_INDEX>
+                        <READ_CLASS>Application Read</READ_CLASS>
+                        <READ_TYPE>Reverse</READ_TYPE>
+                        <BASE_COORD>37</BASE_COORD>
+                    </READ_SPEC>
+                </SPOT_DECODE_SPEC>
+            </SPOT_DESCRIPTOR>
+        </DESIGN>
+        <PLATFORM>
+            <ILLUMINA>
+                <INSTRUMENT_MODEL>Illumina Genome Analyzer</INSTRUMENT_MODEL>
+            </ILLUMINA>
+        </PLATFORM>
+        <PROCESSING/>
+        <EXPERIMENT_ATTRIBUTES>
+            <EXPERIMENT_ATTRIBUTE>
+                <TAG>expected_number_bases</TAG>
+                <VALUE>255</VALUE>
+                <UNITS>MB</UNITS>
+            </EXPERIMENT_ATTRIBUTE>
+            <EXPERIMENT_ATTRIBUTE>
+                <TAG>center_name</TAG>
+                <VALUE>The Sainsbury Laboratory</VALUE>
+            </EXPERIMENT_ATTRIBUTE>
+        </EXPERIMENT_ATTRIBUTES>
+    </EXPERIMENT>
+</EXPERIMENT_SET>

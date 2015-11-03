@@ -1,4 +1,4 @@
-var Project = require('../models/project.js');
+//var Project = require('../models/project.js');
 var Sample = require('../models/sample.js');
 var Run = require('../models/run.js');
 var Read = require('../models/read.js');
@@ -9,15 +9,20 @@ var path = require('path');
 var fastqc = require('../lib/fastqc');
 var md5 = require('md5');
 var zlib = require('zlib');
-var compress = zlib.createGzip();
+//var compress = zlib.createGzip();
 var isGzip = require('is-gzip');
 var isBzip2 = require('is-bzip2');
 var read = require('fs').readFileSync;
 var rimraf = require('rimraf');
-
 var config = require('../config.json');
 
 var Runs = {};
+
+/**
+ * compress a file
+ * @param filename {filename}
+ * @param callback {callback}
+ */
 function compressFile(filename, callback) {
 
   var compressedPath = filename + '.gz';
@@ -37,6 +42,11 @@ function compressFile(filename, callback) {
   }
 }
 
+/**
+ * render the new run form
+ * @param req {request}
+ * @param res {response}
+ */
 Runs.new = function (req, res) {
 
   var groupSN = req.params.group;
@@ -61,6 +71,11 @@ Runs.new = function (req, res) {
   });
 };
 
+/**
+ * post new run
+ * @param req {request}
+ * @param res {response}
+ */
 Runs.newPost = function (req, res) {
 
   var projectSN = req.params.project;
@@ -134,6 +149,10 @@ Runs.newPost = function (req, res) {
 
       return res.render('error', {error: err});
     }
+
+    /**
+     * process all files
+     */
 
     function processAllFiles() {
 
@@ -350,6 +369,12 @@ Runs.newPost = function (req, res) {
   });
 };
 
+
+/**
+ * render one run
+ * @param req {request}
+ * @param res {response}
+ */
 Runs.show = function (req, res) {
   var runSN = req.params.run;
   var sampleSN = req.params.sample;

@@ -5,6 +5,7 @@
   "tmpDir": "./uploads/",
   "fastQCCommand": "fastqc",
   "ena": {
+    "namespace": "JIC",
     "center": "The Sainsbury Laboratory",
     "ftpAddress": "webin.ebi.ac.uk",
     "productionURL": "https://www.ebi.ac.uk/ena/submit/drop-box/submit/",
@@ -14,7 +15,5 @@
     "password": ""
   },
   "groups": [
-    "groups1",
-    "group2"
   ]
 }

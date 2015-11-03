@@ -12,6 +12,8 @@ var Project = thinky.createModel('Project', {
   longDescription: type.string().required(),
   createdAt: type.date().default(r.now()),
 
+  additionalFiles: [type.string()],
+
   safeName: type.string()
 });
 
@@ -32,5 +34,5 @@ module.exports = Project;
 
 var Sample = require('./sample.js');
 var Group = require('./group');
-Project.belongsTo(Group,'group','groupID','id');
+Project.belongsTo(Group, 'group', 'groupID', 'id');
 Project.hasMany(Sample, 'samples', 'id', 'projectID');

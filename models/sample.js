@@ -11,7 +11,9 @@ var Sample = thinky.createModel('Sample', {
   ncbi: type.string().required(),
   conditions: type.string().required(),
   sampleGroup: type.string().required(),
-  safeName: type.string()
+  safeName: type.string(),
+
+  additionalFiles: [type.string()]
 });
 
 

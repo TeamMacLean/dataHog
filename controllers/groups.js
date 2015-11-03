@@ -1,10 +1,15 @@
-var Project = require('../models/project.js');
+//var Project = require('../models/project.js');
 var Group = require('../models/group');
 var config = require('../config');
 
 var Groups = {};
 
-
+/**
+ * render group list
+ * @param req {request}
+ * @param res {response}
+ * @param next {callback}
+ */
 Groups.index = function (req, res, next) {
   Group.run().then(function (groups) {
 
@@ -16,6 +21,12 @@ Groups.index = function (req, res, next) {
   })
 };
 
+/**
+ * render one group
+ * @param req {request}
+ * @param res {response}
+ * @param next {callback}
+ */
 Groups.show = function (req, res, next) {
   var requestedGroup = req.params.group;
   Group.filter({safeName: requestedGroup}).getJoin({projects: true}).then(function (groups) {

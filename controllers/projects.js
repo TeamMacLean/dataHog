@@ -1,7 +1,7 @@
 var Project = require('../models/project.js');
 var Group = require('../models/group');
-var Run = require('../models/run.js');
-var Read = require('../models/read.js');
+//var Run = require('../models/run.js');
+//var Read = require('../models/read.js');
 var fs = require('fs-extra');
 var path = require('path');
 var util = require('../lib/util');
@@ -9,15 +9,26 @@ var config = require('../config.json');
 
 var Projects = {};
 
-Projects.new = function (req, res) {
-
+/**
+ * render new project page
+ * @param req {request}
+ * @param res {response}
+ * @param next {callback}
+ */
+Projects.new = function (req, res, next) {
   var group = req.params.group;
   Group.filter({safeName: group}).run().then(function (groups) {
     return res.render('projects/new', {selectedGroup: groups[0]});
   })
 };
 
-Projects.newPost = function (req, res) {
+/**
+ * post new project
+ * @param req {request}
+ * @param res {response}
+ * @param next {callback}
+ */
+Projects.newPost = function (req, res, next) {
   var name = req.body.name;
   var groupID = req.body.group;
   var responsiblePerson = req.body.responsiblePerson;
@@ -55,6 +66,12 @@ Projects.newPost = function (req, res) {
   });
 };
 
+/**
+ * render one project
+ * @param req {request}
+ * @param res {response}
+ * @param next {callback}
+ */
 Projects.show = function (req, res, next) {
   var projectSN = req.params.project;
   var groupSN = req.params.group;
@@ -72,7 +89,6 @@ Projects.show = function (req, res, next) {
     var project = projects[0];
 
     var fullPath = path.join(config.dataDir, project.group.safeName, project.safeName);
-
 
 
     util.unknownFolders(fullPath, project.samples, function (unknownFolders) {
