@@ -1,3 +1,5 @@
+"use strict";
+
 var request = require('supertest');
 var app = require('../app');
 var rimraf = require('rimraf');
@@ -8,7 +10,7 @@ var Project = require('../models/project');
 var Init = require('../lib/init');
 var fs = require('fs-extra');
 var config = require('../config');
-var thinky = require('../lib/thinky');
+//var thinky = require('../lib/thinky');
 
 
 describe('Server', function () {
@@ -32,8 +34,8 @@ describe('Server', function () {
     it('should get a 404', function (done) {
       request(app)
         .get('/gdagadfgsdfgsdfg')
-        .expect(404, done)
-    })
+        .expect(404, done);
+    });
   });
 
   describe('add', function () {
@@ -41,8 +43,8 @@ describe('Server', function () {
     var timestamp = Date.now();
 
     var testGroupName = 'hogtestgroup' + timestamp;
-    var testGroupSafeName = undefined;
-    var testGroupID = undefined;
+    var testGroupSafeName = null;
+    var testGroupID = null;
     var testProjectName = 'hogtestproject' + timestamp;
 
     before(function (done) {
@@ -51,18 +53,18 @@ describe('Server', function () {
           testGroupSafeName = result.safeName;
           testGroupID = result.id;
           done();
-        })
+        });
       });
     });
 
     after(function (done) {
       Group.filter({name: testGroupName}).run().then(function (groups) {
         async.each(groups, function (group, cb) {
-          group.delete().then(cb)
+          group.delete().then(cb);
         }, function () {
           Project.filter({name: testProjectName}).run().then(function (projects) {
             async.each(projects, function (project, cb2) {
-              project.delete().then(cb2)
+              project.delete().then(cb2);
             }, function () {
 
               var pathToCheck = config.dataDir;
@@ -74,14 +76,14 @@ describe('Server', function () {
                   rimraf(deletePath, function (err) {
                     console.log('deleted', deletePath);
                     cvv(err);
-                  })
+                  });
                 } else {
                   cvv();
                 }
               }, function (err) {
                 done(err);
               });
-            })
+            });
           });
         });
       });
@@ -92,7 +94,7 @@ describe('Server', function () {
         request(app)
           .get('/' + testGroupSafeName)
           .expect('Content-Type', "text/html; charset=utf-8")
-          .expect(200, done)
+          .expect(200, done);
       });
     });
 
@@ -102,7 +104,7 @@ describe('Server', function () {
       it('should load new project page', function (done) {
         request(app)
           .get('/' + testGroupSafeName + '/new')
-          .expect(200, done)
+          .expect(200, done);
       });
 
       it('should create a new project', function (done) {
@@ -121,15 +123,15 @@ describe('Server', function () {
         request(app)
           .get(getURL)
           .expect(200, done);
-      })
+      });
 
     });
 
 
     describe('new sample', function () {
 
-    })
-  })
+    });
+  });
 
 
 });

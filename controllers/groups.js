@@ -1,6 +1,6 @@
-//var Project = require('../models/project.js');
+"use strict";
+
 var Group = require('../models/group');
-var config = require('../config');
 
 var Groups = {};
 
@@ -8,9 +8,8 @@ var Groups = {};
  * render group list
  * @param req {request}
  * @param res {response}
- * @param next {callback}
  */
-Groups.index = function (req, res, next) {
+Groups.index = function (req, res) {
   Group.run().then(function (groups) {
 
     groups.sort(function (a, b) {
@@ -18,7 +17,7 @@ Groups.index = function (req, res, next) {
     });
 
     return res.render('groups/index', {groups: groups});
-  })
+  });
 };
 
 /**

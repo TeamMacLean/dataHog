@@ -1,8 +1,7 @@
+"use strict";
+
 var Reads = {};
 
-//var Project = require('../models/project.js');
-//var Sample = require('../models/sample.js');
-var Run = require('../models/run.js');
 var Read = require('../models/read.js');
 var fs = require('fs');
 var path = require('path');
@@ -36,7 +35,7 @@ Reads.show = function (req, res, next) {
     return res.render('readData/show', {read: read});
   }).error(function (err) {
     return res.render('error', {error: err});
-  })
+  });
 
 };
 
@@ -62,24 +61,24 @@ Reads.fastQC = function (req, res) {
     })
     .run().then(function (results) {
 
-      var read = results[0];
+    var read = results[0];
 
-      var strippedReadName = read.name.replace('.gz', '').replace('.bz2', '');
+    var strippedReadName = read.name.replace('.gz', '').replace('.bz2', '');
 
-      var htmlPath = path.join(__dirname, '../', read.fastQCLocation, strippedReadName + '_fastqc.html');
+    var htmlPath = path.join(__dirname, '../', read.fastQCLocation, strippedReadName + '_fastqc.html');
 
-      fs.stat(htmlPath, function (err, stat) {
-        if (!err) {
-          res.sendFile(htmlPath);
-        } else {
-          res.send('could not find fast qc report');
-        }
-      });
-
-
-    }).error(function () {
-      return res.render('error', {error: 'could not find run'});
+    fs.stat(htmlPath, function (err) {
+      if (!err) {
+        res.sendFile(htmlPath);
+      } else {
+        res.send('could not find fast qc report');
+      }
     });
+
+
+  }).error(function () {
+    return res.render('error', {error: 'could not find run'});
+  });
 };
 
 module.exports = Reads;

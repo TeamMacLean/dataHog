@@ -1,5 +1,5 @@
-'use strict';
-
+"use strict";
+/* exported fileUploader */
 /**
  *
  * @param mountNode
@@ -8,7 +8,6 @@
  * @param MD5ID
  */
 function fileUploader(mountNode, MD5S, fileID, MD5ID) {
-
 
   var input = React.createClass({
     displayName: 'input',
@@ -33,7 +32,7 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
             React.createElement('input', {type: 'text', id: MD5ID + ind, name: MD5ID + ind}),
             React.createElement('br'),
             React.createElement('br')
-          )
+          );
         }
 
         return React.createElement('div', {},
@@ -51,7 +50,7 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
         subs.push(React.createElement('hr'));
         subs.push(makeItem(2));
       } else {
-        subs.push(makeItem())
+        subs.push(makeItem());
       }
 
 
@@ -63,7 +62,7 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
           className: 'error',
           onClick: self.props.removeInput
         })
-      )
+      );
     }
   });
 
@@ -77,9 +76,6 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
       this.setState({items: nextItems});
     },
     removeInput: function removeInput(input) {
-
-      //TODO get count
-      //TODO check its >= than min
 
       if (this.state.items.length > this.state.min) {
         var newData = this.state.items.slice(); //copy array
@@ -100,7 +96,7 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
           {key: index, className: 'no-decoration'},
           React.createElement(item, {removeInput: self.removeInput, index: index, paired: self.state.paired}),
           React.createElement('br')
-        )
+        );
       };
       return React.createElement(
         'div',
@@ -110,11 +106,11 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
           'input',
           {type: 'button', className: 'button', onClick: this.addInput, value: 'add another'}
         )
-      )
+      );
     },
     setPaired: function setPairs(bool) {
 
-      if (!bool || bool == false) {
+      if (!bool || bool === false) {
         this.setState({paired: false});
       } else {
         this.setState({paired: true});

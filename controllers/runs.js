@@ -3,7 +3,6 @@
 var Sample = require('../models/sample.js');
 var Run = require('../models/run.js');
 var Read = require('../models/read.js');
-var async = require('async');
 var fs = require('fs-extra');
 var path = require('path');
 var fastqc = require('../lib/fastqc');
@@ -12,7 +11,7 @@ var zlib = require('zlib');
 var isGzip = require('is-gzip');
 var isBzip2 = require('is-bzip2');
 var read = require('fs').readFileSync;
-var rimraf = require('rimraf');
+//var rimraf = require('rimraf');
 var config = require('../config.json');
 
 var Runs = {};
@@ -48,179 +47,28 @@ Runs.new = function (req, res) {
 };
 
 /**
- * post new run
- * @param req {request}
- * @param res {response}
+ * compress a file
+ * @param filename {filename}
+ * @param callback {function}
  */
-Runs.newPost = function (req, res) {
+function compressFile(filename, callback) {
 
-  var projectSN = req.params.project;
-  var sampleSN = req.params.sample;
-  var groupSN = req.params.group;
-  var name = req.body.name;
+  var compressedPath = filename + '.gz';
 
-  var sequencingProvider = req.body.sequencingProvider;
-  var sequencingTechnology = req.body.sequencingTechnology;
-  var insertSize = req.body.insertSize;
-  var libraryType = req.body.libraryType;
-  var submissionToGalaxy = req.body.submissionToGalaxy === 'on';
+  var compress = zlib.createGzip(),
+    input = fs.createReadStream(filename),
+    output = fs.createWriteStream(compressedPath);
 
-  var librarySource = req.body.librarySource;
-  var librarySelection = req.body.librarySelection;
-  var libraryStrategy = req.body.libraryStrategy;
+  input.pipe(compress).pipe(output);
+
+  if (callback) {
 
 
-  //var savedReads = [];
-  //var pathToNewRunFolder = null;
-  //var currentRun = null;
-
-
-  Sample.filter({safeName: sampleSN}).getJoin({project: {group: true}}).filter({
-    project: {
-      safeName: projectSN,
-      group: {safeName: groupSN}
-    }
-  }).run().then(function (results) {
-    if (results.length > 1) {
-      console.error('too many samples', results);
-    }
-    var sample = results[0];
-
-    var run = new Run({
-      name: name,
-      sampleID: sample.id,
-      librarySource: librarySource,
-      librarySelection: librarySelection,
-      libraryStrategy: libraryStrategy,
-      sequencingProvider: sequencingProvider,
-      sequencingTechnology: sequencingTechnology,
-      insertSize: insertSize,
-      submissionToGalaxy: submissionToGalaxy,
-      libraryType: libraryType
+    output.on('finish', function () {
+      callback(compressedPath);
     });
-
-    //function fail(err) {
-    //
-    //  if (currentRun) {
-    //    currentRun.delete().then(function () {
-    //      console.warn('deleted run');
-    //    });
-    //  }
-    //
-    //  if (pathToNewRunFolder) {
-    //    rimraf(pathToNewRunFolder, function (err) {
-    //      if (err) {
-    //        console.error(err);
-    //      }
-    //      console.warn('deleted run folder', pathToNewRunFolder);
-    //    });
-    //  }
-    //
-    //  savedReads.map(function (sr) {
-    //    console.warn('deleted read');
-    //    sr.delete();
-    //  });
-    //
-    //  return res.render('error', {error: err});
-    //}
-
-    run.save().then(function (savedRun) {
-      //currentRun = savedRun;
-      //processAllFiles();
-
-      var pathToNewRunFolder = path.join(config.dataDir, sample.project.group.safeName, sample.project.safeName, sample.safeName, savedRun.safeName);
-
-      //TODO ensure folder
-
-      fs.ensureDir(pathToNewRunFolder, function (err) {
-        if (err) {
-          //TODO
-          //return fail(err);
-          console.error(err);
-        } else {
-          addReadToRun(req, savedRun, pathToNewRunFolder, function () {
-            console.log('done');
-            renderOK();
-          });
-        }
-
-      });
-
-      function renderOK() {
-        Run.get(savedRun.id).getJoin({sample: {project: {group: true}}, reads: true}).then(function (result) {
-          var url = path.join('/', result.sample.project.group.safeName, result.sample.project.safeName, result.sample.safeName, result.safeName);
-          return res.redirect(url);
-        });
-      }
-    });
-  });
-};
-
-
-/**
- * render one run
- * @param req {request}
- * @param res {response}
- */
-Runs.show = function (req, res) {
-  var runSN = req.params.run;
-  var sampleSN = req.params.sample;
-  var projectSN = req.params.project;
-
-  Run.filter({safeName: runSN}).getJoin({sample: {project: {group: true}}, reads: true}).filter({
-    sample: {
-      safeName: sampleSN,
-      project: {safeName: projectSN}
-    }
-  }).then(function (results) {
-
-
-    if (results.length > 1) {
-      console.error('too many runs', results);
-    }
-
-    var run = results[0];
-
-
-    return res.render('runs/show', {run: run});
-  }).error(function () {
-    return res.render('error', {error: 'could not find run'});
-  });
-};
-
-/**
- *
- * @param req {request}
- * @param res {response}
- * @param next {function}
- */
-Runs.addPost = function (req, res, next) {
-
-  var runSN = req.params.run;
-  var sampleSN = req.params.sample;
-  var projectSN = req.params.project;
-
-  Run.filter({safeName: runSN}).getJoin({sample: {project: {group: true}}, reads: true}).filter({
-    sample: {
-      safeName: sampleSN,
-      project: {safeName: projectSN}
-    }
-  }).then(function (results) {
-
-
-    if (results.length > 1) {
-      console.error('too many runs', results);
-    }
-
-    var run = results[0];
-
-    //console.log('body', req.body);
-    //console.log('files', req.files);
-
-    return res.render('runs/show', {run: run});
-
-  });
-};
+  }
+}
 
 /**
  *
@@ -260,6 +108,7 @@ function ensureCompressed(fileAndMD5, cb) {
 
 }
 
+
 /**
  *
  * @param savedRun
@@ -270,14 +119,6 @@ function ensureCompressed(fileAndMD5, cb) {
 function addAdditional(savedRun, additionalFiles, pathToNewRunFolder, cb) {
   var joinedPathWithAddition = path.join(pathToNewRunFolder, 'additional');
 
-  fs.ensureDir(joinedPathWithAddition, function (err) {
-    if (err) {
-      return cb(err);
-      //return fail(err);
-    } else {
-      moveAdditional(additionalFiles);
-    }
-  });
   function moveAdditional(additionalFiles) {
     var usedNames = [];
     var justPaths = [];
@@ -301,7 +142,7 @@ function addAdditional(savedRun, additionalFiles, pathToNewRunFolder, cb) {
         }
       });
     });
-    Run.get(savedRun.id).update({additionalData: justPaths}).run().then(function (savedRun) {
+    Run.get(savedRun.id).update({additionalData: justPaths}).run().then(function () {
         cb();
       })
       .error(function (err) {
@@ -311,7 +152,18 @@ function addAdditional(savedRun, additionalFiles, pathToNewRunFolder, cb) {
         }
       });
   }
+
+  fs.ensureDir(joinedPathWithAddition, function (err) {
+    if (err) {
+      return cb(err);
+      //return fail(err);
+    } else {
+      moveAdditional(additionalFiles);
+    }
+  });
+
 }
+
 
 /**
  *
@@ -324,7 +176,6 @@ function processAllFiles(req, cb) {
   var additionalFiles = [];
 
   console.log(req.files);
-  //TODO some will have the same num, they are paired/mated!!!
   for (var p in req.files) {
 
 
@@ -335,7 +186,6 @@ function processAllFiles(req, cb) {
         console.log('file', file);
         var split = p.split('-');
         if (split.length === 3) {
-          //TODO its paired
           console.log('its paired');
         } else {
           console.log('its not paired');
@@ -352,30 +202,6 @@ function processAllFiles(req, cb) {
 }
 
 /**
- * compress a file
- * @param filename {filename}
- * @param callback {function}
- */
-function compressFile(filename, callback) {
-
-  var compressedPath = filename + '.gz';
-
-  var compress = zlib.createGzip(),
-    input = fs.createReadStream(filename),
-    output = fs.createWriteStream(compressedPath);
-
-  input.pipe(compress).pipe(output);
-
-  if (callback) {
-
-
-    output.on('finish', function () {
-      callback(compressedPath);
-    });
-  }
-}
-
-/**
  *
  * @param req {request}
  * @param savedRun {run}
@@ -384,12 +210,12 @@ function compressFile(filename, callback) {
  */
 function addReadToRun(req, savedRun, pathToNewRunFolder, cb) {
 
-  var savedReads = []; //TODO for removing db items on fail
+  var savedReads = [];
 
   processAllFiles(req, function (filesAndSums, additionalFiles) {
 
-    if (additionalFiles.length > 0) { //TODO
-      addAdditional(savedRun, additionalFiles, pathToNewRunFolder, function (err) {
+    if (additionalFiles.length > 0) {
+      addAdditional(savedRun, additionalFiles, pathToNewRunFolder, function () {
 
       });
     }
@@ -451,13 +277,7 @@ function addReadToRun(req, savedRun, pathToNewRunFolder, cb) {
         fs.renameSync(md5AndPath.path, newFullPath);
         var fqcPath = path.join(pathToNewRunFolder, '.fastqc');
 
-        fs.ensureDir(fqcPath, function (err) { // create fastqc folder
-          if (err) {
-            return cb(err);
-          } else {
-            fqcStuff();
-          }
-        });
+
         function fqcStuff() {
           var read = new Read({
             name: md5AndPath.originalName,
@@ -481,10 +301,185 @@ function addReadToRun(req, savedRun, pathToNewRunFolder, cb) {
             }
           });
         }
+
+        fs.ensureDir(fqcPath, function (err) { // create fastqc folder
+          if (err) {
+            return cb(err);
+          } else {
+            fqcStuff();
+          }
+        });
       });
     });
     cb();
   });
 }
+
+
+/**
+ * post new run
+ * @param req {request}
+ * @param res {response}
+ */
+Runs.newPost = function (req, res) {
+
+  var projectSN = req.params.project;
+  var sampleSN = req.params.sample;
+  var groupSN = req.params.group;
+  var name = req.body.name;
+
+  var sequencingProvider = req.body.sequencingProvider;
+  var sequencingTechnology = req.body.sequencingTechnology;
+  var insertSize = req.body.insertSize;
+  var libraryType = req.body.libraryType;
+  var submissionToGalaxy = req.body.submissionToGalaxy === 'on';
+
+  var librarySource = req.body.librarySource;
+  var librarySelection = req.body.librarySelection;
+  var libraryStrategy = req.body.libraryStrategy;
+
+
+  Sample.filter({safeName: sampleSN}).getJoin({project: {group: true}}).filter({
+    project: {
+      safeName: projectSN,
+      group: {safeName: groupSN}
+    }
+  }).run().then(function (results) {
+    if (results.length > 1) {
+      console.error('too many samples', results);
+    }
+    var sample = results[0];
+
+    var run = new Run({
+      name: name,
+      sampleID: sample.id,
+      librarySource: librarySource,
+      librarySelection: librarySelection,
+      libraryStrategy: libraryStrategy,
+      sequencingProvider: sequencingProvider,
+      sequencingTechnology: sequencingTechnology,
+      insertSize: insertSize,
+      submissionToGalaxy: submissionToGalaxy,
+      libraryType: libraryType
+    });
+
+    //function fail(err) {
+    //
+    //  if (currentRun) {
+    //    currentRun.delete().then(function () {
+    //      console.warn('deleted run');
+    //    });
+    //  }
+    //
+    //  if (pathToNewRunFolder) {
+    //    rimraf(pathToNewRunFolder, function (err) {
+    //      if (err) {
+    //        console.error(err);
+    //      }
+    //      console.warn('deleted run folder', pathToNewRunFolder);
+    //    });
+    //  }
+    //
+    //  savedReads.map(function (sr) {
+    //    console.warn('deleted read');
+    //    sr.delete();
+    //  });
+    //
+    //  return res.render('error', {error: err});
+    //}
+
+    run.save().then(function (savedRun) {
+
+      var pathToNewRunFolder = path.join(config.dataDir, sample.project.group.safeName, sample.project.safeName, sample.safeName, savedRun.safeName);
+
+      function renderOK() {
+        Run.get(savedRun.id).getJoin({sample: {project: {group: true}}, reads: true}).then(function (result) {
+          var url = path.join('/', result.sample.project.group.safeName, result.sample.project.safeName, result.sample.safeName, result.safeName);
+          return res.redirect(url);
+        });
+      }
+
+      fs.ensureDir(pathToNewRunFolder, function (err) {
+        if (err) {
+          console.error(err);
+        } else {
+          addReadToRun(req, savedRun, pathToNewRunFolder, function () {
+            console.log('done');
+            renderOK();
+          });
+        }
+
+      });
+
+
+    });
+  });
+};
+
+
+/**
+ * render one run
+ * @param req {request}
+ * @param res {response}
+ */
+Runs.show = function (req, res) {
+  var runSN = req.params.run;
+  var sampleSN = req.params.sample;
+  var projectSN = req.params.project;
+
+  Run.filter({safeName: runSN}).getJoin({sample: {project: {group: true}}, reads: true}).filter({
+    sample: {
+      safeName: sampleSN,
+      project: {safeName: projectSN}
+    }
+  }).then(function (results) {
+
+
+    if (results.length > 1) {
+      console.error('too many runs', results);
+    }
+
+    var run = results[0];
+
+
+    return res.render('runs/show', {run: run});
+  }).error(function () {
+    return res.render('error', {error: 'could not find run'});
+  });
+};
+
+/**
+ *
+ * @param req {request}
+ * @param res {response}
+ */
+Runs.addPost = function (req, res) {
+
+  var runSN = req.params.run;
+  var sampleSN = req.params.sample;
+  var projectSN = req.params.project;
+
+  Run.filter({safeName: runSN}).getJoin({sample: {project: {group: true}}, reads: true}).filter({
+    sample: {
+      safeName: sampleSN,
+      project: {safeName: projectSN}
+    }
+  }).then(function (results) {
+
+
+    if (results.length > 1) {
+      console.error('too many runs', results);
+    }
+
+    var run = results[0];
+
+    //console.log('body', req.body);
+    //console.log('files', req.files);
+
+    return res.render('runs/show', {run: run});
+
+  });
+};
+
 
 module.exports = Runs;

@@ -1,3 +1,5 @@
+"use strict";
+
 var app = require('./app');
 var config = require('./config.json');
 

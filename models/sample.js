@@ -1,6 +1,6 @@
 var thinky = require('../lib/thinky.js');
 var type = thinky.type;
-var r = thinky.r;
+//var r = thinky.r;
 var util = require('../lib/util');
 
 var Sample = thinky.createModel('Sample', {

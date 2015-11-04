@@ -16,7 +16,7 @@ var Run = thinky.createModel('Run', {
   libraryStrategy: type.string().required(),
   insertSize: type.string().required(),
   additionalFiles: [type.string().required()],
-  submissionToGalaxy: type.boolean().required(), //TODO send email if true
+  submissionToGalaxy: type.boolean().required(), //send email
   safeName: type.string()
 });
 

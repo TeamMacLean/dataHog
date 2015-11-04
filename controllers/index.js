@@ -4,9 +4,8 @@ var Index = {};
  * render site index
  * @param req {request}
  * @param res {response}
- * @param next {callback}
  */
-Index.index = function (req, res, next) {
+Index.index = function (req, res) {
   res.render('index');
 };
 

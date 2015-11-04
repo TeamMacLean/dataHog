@@ -1,3 +1,4 @@
+"use strict";
 var Samples = {};
 var Project = require('../models/project');
 var Sample = require('../models/sample');
@@ -65,7 +66,7 @@ Samples.newPost = function (req, res) {
       console.error(err);
     });
   })
-    .error(function (err) {
+    .error(function () {
       return res.render('error', {error: 'could not find project'});
     });
 
@@ -94,9 +95,9 @@ Samples.show = function (req, res) {
 
     res.render('samples/show', {sample: sample});
   })
-    .error(function (err) {
+    .error(function () {
       return res.render('error', {error: 'could not find sample'});
-    })
+    });
 };
 
 module.exports = Samples;
