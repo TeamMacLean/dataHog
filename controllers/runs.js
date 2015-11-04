@@ -21,7 +21,7 @@ var Runs = {};
 /**
  * compress a file
  * @param filename {filename}
- * @param callback {callback}
+ * @param callback {function}
  */
 function compressFile(filename, callback) {
 
@@ -196,49 +196,49 @@ Runs.newPost = function (req, res) {
 
       });
 
-      function addAdditional(cb) {
-        var joinedPathWithAddition = path.join(pathToNewRunFolder, 'additional');
-
-        fs.ensureDir(joinedPathWithAddition, function (err) {
-          if (err) {
-            return fail(err);
-          } else {
-            moveAdditional();
-          }
-        });
-        function moveAdditional() { //TODO FIX
-          var usedNames = [];
-          var justPaths = [];
-          additionalFiles.map(function (f) {
-            var fileName = f.originalname;
-            if (usedNames.indexOf(fileName) > -1) {
-              var i = 0;
-              while (usedNames.indexOf(fileName) > -1) {
-                i++;
-                var extension = path.extname(f.originalname);
-                var withoutExtention = path.basename(fileName, extension);
-                fileName = withoutExtention + i + extension;
-              }
-            }
-            usedNames.push(fileName);
-            var newPath = path.join(joinedPathWithAddition, fileName);
-            justPaths.push(newPath);
-            fs.rename(f.path, newPath, function (err) {
-              if (err) {
-                console.error('error!', err);
-              }
-            });
-          });
-          Run.get(savedRun.id).update({additionalData: justPaths}).run().then(function (savedRun) {
-              cb();
-            })
-            .error(function (err) {
-              if (err) {
-                return fail(err);
-              }
-            })
-        }
-      }
+      //function addAdditional(cb) {
+      //  var joinedPathWithAddition = path.join(pathToNewRunFolder, 'additional');
+      //
+      //  fs.ensureDir(joinedPathWithAddition, function (err) {
+      //    if (err) {
+      //      return fail(err);
+      //    } else {
+      //      moveAdditional();
+      //    }
+      //  });
+      //  function moveAdditional() { //TODO FIX
+      //    var usedNames = [];
+      //    var justPaths = [];
+      //    additionalFiles.map(function (f) {
+      //      var fileName = f.originalname;
+      //      if (usedNames.indexOf(fileName) > -1) {
+      //        var i = 0;
+      //        while (usedNames.indexOf(fileName) > -1) {
+      //          i++;
+      //          var extension = path.extname(f.originalname);
+      //          var withoutExtention = path.basename(fileName, extension);
+      //          fileName = withoutExtention + i + extension;
+      //        }
+      //      }
+      //      usedNames.push(fileName);
+      //      var newPath = path.join(joinedPathWithAddition, fileName);
+      //      justPaths.push(newPath);
+      //      fs.rename(f.path, newPath, function (err) {
+      //        if (err) {
+      //          console.error('error!', err);
+      //        }
+      //      });
+      //    });
+      //    Run.get(savedRun.id).update({additionalData: justPaths}).run().then(function (savedRun) {
+      //        cb();
+      //      })
+      //      .error(function (err) {
+      //        if (err) {
+      //          return fail(err);
+      //        }
+      //      })
+      //  }
+      //}
 
       function runInOrder() {
         async.series([addReads, addAdditional], renderOK);
@@ -251,37 +251,37 @@ Runs.newPost = function (req, res) {
         })
       }
 
-      function ensureCompressed(fileAndMD5, cb) {
-
-        var file = fileAndMD5.file;
-        var md5er = fileAndMD5.md5;
-
-        var fileBuff = read(file.path);
-
-        var compressed = isBzip2(fileBuff) || isGzip(fileBuff);
-        var fileExtention = path.extname(file.originalname);
-
-        var originalName = file.originalname;
-
-        if (!compressed && ['.fq', '.fasq'].indexOf(fileExtention) < 0) {
-          var err = new Error('not compressed and not a fastq/fq file extention');
-
-          return fail(err);
-
-
-        } else if (!compressed) { //not compressed
-          compressFile(file.path, function (compressedPath) {
-
-            var cFile = fs.readFileSync(compressedPath);
-            var cMD5 = md5(cFile);
-
-            return cb(null, {md5: cMD5, path: path.resolve(compressedPath), originalName: originalName + '.gz'});
-          });
-        } else { //is compressed already
-          return cb(null, {md5: md5er, path: path.resolve(file.path), originalName: originalName});
-        }
-
-      }
+      //function ensureCompressed(fileAndMD5, cb) {
+      //
+      //  var file = fileAndMD5.file;
+      //  var md5er = fileAndMD5.md5;
+      //
+      //  var fileBuff = read(file.path);
+      //
+      //  var compressed = isBzip2(fileBuff) || isGzip(fileBuff);
+      //  var fileExtention = path.extname(file.originalname);
+      //
+      //  var originalName = file.originalname;
+      //
+      //  if (!compressed && ['.fq', '.fasq'].indexOf(fileExtention) < 0) {
+      //    var err = new Error('not compressed and not a fastq/fq file extention');
+      //
+      //    return fail(err);
+      //
+      //
+      //  } else if (!compressed) { //not compressed
+      //    compressFile(file.path, function (compressedPath) {
+      //
+      //      var cFile = fs.readFileSync(compressedPath);
+      //      var cMD5 = md5(cFile);
+      //
+      //      return cb(null, {md5: cMD5, path: path.resolve(compressedPath), originalName: originalName + '.gz'});
+      //    });
+      //  } else { //is compressed already
+      //    return cb(null, {md5: md5er, path: path.resolve(file.path), originalName: originalName});
+      //  }
+      //
+      //}
 
       function addReads(cb) {
 
@@ -335,7 +335,7 @@ Runs.newPost = function (req, res) {
           usedFileNames.push(testName);
           fileAndMD5.file.originalname = fileName;
 
-          ensureCompressed(fileAndMD5, function (err, md5AndPath) {
+          ensureCompressed(fileAndMD5, compressedPath, function (err, md5AndPath) {
 
             if (err) {
               return fail(err);
@@ -389,7 +389,7 @@ Runs.newPost = function (req, res) {
  * render one run
  * @param req {request}
  * @param res {response}
- * @param next {callback} called to moved to the next route
+ * @param next {function} called to moved to the next route
  */
 Runs.show = function (req, res, next) {
   var runSN = req.params.run;
@@ -417,7 +417,14 @@ Runs.show = function (req, res, next) {
   });
 };
 
+/**
+ *
+ * @param req {request}
+ * @param res {response}
+ * @param next {function}
+ */
 Runs.addPost = function (req, res, next) {
+
   var runSN = req.params.run;
   var sampleSN = req.params.sample;
   var projectSN = req.params.project;
@@ -435,8 +442,101 @@ Runs.addPost = function (req, res, next) {
     }
 
     var run = results[0];
+
+    console.log('body', req.body);
+    console.log('files', req.files);
+
+    return res.render('runs/show', {run: run});
+
   })
 };
 
+/**
+ *
+ * @param fileAndMD5
+ * @param compressedPath
+ * @param cb
+ * @returns {*}
+ */
+function ensureCompressed(fileAndMD5, compressedPath, cb) {
+
+  var file = fileAndMD5.file;
+  var md5er = fileAndMD5.md5;
+
+  var fileBuff = read(file.path);
+
+  var compressed = isBzip2(fileBuff) || isGzip(fileBuff);
+  var fileExtention = path.extname(file.originalname);
+
+  var originalName = file.originalname;
+
+  if (!compressed && ['.fq', '.fasq'].indexOf(fileExtention) < 0) {
+    var err = new Error('not compressed and not a fastq/fq file extention');
+
+    return fail(err);
+
+
+  } else if (!compressed) { //not compressed
+    compressFile(file.path, function (compressedPath) {
+
+      var cFile = fs.readFileSync(compressedPath);
+      var cMD5 = md5(cFile);
+
+      return cb(null, {md5: cMD5, path: path.resolve(compressedPath), originalName: originalName + '.gz'});
+    });
+  } else { //is compressed already
+    return cb(null, {md5: md5er, path: path.resolve(file.path), originalName: originalName});
+  }
+
+}
+
+function addAdditional(cb) {
+  var joinedPathWithAddition = path.join(pathToNewRunFolder, 'additional');
+
+  fs.ensureDir(joinedPathWithAddition, function (err) {
+    if (err) {
+      return fail(err);
+    } else {
+      moveAdditional();
+    }
+  });
+  function moveAdditional() { //TODO FIX
+    var usedNames = [];
+    var justPaths = [];
+    additionalFiles.map(function (f) {
+      var fileName = f.originalname;
+      if (usedNames.indexOf(fileName) > -1) {
+        var i = 0;
+        while (usedNames.indexOf(fileName) > -1) {
+          i++;
+          var extension = path.extname(f.originalname);
+          var withoutExtention = path.basename(fileName, extension);
+          fileName = withoutExtention + i + extension;
+        }
+      }
+      usedNames.push(fileName);
+      var newPath = path.join(joinedPathWithAddition, fileName);
+      justPaths.push(newPath);
+      fs.rename(f.path, newPath, function (err) {
+        if (err) {
+          console.error('error!', err);
+        }
+      });
+    });
+    Run.get(savedRun.id).update({additionalData: justPaths}).run().then(function (savedRun) {
+        cb();
+      })
+      .error(function (err) {
+        if (err) {
+          return fail(err);
+        }
+      })
+  }
+}
+
+
+function addReadToRun(){
+  //TODO
+}
 
 module.exports = Runs;

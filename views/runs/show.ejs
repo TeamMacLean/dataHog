@@ -63,7 +63,9 @@
         <% }); %>
     </div>
     <hr>
-    <form>
+    <form action="/<%- run.sample.project.group.safeName %>/<%- run.sample.project.safeName %>/<%- run.sample.safeName %>/<%- run.safeName %>/add"
+          method="POST"
+          enctype="multipart/form-data">
         <h2>Add processed data</h2>
 
         <input type="hidden" value="<%- run.libraryType %>" id="typePasser">

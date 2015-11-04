@@ -6,7 +6,6 @@ var routes = require('./routes');
 var config = require('./config.json');
 var fs = require('fs');
 var init = require('./lib/init');
-var thinky = require('./lib/thinky');
 
 
 if (!config.appName || !config.port || !config.dataDir || !config.tmpDir) {
@@ -26,8 +25,6 @@ if (!fs.existsSync(config.dataDir)) {
 if (!fs.existsSync(config.tmpDir)) {
   console.error('tmpDir', config.tmpDir, 'does not exist');
 }
-
-//TODO generate groups database entries
 
 var app = express();
 app.locals.title = config.appName;
