@@ -1,3 +1,5 @@
+"use strict";
+
 var util = require('../lib/util');
 
 describe('util', function () {
@@ -8,9 +10,9 @@ describe('util', function () {
       if (safe === 'this_is_not_safe') {
         done();
       } else {
-        done(new Error(safe + ' != this_is_not_safe'))
+        done(new Error(safe + ' != this_is_not_safe'));
       }
-    })
+    });
   });
   describe('.generateSafeName', function () {
     it('should return "bob_2" when given "bob"', function (done) {
@@ -25,8 +27,7 @@ describe('util', function () {
           done(new Error(safeName + ' != bob_2'));
         }
 
-      })
-
-    })
-  })
+      });
+    });
+  });
 });

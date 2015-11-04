@@ -1,5 +1,6 @@
 "use strict";
 /* exported fileUploader */
+/* globals React, ReactDOM, alert */
 /**
  *
  * @param mountNode

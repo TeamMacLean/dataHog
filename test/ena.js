@@ -1,3 +1,5 @@
+"use strict";
+
 var path = require('path');
 var ena = require('../lib/ena');
 var config = require('../config').ena;
@@ -13,7 +15,10 @@ describe('ENA', function () {
     var fileName = 'test.fastq.gz';
 
     it('should upload ok', function (done) {
-      if (!canLogIn) this.skip();
+      if (!canLogIn) {
+        this.skip();
+      }
+
       ena.upload(fileToUpload, fileName, function (err) {
         if (err) {
           done(err);
@@ -21,12 +26,14 @@ describe('ENA', function () {
           done();
         }
       });
-    })
+    });
   });
   describe('.submit', function () {
     this.timeout(50000);
     it('should upload ok', function (done) {
-      if (!canLogIn) this.skip('this is text');
+      if (!canLogIn) {
+        this.skip('this is text');
+      }
 
       var experiment = path.join(__dirname, 'data', 'experiment.xml');
       var run = path.join(__dirname, 'data', 'run.xml');
@@ -39,6 +46,6 @@ describe('ENA', function () {
         done(err);
       };
       ena.submit(submission, study, sample, experiment, run, end);
-    })
-  })
+    });
+  });
 });

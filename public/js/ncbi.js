@@ -1,5 +1,6 @@
 "use strict";
 /* exported sampleNCBI */
+/* globals $, tax */
 $(function () {
   sampleNCBI();
 });

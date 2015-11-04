@@ -1,4 +1,5 @@
 "use strict";
+
 var thinky = require('../lib/thinky.js');
 var type = thinky.type;
 //var r = thinky.r;

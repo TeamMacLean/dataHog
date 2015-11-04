@@ -1,4 +1,5 @@
 "use strict";
+
 var Samples = {};
 var Project = require('../models/project');
 var Sample = require('../models/sample');

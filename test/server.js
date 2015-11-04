@@ -26,8 +26,8 @@ describe('Server', function () {
       request(app)
         .get('/')
         .expect('Content-Type', "text/html; charset=utf-8")
-        .expect(200, done)
-    })
+        .expect(200, done);
+    });
   });
 
   describe('404', function () {

@@ -1,3 +1,5 @@
+"use strict";
+
 var thinky = require('../lib/thinky.js');
 var type = thinky.type;
 var util = require('../lib/util');

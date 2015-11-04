@@ -1,3 +1,4 @@
+"use strict";
 
 describe('Legacy Data', function () {
   describe('run', function () {
@@ -12,6 +13,6 @@ describe('Legacy Data', function () {
           done(new Error('should have found folders in the app root'));
         }
       });
-    })
+    });
   });
 });

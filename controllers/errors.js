@@ -1,4 +1,6 @@
+"use strict";
 var Errors = {};
+
 /**
  * renders a 404
  * @param req {request}
