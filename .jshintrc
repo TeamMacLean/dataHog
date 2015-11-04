@@ -1,22 +1,5 @@
 {
-  "globals": {
-    /* MOCHA */
-    "describe": false,
-    "it": false,
-    "before": false,
-    "beforeEach": false,
-    "after": false,
-    "afterEach": false
-  },
-  "strict": true,
   "node": true,
-  "noempty": true,
-  "noarg": true,
-  "eqeqeq": true,
-  "browser": true,
-  "bitwise": true,
-  "curly": true,
-  "undef": true,
-  "nonew": true,
-  "forin": true
+  "mocha": true,
+  "browser": true
 }
