@@ -153,15 +153,28 @@ Runs.newPost = function (req, res) {
     /**
      * process all files
      */
-
     function processAllFiles() {
 
+      console.log('body', req.body);
+
+      //TODO some will have the same num, they are paired/mated!!!
       for (var p in req.files) {
         if (req.files.hasOwnProperty(p)) {
           if (p.indexOf('file') > -1) {
+
+
             var file = req.files[p];
+
+            var split = p.split('-');
+            if (split.length === 3) {
+              //TODO its paired
+              console.log('its paired');
+            } else {
+              console.log('its not paired');
+            }
+
             var num = p.split('-')[1];
-            filesAndSums.push({file: file, md5: req.body['MD5-' + num]});
+            filesAndSums.push({file: file, md5: req.body['md5-' + num]});
           } else if (p.indexOf('additional') > -1) {
             additionalFiles.push(req.files[p]);
           }
@@ -217,8 +230,8 @@ Runs.newPost = function (req, res) {
             });
           });
           Run.get(savedRun.id).update({additionalData: justPaths}).run().then(function (savedRun) {
-            cb();
-          })
+              cb();
+            })
             .error(function (err) {
               if (err) {
                 return fail(err);
@@ -271,6 +284,7 @@ Runs.newPost = function (req, res) {
       }
 
       function addReads(cb) {
+
 
         var happyFiles = [];
         var sadFiles = [];
@@ -345,7 +359,8 @@ Runs.newPost = function (req, res) {
                 MD5: md5AndPath.md5,
                 fastQCLocation: fqcPath,
                 moreInfo: '',
-                path: newFullPath
+                path: newFullPath,
+                processed: true
               });
               read.save().then(function (savedRead) {
 
@@ -374,8 +389,9 @@ Runs.newPost = function (req, res) {
  * render one run
  * @param req {request}
  * @param res {response}
+ * @param next {callback} called to moved to the next route
  */
-Runs.show = function (req, res) {
+Runs.show = function (req, res, next) {
   var runSN = req.params.run;
   var sampleSN = req.params.sample;
   var projectSN = req.params.project;
@@ -395,11 +411,31 @@ Runs.show = function (req, res) {
     var run = results[0];
 
 
-
     return res.render('runs/show', {run: run});
   }).error(function () {
     return res.render('error', {error: 'could not find run'});
   });
+};
+
+Runs.addPost = function (req, res, next) {
+  var runSN = req.params.run;
+  var sampleSN = req.params.sample;
+  var projectSN = req.params.project;
+
+  Run.filter({safeName: runSN}).getJoin({sample: {project: {group: true}}, reads: true}).filter({
+    sample: {
+      safeName: sampleSN,
+      project: {safeName: projectSN}
+    }
+  }).then(function (results) {
+
+
+    if (results.length > 1) {
+      console.error('too many runs', results);
+    }
+
+    var run = results[0];
+  })
 };
 
 

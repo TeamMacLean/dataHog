@@ -31,10 +31,24 @@
             <input type="text" id="conditions" name="conditions" required>
         </fieldset>
 
+        <fieldset class="file-group" id="additionalDataDiv">
+            <label>Additional data</label>
+
+            <div id="additionalData">
+            </div>
+
+        </fieldset>
+
         <button type="submit" class="button button-primary">Add</button>
     </form>
 
 </div>
 
+
+<script>
+    var additional = document.getElementById('additionalData');
+    var addtionalLoader = fileUploader(additional, false, 'file').setMin(0);
+
+</script>
 
 <% include ../foot %>

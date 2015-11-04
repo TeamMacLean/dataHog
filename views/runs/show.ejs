@@ -2,7 +2,7 @@
 <div class="container">
     <h3>
         <a href="/<%- run.sample.project.group.safeName %>/<%- run.sample.project.safeName %>/<%- run.sample.safeName %>"><i
-                    class="fa fa-chevron-left"></i> <%- run.sample.name %></a></h3>
+                    class="fa fa-chevron-left"></i> Sample: <%- run.sample.name %></a></h3>
 
     <h2><%- run.name %></h2>
 
@@ -45,12 +45,6 @@
 
     <p><%- run.submissionToGalaxy %></p>
 
-
-    <a class="button button-primary"
-       href="/<%- run.sample.project.group.safeName %>/<%- run.sample.project.safeName %>/<%- run.sample.safeName %>/<%- run.safeName %>/new"><i
-                class="fa fa-plus"></i> add read
-        data</a>
-
     <div class="row">
         <% var i = 0; %>
         <% if(run.reads) run.reads.map(function(read){ %>
@@ -58,7 +52,8 @@
         <div class="col6">
             <a href="/<%- run.sample.project.group.safeName %>/<%- run.sample.project.safeName %>/<%- run.sample.safeName %>/<%- run.safeName %>/<%- read.safeName %>">
                 <div class="tile">
-                    <!--<i class="fa fa-cube"></i>--> <%- read.name %>
+                    Read:
+                    <%- read.name %>
                 </div>
             </a>
         </div>
@@ -67,6 +62,35 @@
         <% } %>
         <% }); %>
     </div>
+    <hr>
+    <form>
+        <h2>Add processed data</h2>
+
+        <input type="hidden" value="<%- run.libraryType %>" id="typePasser">
+
+        <fieldset id="md5Inputs" class="file-group">
+            <label>Read data</label>
+
+            <div id="filesRoot">
+            </div>
+        </fieldset>
+        <button type="submit" class="button button-primary">Submit</button>
+    </form>
+
+
+    <script>
+
+        var md5files = document.getElementById('filesRoot');
+        var md5Loader = fileUploader(md5files, true, 'file', 'md5').setMin(1);
+
+        var type = $('#typePasser').val();
+        console.log('type', type);
+
+        if (type !== 'unpaired') {
+            md5Loader.setPaired(true);
+        }
+
+    </script>
 
 </div>
 

@@ -42,6 +42,9 @@ router.post('/:group/:project/:sample/new', Runs.newPost);
 //show run
 router.get('/:group/:project/:sample/:run', Runs.show);
 
+//new read
+router.post('/:group/:project/:sample/add', Runs.addPost);
+
 //show read
 router.get('/:group/:project/:sample/:run/:read', Reads.show);
 

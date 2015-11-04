@@ -5,6 +5,7 @@ var r = thinky.r;
 var util = require('../lib/util');
 
 var Read = thinky.createModel('Read', {
+  processed: type.boolean().required(),
   id: type.string(),
   runID: type.string().required(),
   name: type.string().required(),

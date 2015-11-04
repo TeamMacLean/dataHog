@@ -2,10 +2,11 @@ var Reads = {};
 
 //var Project = require('../models/project.js');
 //var Sample = require('../models/sample.js');
-//var Run = require('../models/run.js');
+var Run = require('../models/run.js');
 var Read = require('../models/read.js');
 var fs = require('fs');
 var path = require('path');
+
 
 /**
  * render one read

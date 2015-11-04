@@ -9,25 +9,54 @@
  */
 function fileUploader(mountNode, MD5S, fileID, MD5ID) {
 
+
   var input = React.createClass({
     displayName: 'input',
     render: function render() {
       var self = this;
-      var md5Input = null;
-      if (MD5S) {
-        md5Input = React.createElement('div', {},
-          React.createElement('label', {}, 'MD5'),
-          React.createElement('input', {type: 'text', id: MD5ID + '-' + self.props.index}),
+      var paired = self.props.paired;
+
+      function makeItem(p) {
+        var md5Input = null;
+        var pairNumber = '';
+        var label = '';
+        if (p) {
+          label = 'part ' + p;
+          pairNumber = '-' + p;
+        }
+
+        var ind = '-' + self.props.index + pairNumber;
+
+        if (MD5S) {
+          md5Input = React.createElement('div', {},
+            React.createElement('label', {}, 'md5'),
+            React.createElement('input', {type: 'text', id: MD5ID + ind, name: MD5ID + ind}),
+            React.createElement('br'),
+            React.createElement('br')
+          )
+        }
+
+        return React.createElement('div', {},
+          React.createElement('label', {}, label),
+          React.createElement('input', {type: 'file', id: fileID + ind, name: fileID + ind}),
           React.createElement('br'),
-          React.createElement('br')
-        )
+          React.createElement('br'),
+          md5Input);
       }
+
+      var subs = [];
+
+      if (paired) {
+        subs.push(makeItem(1));
+        subs.push(React.createElement('hr'));
+        subs.push(makeItem(2));
+      } else {
+        subs.push(makeItem())
+      }
+
+
       return React.createElement('div', {className: 'file-group'},
-        React.createElement('label', {}, 'File'),
-        React.createElement('input', {type: 'file', id: fileID + '-' + self.props.index}),
-        React.createElement('br'),
-        React.createElement('br'),
-        md5Input,
+        subs,
         React.createElement('input', {
           type: 'button',
           value: 'remove',
@@ -66,11 +95,10 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
     render: function render() {
       var self = this;
       var toList = function toList(item, index) {
-
         return React.createElement(
           'div',
           {key: index, className: 'no-decoration'},
-          React.createElement(item, {removeInput: self.removeInput, index: index}),
+          React.createElement(item, {removeInput: self.removeInput, index: index, paired: self.state.paired}),
           React.createElement('br')
         )
       };

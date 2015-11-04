@@ -17,10 +17,9 @@
         <fieldset>
             <label for="libraryType">library Type</label>
             <select id="libraryType" name="libraryType" required>
-                <option value=""></option>
+                <option>unpaired</option>
                 <option>paired</option>
                 <option>mate</option>
-                <option>unpaired</option>
             </select>
         </fieldset>
 
@@ -171,7 +170,7 @@
         </fieldset>
 
         <fieldset id="md5Inputs" class="file-group">
-            <label>Read data</label>
+            <label>Raw Read data</label>
 
             <div id="filesRoot">
             </div>
@@ -191,10 +190,20 @@
 
     <script>
         var additional = document.getElementById('additionalData');
-        fileUploader(additional, false, 'file').setMin(2).setPaired();
+        var addtionalLoader = fileUploader(additional, false, 'file').setMin(0);
 
         var md5files = document.getElementById('filesRoot');
-        fileUploader(md5files, true, 'file', 'md5').setMin(6);
+        var md5Loader = fileUploader(md5files, true, 'file', 'md5').setMin(1);
+
+        $('#libraryType').on('change', function () {
+            var self = $(this);
+            if (self.val() === 'unpaired') {
+                md5Loader.setPaired(false);
+            } else {
+                md5Loader.setPaired(true);
+            }
+        })
+
     </script>
 
 </div>
