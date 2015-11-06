@@ -13,9 +13,9 @@ var isBzip2 = require('is-bzip2');
 var read = require('fs').readFileSync;
 //var rimraf = require('rimraf');
 var config = require('../config.json');
+var util = require('../lib/util');
 
 var Runs = {};
-
 
 /**
  * render the new run form
@@ -38,7 +38,6 @@ Runs.new = function (req, res) {
     if (results.length > 1) {
       console.error('too many samples', results);
     }
-
 
     return res.render('runs/new', {sample: results[0]});
   }).error(function (err) {
@@ -93,7 +92,6 @@ function ensureCompressed(fileAndMD5, cb) {
 
     return cb(err);
 
-
   } else if (!compressed) { //not compressed
     compressFile(file.path, function (compressedPath) {
 
@@ -105,7 +103,6 @@ function ensureCompressed(fileAndMD5, cb) {
   } else { //is compressed already
     return cb(null, {md5: md5er, path: path.resolve(file.path), originalName: originalName});
   }
-
 }
 
 
@@ -120,29 +117,37 @@ function addAdditional(savedRun, additionalFiles, pathToNewRunFolder, cb) {
   var joinedPathWithAddition = path.join(pathToNewRunFolder, 'additional');
 
   function moveAdditional(additionalFiles) {
-    var usedNames = [];
-    var justPaths = [];
+    //var usedNames = [];
+    var originalPaths = []; //not to be pushed to the database
+    var finalPaths = [];
     additionalFiles.map(function (f) {
       var fileName = f.originalname;
-      if (usedNames.indexOf(fileName) > -1) {
-        var i = 0;
-        while (usedNames.indexOf(fileName) > -1) {
-          i++;
-          var extension = path.extname(f.originalname);
-          var withoutExtention = path.basename(fileName, extension);
-          fileName = withoutExtention + i + extension;
-        }
-      }
-      usedNames.push(fileName);
+      //if (usedNames.indexOf(fileName) > -1) {
+      //  var i = 0;
+      //  while (usedNames.indexOf(fileName) > -1) {
+      //    i++;
+      //    var extension = path.extname(f.originalname);
+      //    var withoutExtention = path.basename(fileName, extension);
+      //    fileName = withoutExtention + i + extension;
+      //  }
+      //}
+      //usedNames.push(fileName);
       var newPath = path.join(joinedPathWithAddition, fileName);
-      justPaths.push(newPath);
-      fs.rename(f.path, newPath, function (err) {
+      originalPaths.push(newPath);
+      safeMove(f.path, newPath, function (err, newPath) { //TODO
+        finalPaths.push(newPath);
         if (err) {
           console.error('error!', err);
         }
+        //update DB here
       });
     });
-    Run.get(savedRun.id).update({additionalData: justPaths}).run().then(function () {
+
+    Run.get(savedRun.id).update({
+      additionalData: r.row('errors').append('appended error')
+    })
+
+    Run.get(savedRun.id).update({additionalData: finalPaths}).run().then(function () {
         cb();
       })
       .error(function (err) {
@@ -161,9 +166,7 @@ function addAdditional(savedRun, additionalFiles, pathToNewRunFolder, cb) {
       moveAdditional(additionalFiles);
     }
   });
-
 }
-
 
 /**
  *
@@ -175,22 +178,18 @@ function processAllFiles(req, cb) {
   var filesAndSums = [];
   var additionalFiles = [];
 
-  console.log(req.files);
   for (var p in req.files) {
-
 
     if (req.files.hasOwnProperty(p)) {
       if (p.indexOf('file') > -1) {
 
         var file = req.files[p];
-        console.log('file', file);
         var split = p.split('-');
         if (split.length === 3) {
           console.log('its paired');
         } else {
           console.log('its not paired');
         }
-
         var num = p.split('-')[1];
         filesAndSums.push({file: file, md5: req.body['md5-' + num]});
       } else if (p.indexOf('additional') > -1) {
@@ -204,115 +203,133 @@ function processAllFiles(req, cb) {
 /**
  *
  * @param req {request}
+ * @param processed {boolean}
  * @param savedRun {run}
  * @param pathToNewRunFolder {path}
  * @param cb {function}
  */
-function addReadToRun(req, savedRun, pathToNewRunFolder, cb) {
+function addReadToRun(req, processed, savedRun, pathToNewRunFolder, cb) {
 
-  var savedReads = [];
+  var rootPath = pathToNewRunFolder;
 
-  processAllFiles(req, function (filesAndSums, additionalFiles) {
+  if (processed) {
+    pathToNewRunFolder = path.join(pathToNewRunFolder, 'processed');
+  } else {
+    pathToNewRunFolder = path.join(pathToNewRunFolder, 'raw');
+  }
 
-    if (additionalFiles.length > 0) {
-      addAdditional(savedRun, additionalFiles, pathToNewRunFolder, function () {
+  fs.ensureDir(pathToNewRunFolder, function (err) {
+    if (err) {
+      console.error(err);
+      cb(err);
+    } else {
+      var savedReads = [];
 
-      });
-    }
+      processAllFiles(req, function (filesAndSums, additionalFiles) {
 
+        if (additionalFiles.length > 0) {
+          addAdditional(savedRun, additionalFiles, rootPath, function () {
 
-    var happyFiles = [];
-    var sadFiles = [];
-    filesAndSums.map(function (fsum) {
-      var buf = fs.readFileSync(fsum.file.path);
-      var sum = md5(buf);
-      if (sum === fsum.md5) {
-        happyFiles.push(fsum);
-      } else {
-        sadFiles.push(fsum);
-      }
-    });
-    if (sadFiles.length > 0) {
-      console.warn('some bad md5 sums');
-      return cb(new Error('md5 sums do not match'));
-    }
-
-    if (happyFiles.length < 1) {
-      return cb(new Error('no read files attached'));
-    }
-
-
-    var usedFileNames = [];
-    happyFiles.map(function (fileAndMD5) {
-      var file = fileAndMD5.file;
-
-      var fileName = file.originalname;
-      var testName = file.originalname;
-
-      var exts = '';
-
-      if (testName.indexOf('.') > -1) {
-
-        var preSplit = testName;
-
-        testName = preSplit.substr(0, preSplit.indexOf('.'));
-        exts = preSplit.substr(preSplit.indexOf('.'));
-      }
-
-      if (usedFileNames.indexOf(testName) > -1) {
-        var i = 0;
-        while (usedFileNames.indexOf(testName) > -1) {
-          i++;
-          testName = testName + i;
-        }
-        fileName = testName + exts;
-      }
-      usedFileNames.push(testName);
-      fileAndMD5.file.originalname = fileName;
-
-      ensureCompressed(fileAndMD5, function (err, md5AndPath) {
-
-        var newFullPath = path.join(pathToNewRunFolder, md5AndPath.originalName);
-
-        fs.renameSync(md5AndPath.path, newFullPath);
-        var fqcPath = path.join(pathToNewRunFolder, '.fastqc');
-
-
-        function fqcStuff() {
-          var read = new Read({
-            name: md5AndPath.originalName,
-            runID: savedRun.id,
-            MD5: md5AndPath.md5,
-            fastQCLocation: fqcPath,
-            moreInfo: '',
-            path: newFullPath,
-            processed: true
-          });
-          read.save().then(function (savedRead) {
-
-            savedReads.push(savedRead);
-
-            fastqc.run(newFullPath, fqcPath, function () {
-              console.log('created fastqc report');
-            });
-          }).error(function (err) {
-            if (err) {
-              return cb(err);
-            }
           });
         }
 
-        fs.ensureDir(fqcPath, function (err) { // create fastqc folder
-          if (err) {
-            return cb(err);
+        var happyFiles = [];
+        var sadFiles = [];
+        filesAndSums.map(function (fsum) {
+          var buf = fs.readFileSync(fsum.file.path);
+          var sum = md5(buf);
+          if (sum === fsum.md5) {
+            happyFiles.push(fsum);
           } else {
-            fqcStuff();
+            sadFiles.push(fsum);
           }
         });
+        if (sadFiles.length > 0) {
+          console.warn('some bad md5 sums');
+          return cb(new Error('md5 sums do not match'));
+        }
+
+        if (happyFiles.length < 1) {
+          return cb(new Error('no read files attached'));
+        }
+
+        var usedFileNames = [];
+        happyFiles.map(function (fileAndMD5) {
+          var file = fileAndMD5.file;
+
+          var fileName = file.originalname;
+          var testName = file.originalname;
+
+          var exts = '';
+
+          if (testName.indexOf('.') > -1) {
+
+            var preSplit = testName;
+
+            testName = preSplit.substr(0, preSplit.indexOf('.'));
+            exts = preSplit.substr(preSplit.indexOf('.'));
+          }
+
+          if (usedFileNames.indexOf(testName) > -1) {
+            var i = 0;
+            while (usedFileNames.indexOf(testName) > -1) {
+              i++;
+              testName = testName + i;
+            }
+            fileName = testName + exts;
+          }
+          usedFileNames.push(testName);
+          fileAndMD5.file.originalname = fileName;
+
+          ensureCompressed(fileAndMD5, function (err, md5AndPath) {
+
+            var newFullPath = path.join(pathToNewRunFolder, md5AndPath.originalName);
+
+            safeMove(md5AndPath.path, newFullPath, function (err, newPath) {
+              if (newPath) { //it may have found a new name!
+                newFullPath = newPath;
+              }
+              var fqcPath = path.join(pathToNewRunFolder, '.fastqc');
+
+              function fqcStuff() {
+                var read = new Read({
+                  name: md5AndPath.originalName,
+                  runID: savedRun.id,
+                  MD5: md5AndPath.md5,
+                  fastQCLocation: fqcPath,
+                  moreInfo: '',
+                  path: newFullPath,
+                  processed: processed
+                });
+                read.save().then(function (savedRead) {
+
+                  savedReads.push(savedRead);
+
+                  fastqc.run(newFullPath, fqcPath, function () {
+                    console.log('created fastqc report');
+                  });
+                }).error(function (err) {
+                  if (err) {
+                    return cb(err);
+                  }
+                });
+              }
+
+              fs.ensureDir(fqcPath, function (err) { // create fastqc folder
+                if (err) {
+                  return cb(err);
+                } else {
+                  fqcStuff();
+                }
+              });
+            });
+          });
+        });
+        cb();
       });
-    });
-    cb();
+    }
   });
+
 }
 
 
@@ -399,18 +416,16 @@ Runs.newPost = function (req, res) {
         });
       }
 
-      fs.ensureDir(pathToNewRunFolder, function (err) {
+      var processed = false;
+
+      addReadToRun(req, processed, savedRun, pathToNewRunFolder, function (err) {
         if (err) {
           console.error(err);
-        } else {
-          addReadToRun(req, savedRun, pathToNewRunFolder, function () {
-            console.log('done');
-            renderOK();
-          });
+          //TODO FAIL!
         }
-
+        console.log('done');
+        renderOK();
       });
-
 
     });
   });
@@ -473,13 +488,51 @@ Runs.addPost = function (req, res) {
 
     var run = results[0];
 
-    //console.log('body', req.body);
-    //console.log('files', req.files);
+    var pathToRunProcessedFolder = path.join(config.dataDir, run.sample.project.group.safeName, run.sample.project.safeName, run.sample.safeName, run.safeName);
 
-    return res.render('runs/show', {run: run});
+    var processed = true;
+
+    addReadToRun(req, processed, run, pathToRunProcessedFolder, function () {
+      var url = path.join('/', run.sample.project.group.safeName, run.sample.project.safeName, run.sample.safeName, run.safeName);
+      return res.redirect(url);
+    });
 
   });
 };
+
+function safeMove(from, to, cb) {
+
+  var existingFiles = [];
+
+  var toFileName = path.basename(to);
+
+  var parentTo = path.join(to, '../');
+
+  fs.readdir(parentTo, function (err, files) {
+
+    //has to all be sync
+    files.map(function (file) {
+      var fullPathOfFile = path.join(parentTo, file);
+      var stat = fs.statSync(fullPathOfFile);
+      if (stat.isFile()) {
+        existingFiles.push(file);
+      }
+    });
+
+
+    var newFileName = util.getUniqueFileName(toFileName, existingFiles);
+
+    var newTo = path.join(parentTo, newFileName);
+
+    //then
+    fs.rename(from, newTo, function (err) {
+      cb(err, newTo);
+    });
+
+  });
+
+
+}
 
 
 module.exports = Runs;
