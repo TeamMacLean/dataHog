@@ -426,7 +426,7 @@ Runs.show = function (req, res) {
   }).then(function (results) {
 
     if (!results) {
-      res.render('error', {error: 'could not find run ' + runSN});
+      return res.render('error', {error: 'could not find run ' + runSN});
     }
 
     if (results.length > 1) {
