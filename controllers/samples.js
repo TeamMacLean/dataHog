@@ -4,6 +4,7 @@ var Samples = {};
 var Project = require('../models/project');
 var Sample = require('../models/sample');
 var fs = require('fs-extra');
+var util = require('../lib/util');
 var path = require('path');
 var config = require('../config.json');
 
@@ -59,6 +60,20 @@ Samples.newPost = function (req, res) {
           return res.render('error', {error: err});
         } else {
 
+          var additionalFiles = [];
+          for (var p in req.files) {
+            if (req.files.hasOwnProperty(p)) {
+              if (p.indexOf('additional') > -1) {
+                additionalFiles.push(req.files[p]);
+              }
+            }
+          }
+          util.addAdditional(result, additionalFiles, joinedPath, function (err) {
+            if (err) {
+              console.error(err);
+            }
+          });
+
           var url = path.join('/', project.group.safeName, project.safeName, result.safeName);
           return res.redirect(url);
         }
@@ -85,7 +100,8 @@ Samples.show = function (req, res) {
 
   Sample.filter({safeName: sampleSafeName}).getJoin({
     project: {group: true},
-    runs: true
+    runs: true,
+    additionalFiles: true
   }).filter({project: {safeName: projectSN, group: {safeName: groupSN}}}).run().then(function (results) {
 
     if (results.length > 1) {
@@ -93,10 +109,10 @@ Samples.show = function (req, res) {
     }
     var sample = results[0];
 
-
     res.render('samples/show', {sample: sample});
   })
-    .error(function () {
+    .error(function (err) {
+      console.error(err);
       return res.render('error', {error: 'could not find sample'});
     });
 };

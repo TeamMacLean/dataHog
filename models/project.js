@@ -13,9 +13,7 @@ var Project = thinky.createModel('Project', {
   shortDescription: type.string().required(),
   longDescription: type.string().required(),
   createdAt: type.date().default(r.now()),
-
-  additionalFiles: [type.string()],
-
+  path: type.string(),
   safeName: type.string()
 });
 
@@ -24,9 +22,15 @@ Project.pre('save', function (next) {
   var unsafeName = project.name;
   if (!project.safeName) {
     Project.run().then(function (result) {
-      util.generateSafeName(unsafeName, result, function (name) {
-        project.safeName = name;
-        next();
+      util.generateSafeName(unsafeName, result, function (newSafeName) {
+        project.safeName = newSafeName;
+        util.generateUniqueName(project.name, result, function (newName) {
+          project.name = newName;
+          Group.get(project.groupID).run().then(function (group) {
+            project.path = '/' + group.safeName + '/' + project.safeName;
+            next();
+          });
+        });
       });
     });
   }
@@ -36,5 +40,7 @@ module.exports = Project;
 
 var Sample = require('./sample.js');
 var Group = require('./group');
+var AdditionalFile = require('./additionalFile');
 Project.belongsTo(Group, 'group', 'groupID', 'id');
 Project.hasMany(Sample, 'samples', 'id', 'projectID');
+Project.hasMany(AdditionalFile, 'additionalFiles', 'id', 'parentID');

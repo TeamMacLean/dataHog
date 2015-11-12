@@ -5,6 +5,7 @@ var Reads = {};
 var Read = require('../models/read.js');
 var fs = require('fs');
 var path = require('path');
+var config = require('../config.json');
 
 
 /**
@@ -78,6 +79,32 @@ Reads.fastQC = function (req, res) {
 
   }).error(function () {
     return res.render('error', {error: 'could not find run'});
+  });
+};
+
+Reads.download = function (req, res) {
+  var projectSN = req.params.project;
+  var sampleSN = req.params.sample;
+  var runSN = req.params.run;
+  var readSN = req.params.read;
+
+  Read.filter({safeName: readSN}).getJoin({run: {sample: {project: {group: true}}}})
+    .filter({
+      run: {
+        safeName: runSN,
+        sample: {safeName: sampleSN, project: {safeName: projectSN}}
+      }
+    })
+    .run().then(function (results) {
+
+    var read = results[0];
+    var absPath = path.resolve(read.path);
+    console.log(absPath);
+    return res.download(absPath, 'filename.fasta.gz', function (err) {
+      if (err) {
+        console.error(err);
+      }
+    });
   });
 };
 

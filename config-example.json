@@ -4,6 +4,13 @@
   "dataDir": "./reads",
   "tmpDir": "./uploads/",
   "fastQCCommand": "fastqc",
+  "ldap": {
+    "url": "ldap://localhost:389",
+    "bindDn": "cn=root",
+    "bindCredentials": "secret",
+    "searchBase": "ou=nbi.ac.uk",
+    "searchFilter": "(uid={{username}})"
+  },
   "ena": {
     "namespace": "JIC",
     "center": "The Sainsbury Laboratory",
@@ -15,5 +22,7 @@
     "password": ""
   },
   "groups": [
+  ],
+  "admins": [
   ]
 }

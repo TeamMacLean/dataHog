@@ -28,3 +28,11 @@
     <script src="/js/fileUploader.js"></script>
 </head>
 <body>
+
+<% if(locals.signedInUser){ %>
+<div class="container">
+    <div class="right">
+        <%- locals.signedInUser.username %> - <a href="/signout">Sign Out</a>
+    </div>
+</div>
+<% } %>

@@ -12,9 +12,8 @@ var Sample = thinky.createModel('Sample', {
   ncbi: type.string().required(),
   conditions: type.string().required(),
   sampleGroup: type.string().required(),
-  safeName: type.string(),
-
-  additionalFiles: [type.string()]
+  path: type.string().required(),
+  safeName: type.string()
 });
 
 
@@ -26,9 +25,13 @@ Sample.pre('save', function (next) {
       util.generateSafeName(unsafeName, result, function (name) {
         sample.safeName = name;
         //now create sampleGroup
-        Project.get(sample.projectID).run().then(function (result) {
-          sample.sampleGroup = result.safeName + '_' + name;
-          next();
+        Project.get(sample.projectID).getJoin({group: true}).run().then(function (project) {
+          sample.path = '/' + project.group.safeName + '/' + project.safeName + '/' + sample.safeName;
+          sample.sampleGroup = project.safeName + '_' + name;
+          util.generateUniqueName(sample.name, result, function (newName) {
+            sample.name = newName;
+            next();
+          });
         });
       });
     });
@@ -41,3 +44,6 @@ var Run = require('./run');
 var Project = require('./project');
 Sample.belongsTo(Project, 'project', 'projectID', 'id');
 Sample.hasMany(Run, 'runs', 'id', 'sampleID');
+
+var AdditionalFile = require('./additionalFile');
+Sample.hasMany(AdditionalFile, 'additionalFiles', 'id', 'parentID');

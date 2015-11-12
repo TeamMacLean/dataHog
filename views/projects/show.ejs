@@ -1,6 +1,7 @@
 <% include ../head %>
 <div class="container">
-    <h3><a href="/<%- project.group.safeName %>"><i class="fa fa-chevron-left"></i> Group: <%- project.group.name %></a></h3>
+    <h3><a href="/<%- project.group.safeName %>"><i class="fa fa-chevron-left"></i> Group: <%- project.group.name %></a>
+    </h3>
 
 
     <h2><%- project.name %></h2>
@@ -25,6 +26,22 @@
 
     <p><%- project.longDescription %></p>
 
+    <label>Path</label>
+
+    <p><%- project.path %></p>
+
+    <label>Additional Files</label>
+    <%
+    if(project.additionalFiles && project.additionalFiles.length > 0){
+    project.additionalFiles.map(function(file){
+    %>
+    <p><i class="fa fa-file-o"></i> <a href="/additional/<%- file.id %>/download"><%- file.name %></a></p>
+    <%
+    });
+    } else { %>
+    <p>none</p>
+    <% } %>
+
     <a class="button button-primary" href="/<%- project.group.safeName %>/<%- project.safeName %>/new"><i
                 class="fa fa-plus"></i> new sample</a>
 
@@ -43,20 +60,6 @@
         <% if (i % 2 == 0){ %>
         <div class="clearfix"></div>
         <% } %>
-        <% }); %>
-    </div>
-    <div class="row">
-        <% unknownFolders.map(function(folder){ %>
-        <div class="col6 auto-clear">
-            <div class="tile disabled">
-                <div class="title">
-                    <span><%- folder %></span>
-                </div>
-                <div class="sub-title">
-                    <span>Unknown Folder</span>
-                </div>
-            </div>
-        </div>
         <% }); %>
     </div>
 

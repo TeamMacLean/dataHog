@@ -17,8 +17,8 @@ var Run = thinky.createModel('Run', {
   librarySelection: type.string().required(),
   libraryStrategy: type.string().required(),
   insertSize: type.string().required(),
-  additionalFiles: [type.string().required()],
   submissionToGalaxy: type.boolean().required(), //send email
+  path: type.string(),
   safeName: type.string()
 });
 
@@ -26,10 +26,19 @@ Run.pre('save', function (next) {
   var run = this;
   var unsafeName = run.name;
   if (!run.safeName) {
+
+    run.additionalFiles = [];
+
     Run.run().then(function (result) {
       util.generateSafeName(unsafeName, result, function (name) {
         run.safeName = name;
-        next();
+        util.generateUniqueName(run.name, result, function (newName) {
+          run.name = newName;
+          Sample.get(run.sampleID).getJoin({project: {group: true}}).run().then(function (sample) {
+            run.path = '/' + sample.project.group.safeName + '/' + sample.project.safeName + '/' + sample.safeName + '/' + run.safeName;
+            next();
+          });
+        });
       });
     });
   }
@@ -39,5 +48,7 @@ module.exports = Run;
 
 var Sample = require('./sample.js');
 var Read = require('./read.js');
+var AdditionalFile = require('./additionalFile');
 Run.hasMany(Read, 'reads', 'id', 'runID');
 Run.belongsTo(Sample, 'sample', 'sampleID', 'id');
+Run.hasMany(AdditionalFile, 'additionalFiles', 'id', 'parentID');

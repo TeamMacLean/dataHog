@@ -54,6 +54,20 @@ Projects.newPost = function (req, res) {
           return res.render('error', {error: err});
         }
 
+        var additionalFiles = [];
+        for (var p in req.files) {
+          if (req.files.hasOwnProperty(p)) {
+            if (p.indexOf('additional') > -1) {
+              additionalFiles.push(req.files[p]);
+            }
+          }
+        }
+        util.addAdditional(result, additionalFiles, joinedPath, function (err) {
+          if (err) {
+            console.error(err);
+          }
+        });
+
         var url = path.join('/', group.safeName, project.safeName);
 
         return res.redirect(url);
@@ -71,13 +85,15 @@ Projects.newPost = function (req, res) {
  * @param next {callback}
  */
 Projects.show = function (req, res, next) {
+
   var projectSN = req.params.project;
   var groupSN = req.params.group;
 
 
   Project.filter({safeName: projectSN}).getJoin({
     samples: true,
-    group: true
+    group: true,
+    additionalFiles: true
   }).filter({group: {safeName: groupSN}}).run().then(function (projects) {
 
     if (projects.length < 1) {
@@ -86,12 +102,8 @@ Projects.show = function (req, res, next) {
 
     var project = projects[0];
 
-    var fullPath = path.join(config.dataDir, project.group.safeName, project.safeName);
-
-
-    util.unknownFolders(fullPath, project.samples, function (unknownFolders) {
-      return res.render('projects/show', {project: projects[0], unknownFolders: unknownFolders});
-    });
+    return res.render('projects/show', {project: project});
+    //});
   }).error(function () {
     return res.render('error', {error: 'could not find project'});
   });

@@ -11,11 +11,48 @@ var zlib = require('zlib');
 var isGzip = require('is-gzip');
 var isBzip2 = require('is-bzip2');
 var read = require('fs').readFileSync;
-//var rimraf = require('rimraf');
+var rimraf = require('rimraf');
 var config = require('../config.json');
 var util = require('../lib/util');
+var thinky = require('../lib/thinky');
+var async = require('async');
 
 var Runs = {};
+
+function deleteRun(run, cb) {
+
+  if (run) {
+
+    Run.get(run.id).getJoin({reads: true}).run().then(function (result) {
+
+      Read.filter({runID: result.id}).run().then(function (reads) {
+        reads.map(function (map) {
+          map.delete().then(function () {
+            console.warn('deleted read');
+          });
+        });
+      });
+      result.delete().then(function () {
+
+        var absPath = path.resolve(path.join(config.dataDir, run.path));
+
+        rimraf(absPath, function (err) {
+          if (err) {
+            console.error(err);
+            return cb(err);
+          } else {
+            console.warn('deleted run folder', absPath);
+            return cb();
+          }
+        });
+      });
+    });
+
+
+  } else {
+    cb(new Error('you did not give me a run!'));
+  }
+}
 
 /**
  * render the new run form
@@ -108,68 +145,6 @@ function ensureCompressed(fileAndMD5, cb) {
 
 /**
  *
- * @param savedRun
- * @param additionalFiles
- * @param pathToNewRunFolder
- * @param cb
- */
-function addAdditional(savedRun, additionalFiles, pathToNewRunFolder, cb) {
-  var joinedPathWithAddition = path.join(pathToNewRunFolder, 'additional');
-
-  function moveAdditional(additionalFiles) {
-    //var usedNames = [];
-    var originalPaths = []; //not to be pushed to the database
-    var finalPaths = [];
-    additionalFiles.map(function (f) {
-      var fileName = f.originalname;
-      //if (usedNames.indexOf(fileName) > -1) {
-      //  var i = 0;
-      //  while (usedNames.indexOf(fileName) > -1) {
-      //    i++;
-      //    var extension = path.extname(f.originalname);
-      //    var withoutExtention = path.basename(fileName, extension);
-      //    fileName = withoutExtention + i + extension;
-      //  }
-      //}
-      //usedNames.push(fileName);
-      var newPath = path.join(joinedPathWithAddition, fileName);
-      originalPaths.push(newPath);
-      safeMove(f.path, newPath, function (err, newPath) { //TODO
-        finalPaths.push(newPath);
-        if (err) {
-          console.error('error!', err);
-        }
-        //update DB here
-      });
-    });
-
-    Run.get(savedRun.id).update({
-      additionalData: r.row('errors').append('appended error')
-    })
-
-    Run.get(savedRun.id).update({additionalData: finalPaths}).run().then(function () {
-        cb();
-      })
-      .error(function (err) {
-        if (err) {
-          return cb(err);
-          //return fail(err);
-        }
-      });
-  }
-
-  fs.ensureDir(joinedPathWithAddition, function (err) {
-    if (err) {
-      return cb(err);
-      //return fail(err);
-    } else {
-      moveAdditional(additionalFiles);
-    }
-  });
-}
-
-/**
- *
  * @param req {request} request
  * @param cb {function} callback
  */
@@ -184,14 +159,19 @@ function processAllFiles(req, cb) {
       if (p.indexOf('file') > -1) {
 
         var file = req.files[p];
+
         var split = p.split('-');
         if (split.length === 3) {
           console.log('its paired');
         } else {
           console.log('its not paired');
         }
-        var num = p.split('-')[1];
-        filesAndSums.push({file: file, md5: req.body['md5-' + num]});
+
+        var num = p.substring(p.indexOf('-') + 1);
+
+        var md5Lookup = 'md5-' + num;
+
+        filesAndSums.push({file: file, md5: req.body[md5Lookup]});
       } else if (p.indexOf('additional') > -1) {
         additionalFiles.push(req.files[p]);
       }
@@ -228,13 +208,16 @@ function addReadToRun(req, processed, savedRun, pathToNewRunFolder, cb) {
       processAllFiles(req, function (filesAndSums, additionalFiles) {
 
         if (additionalFiles.length > 0) {
-          addAdditional(savedRun, additionalFiles, rootPath, function () {
-
+          util.addAdditional(savedRun, additionalFiles, rootPath, function (err) {
+            if (err) {
+              console.error(err);
+            }
           });
         }
 
         var happyFiles = [];
         var sadFiles = [];
+
         filesAndSums.map(function (fsum) {
           var buf = fs.readFileSync(fsum.file.path);
           var sum = md5(buf);
@@ -254,7 +237,11 @@ function addReadToRun(req, processed, savedRun, pathToNewRunFolder, cb) {
         }
 
         var usedFileNames = [];
-        happyFiles.map(function (fileAndMD5) {
+        var previousID = '';
+        async.eachSeries(happyFiles, function iterator(fileAndMD5, nextHappyFile) {
+
+          //async.each(happyFiles, function iterator(fileAndMD5, nextHappyFile) {
+
           var file = fileAndMD5.file;
 
           var fileName = file.originalname;
@@ -285,47 +272,56 @@ function addReadToRun(req, processed, savedRun, pathToNewRunFolder, cb) {
 
             var newFullPath = path.join(pathToNewRunFolder, md5AndPath.originalName);
 
-            safeMove(md5AndPath.path, newFullPath, function (err, newPath) {
+            util.safeMove(md5AndPath.path, newFullPath, function (err, newPath) {
               if (newPath) { //it may have found a new name!
                 newFullPath = newPath;
               }
               var fqcPath = path.join(pathToNewRunFolder, '.fastqc');
 
-              function fqcStuff() {
-                var read = new Read({
-                  name: md5AndPath.originalName,
-                  runID: savedRun.id,
-                  MD5: md5AndPath.md5,
-                  fastQCLocation: fqcPath,
-                  moreInfo: '',
-                  path: newFullPath,
-                  processed: processed
-                });
-                read.save().then(function (savedRead) {
+              var siblingID = null;
+              var split = fileAndMD5.file.fieldname.split('-');
+              if (split.length === 3) { //its paired/mated
 
-                  savedReads.push(savedRead);
-
-                  fastqc.run(newFullPath, fqcPath, function () {
-                    console.log('created fastqc report');
-                  });
-                }).error(function (err) {
-                  if (err) {
-                    return cb(err);
-                  }
-                });
+                var second = split[2] === '2';
+                if (second) {
+                  siblingID = previousID;
+                }
               }
 
               fs.ensureDir(fqcPath, function (err) { // create fastqc folder
                 if (err) {
+                  console.error(err);
                   return cb(err);
                 } else {
-                  fqcStuff();
+                  var read = new Read({
+                    name: md5AndPath.originalName,
+                    runID: savedRun.id,
+                    MD5: md5AndPath.md5,
+                    fastQCLocation: fqcPath,
+                    moreInfo: '',
+                    path: newFullPath,
+                    processed: processed,
+                    siblingID: siblingID
+                  });
+                  read.save().then(function (savedRead) {
+                    previousID = read.id;
+                    savedReads.push(savedRead);
+                    fastqc.run(newFullPath, fqcPath, function () {
+                      console.log('created fastqc report');
+                      return nextHappyFile(); //IMPORTANT!!
+                    });
+                  }).error(function (err) {
+                    if (err) {
+                      return cb(err);
+                    }
+                  });
                 }
               });
             });
           });
+        }, function done(err) {
+          cb(err); //IMPORTANT after all reads, run and fastaqc created!
         });
-        cb();
       });
     }
   });
@@ -380,30 +376,6 @@ Runs.newPost = function (req, res) {
       libraryType: libraryType
     });
 
-    //function fail(err) {
-    //
-    //  if (currentRun) {
-    //    currentRun.delete().then(function () {
-    //      console.warn('deleted run');
-    //    });
-    //  }
-    //
-    //  if (pathToNewRunFolder) {
-    //    rimraf(pathToNewRunFolder, function (err) {
-    //      if (err) {
-    //        console.error(err);
-    //      }
-    //      console.warn('deleted run folder', pathToNewRunFolder);
-    //    });
-    //  }
-    //
-    //  savedReads.map(function (sr) {
-    //    console.warn('deleted read');
-    //    sr.delete();
-    //  });
-    //
-    //  return res.render('error', {error: err});
-    //}
 
     run.save().then(function (savedRun) {
 
@@ -419,12 +391,16 @@ Runs.newPost = function (req, res) {
       var processed = false;
 
       addReadToRun(req, processed, savedRun, pathToNewRunFolder, function (err) {
+
         if (err) {
           console.error(err);
-          //TODO FAIL!
+          deleteRun(savedRun, function () {
+            return res.render('error', {error: err});
+          });
+        } else {
+          return renderOK();
         }
-        console.log('done');
-        renderOK();
+
       });
 
     });
@@ -442,13 +418,12 @@ Runs.show = function (req, res) {
   var sampleSN = req.params.sample;
   var projectSN = req.params.project;
 
-  Run.filter({safeName: runSN}).getJoin({sample: {project: {group: true}}, reads: true}).filter({
+  Run.filter({safeName: runSN}).getJoin({sample: {project: {group: true}}, reads: {sibling: true}}).filter({
     sample: {
       safeName: sampleSN,
       project: {safeName: projectSN}
     }
   }).then(function (results) {
-
 
     if (results.length > 1) {
       console.error('too many runs', results);
@@ -456,8 +431,61 @@ Runs.show = function (req, res) {
 
     var run = results[0];
 
+    var rawPRE = run.reads.filter(function (r) {
+      return r.processed === false;
+    });
 
-    return res.render('runs/show', {run: run});
+    var processedPRE = run.reads.filter(function (r) {
+      return r.processed === true;
+    });
+
+    var raw = [];
+    var processed = [];
+    var alreadyGrouped = [];
+
+    rawPRE.map(function (r) {
+      var inGroup = alreadyGrouped.filter(function (ig) {
+          return r.id === ig.id;
+        }).length > 0;
+      if (!inGroup) {
+        if (r.sibling) {
+          var processedAlready = alreadyGrouped.filter(function (ag) {
+              return ag.id === r.sibling.id;
+            }).length > 0;
+          if (!processedAlready) {
+            alreadyGrouped.push(r);
+            alreadyGrouped.push(r.sibling);
+            var group = [];
+            group.push(r);
+            group.push(r.sibling);
+            raw.push(group);
+          }
+        }
+      }
+    });
+
+    processedPRE.map(function (p) {
+      var inGroup = alreadyGrouped.filter(function (ig) {
+          return p.id === ig.id;
+        }).length > 0;
+      if (!inGroup) {
+        if (p.sibling) {
+          var processedAlready = alreadyGrouped.filter(function (ag) {
+              return ag.id === p.sibling.id;
+            }).length > 0;
+          if (!processedAlready) {
+            alreadyGrouped.push(p);
+            alreadyGrouped.push(p.sibling);
+            var group = [];
+            group.push(p);
+            group.push(p.sibling);
+            raw.push(group);
+          }
+        }
+      }
+    });
+
+    return res.render('runs/show', {run: run, raw: raw, processed: processed});
   }).error(function () {
     return res.render('error', {error: 'could not find run'});
   });
@@ -481,58 +509,27 @@ Runs.addPost = function (req, res) {
     }
   }).then(function (results) {
 
-
     if (results.length > 1) {
       console.error('too many runs', results);
     }
 
     var run = results[0];
-
     var pathToRunProcessedFolder = path.join(config.dataDir, run.sample.project.group.safeName, run.sample.project.safeName, run.sample.safeName, run.safeName);
-
     var processed = true;
 
-    addReadToRun(req, processed, run, pathToRunProcessedFolder, function () {
+    //processed!
+    addReadToRun(req, processed, run, pathToRunProcessedFolder, function (err) {
+      if (err) {
+        deleteRun(run, function () {
+          return res.render('error', {error: 'had to delete the run + reads'});
+        });
+      }
       var url = path.join('/', run.sample.project.group.safeName, run.sample.project.safeName, run.sample.safeName, run.safeName);
       return res.redirect(url);
     });
 
   });
 };
-
-function safeMove(from, to, cb) {
-
-  var existingFiles = [];
-
-  var toFileName = path.basename(to);
-
-  var parentTo = path.join(to, '../');
-
-  fs.readdir(parentTo, function (err, files) {
-
-    //has to all be sync
-    files.map(function (file) {
-      var fullPathOfFile = path.join(parentTo, file);
-      var stat = fs.statSync(fullPathOfFile);
-      if (stat.isFile()) {
-        existingFiles.push(file);
-      }
-    });
-
-
-    var newFileName = util.getUniqueFileName(toFileName, existingFiles);
-
-    var newTo = path.join(parentTo, newFileName);
-
-    //then
-    fs.rename(from, newTo, function (err) {
-      cb(err, newTo);
-    });
-
-  });
-
-
-}
 
 
 module.exports = Runs;

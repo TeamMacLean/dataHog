@@ -6,6 +6,10 @@ var routes = require('./routes');
 var config = require('./config.json');
 var fs = require('fs');
 var init = require('./lib/init');
+var session = require('express-session');
+var passport = require('passport');
+var cookieParser = require('cookie-parser');
+var util = require('./lib/util');
 
 
 if (!config.appName || !config.port || !config.dataDir || !config.tmpDir) {
@@ -32,10 +36,31 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
+app.use(cookieParser());
 app.use(multer({
   dest: config.tmpDir
 }));
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(session({
+  secret: util.genSecret(),
+  resave: false,
+  saveUninitialized: false
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.use(function (req, res, next) {
+  if (req.user != null) {
+    res.locals.signedInUser = {};
+    res.locals.signedInUser.username = req.user.username;
+  }
+  next(null, req, res);
+});
+
+util.setupPassport();
+
 app.use(routes);
 
 module.exports = app;

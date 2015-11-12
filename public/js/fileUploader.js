@@ -17,6 +17,9 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
       var paired = self.props.paired;
 
       function makeItem(p) {
+
+        console.log(p);
+
         var md5Input = null;
         var pairNumber = '';
         var label = '';

@@ -3,7 +3,7 @@
     <h3><a href="/<%- sample.project.group.safeName %>/<%- sample.project.safeName %>/<%- sample.safeName %>"><i
                     class="fa fa-chevron-left"></i> <%- sample.name %></a></h3>
 
-    <h2>Add read data</h2>
+    <h2>New run</h2>
 
     <form action="/<%- sample.project.group.safeName %>/<%- sample.project.safeName %>/<%- sample.safeName %>/new"
           method="POST"
@@ -17,9 +17,9 @@
         <fieldset>
             <label for="libraryType">library Type</label>
             <select id="libraryType" name="libraryType" required>
-                <option>unpaired</option>
                 <option>paired</option>
                 <option>mate</option>
+                <option>unpaired</option>
             </select>
         </fieldset>
 
@@ -195,14 +195,21 @@
         var md5files = document.getElementById('filesRoot');
         var md5Loader = fileUploader(md5files, true, 'file', 'md5').setMin(1);
 
-        $('#libraryType').on('change', function () {
-            var self = $(this);
-            if (self.val() === 'unpaired') {
+        var $libType = $('#libraryType');
+
+        function updateType() {
+            if ($libType.val() === 'unpaired') {
                 md5Loader.setPaired(false);
             } else {
                 md5Loader.setPaired(true);
             }
-        })
+        }
+
+        $libType.on('change', function () {
+            updateType();
+        });
+
+        updateType();
 
     </script>
 

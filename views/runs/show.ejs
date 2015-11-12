@@ -2,9 +2,9 @@
 <div class="container">
     <h3>
         <a href="/<%- run.sample.project.group.safeName %>/<%- run.sample.project.safeName %>/<%- run.sample.safeName %>"><i
-                    class="fa fa-chevron-left"></i> Sample: <%- run.sample.name %></a></h3>
+                    class="fa fa-chevron-left"></i> Back to sample: <%- run.sample.name %></a></h3>
 
-    <h2><%- run.name %></h2>
+    <h2>Run: <%- run.name %></h2>
 
     <label>Sequencing provider</label>
 
@@ -14,54 +14,126 @@
 
     <p><%- run.sequencingTechnology %></p>
 
-    <label>Additional Info</label>
+    <label>Path</label>
 
-    <% if(run.additionalData){ %>
-    <% run.additionalData.map(function(data){ %>
+    <p><%- run.path %></p>
 
+    <label>Additional Files</label>
     <%
-        var str = data;
-        var n = str.lastIndexOf('/');
-        var result = str.substring(n + 1);
+    if(run.additionalFiles && run.additionalFiles.length > 0){
+    run.additionalFiles.map(function(file){
     %>
-
-    <p><i class="fa fa-file-o"></i> <a href="#"><%- result %></a></p>
-
-    <% }); %>
-
-    <% } else { %>
+    <p><i class="fa fa-file-o"></i> <a href="/additional/<%- file.id %>/download"><%- file.name %></a></p>
+    <%
+    });
+    } else { %>
     <p>none</p>
     <% } %>
 
-    <label>Library information</label>
+    <label>Library Source</label>
 
-    <p> <%- run.libraryInformation %></p>
+    <p> <%- run.librarySource %></p>
 
     <label>Library type</label>
 
     <p><%- run.libraryType %></p>
 
+    <label>Library Selection</label>
+
+    <p><%- run.librarySelection %></p>
+
+    <label>Insert Size</label>
+
+    <p><%- run.insertSize %></p>
+
     <label>Submission to Galaxy</label>
 
     <p><%- run.submissionToGalaxy %></p>
 
+    <h2>Raw</h2>
+    <% if(raw && raw.length > 0){ %>
+
     <div class="row">
-        <% var i = 0; %>
-        <% if(run.reads) run.reads.map(function(read){ %>
-        <% i++; %>
+        <% raw.map(function(read){ %>
+        <% if(read.length === 2){ %>
+        <div class="col6">
+            <div class="tile-group">
+                <a class="tile"
+                   href="/<%- run.sample.project.group.safeName %>/<%- run.sample.project.safeName %>/<%- run.sample.safeName %>/<%- run.safeName %>/<%- read[0].safeName %>">
+                    <%- read[0].name %>
+                </a>
+
+                <a class="tile"
+                   href="/<%- run.sample.project.group.safeName %>/<%- run.sample.project.safeName %>/<%- run.sample.safeName %>/<%- run.safeName %>/<%- read[1].safeName %>">
+                    <%- read[1].name %>
+                </a>
+            </div>
+        </div>
+        <% } else { %>
         <div class="col6">
             <a href="/<%- run.sample.project.group.safeName %>/<%- run.sample.project.safeName %>/<%- run.sample.safeName %>/<%- run.safeName %>/<%- read.safeName %>">
                 <div class="tile">
-                    Read:
+                    File:
                     <%- read.name %>
                 </div>
+
+                <% if(read.siblingID && read.sibling){ %>
+                <p>TRUE <%- read.siblingID %></p>
+                <% } else { %>
+                <p>FALSE <%- read.siblingID %></p>
+                <% } %>
             </a>
         </div>
-        <% if (i % 2 == 0){ %>
-        <div class="clearfix"></div>
         <% } %>
         <% }); %>
     </div>
+    <% } else { %>
+    <p>None</p>
+    <% } %>
+
+
+    <h2>Processed</h2>
+
+    <% if(processed && processed.length > 0){ %>
+
+    <div class="row">
+        <% processed.map(function(read){ %>
+        <% if(read.length === 2){ %>
+        <div class="col6">
+            <div class="tile-group">
+                <a class="tile"
+                   href="/<%- run.sample.project.group.safeName %>/<%- run.sample.project.safeName %>/<%- run.sample.safeName %>/<%- run.safeName %>/<%- read[0].safeName %>">
+                    <%- read[0].name %>
+                </a>
+
+                <a class="tile"
+                   href="/<%- run.sample.project.group.safeName %>/<%- run.sample.project.safeName %>/<%- run.sample.safeName %>/<%- run.safeName %>/<%- read[1].safeName %>">
+                    <%- read[1].name %>
+                </a>
+            </div>
+        </div>
+        <% } else { %>
+        <div class="col6">
+            <a href="/<%- run.sample.project.group.safeName %>/<%- run.sample.project.safeName %>/<%- run.sample.safeName %>/<%- run.safeName %>/<%- read.safeName %>">
+                <div class="tile">
+                    File:
+                    <%- read.name %>
+                </div>
+
+                <% if(read.siblingID && read.sibling){ %>
+                <p>TRUE <%- read.siblingID %></p>
+                <% } else { %>
+                <p>FALSE <%- read.siblingID %></p>
+                <% } %>
+            </a>
+        </div>
+        <% } %>
+        <% }); %>
+    </div>
+    <% } else { %>
+    <p>None</p>
+    <% } %>
+
     <hr>
     <form action="/<%- run.sample.project.group.safeName %>/<%- run.sample.project.safeName %>/<%- run.sample.safeName %>/<%- run.safeName %>/add"
           method="POST"

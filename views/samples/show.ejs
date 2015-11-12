@@ -19,6 +19,21 @@
 
     <p><%- sample.conditions %></p>
 
+    <label>Path</label>
+
+    <p><%- sample.path %></p>
+
+    <label>Additional Files</label>
+    <%
+    if(sample.additionalFiles && sample.additionalFiles.length > 0){
+    sample.additionalFiles.map(function(file){
+    %>
+    <p><i class="fa fa-file-o"></i> <a href="/additional/<%- file.id %>/download"><%- file.name %></a></p>
+    <%
+    });
+    } else { %>
+    <p>none</p>
+    <% } %>
 
     <a class="button button-primary"
        href="/<%- sample.project.group.safeName %>/<%- sample.project.safeName %>/<%- sample.safeName %>/new"><i

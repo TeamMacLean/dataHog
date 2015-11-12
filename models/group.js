@@ -7,17 +7,25 @@ var util = require('../lib/util');
 var Group = thinky.createModel('Group', {
   id: type.string(),
   name: type.string().required(),
-  safeName: type.string()
+  safeName: type.string(),
+  path: type.string().required()
 });
 
 Group.pre('save', function (next) {
+
   var group = this;
   var unsafeName = group.name;
   if (!group.safeName) {
     Group.run().then(function (result) {
       util.generateSafeName(unsafeName, result, function (name) {
         group.safeName = name;
-        next();
+
+        group.path = '/' + group.safeName;
+
+        util.generateUniqueName(group.name, result, function (newName) {
+          group.name = newName;
+          next();
+        });
       });
     });
   }
