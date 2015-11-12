@@ -29,10 +29,14 @@
 </head>
 <body>
 
-<% if(locals.signedInUser){ %>
+
 <div class="container">
     <div class="right">
-        <%- locals.signedInUser.username %> - <a href="/signout">Sign Out</a>
+        <% if(locals.signedInUser){ %>
+        <%- locals.signedInUser.username %> - <a href="/signout">Sign out</a>
+        <% } else { %>
+        <a href="/signin">Sign in</a>
+        <% } %>
     </div>
 </div>
-<% } %>
+
