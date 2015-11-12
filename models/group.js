@@ -7,7 +7,7 @@ var util = require('../lib/util');
 var Group = thinky.createModel('Group', {
   id: type.string(),
   name: type.string().required(),
-  safeName: type.string(),
+  safeName: type.string().required(),
   path: type.string().required()
 });
 

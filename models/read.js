@@ -12,15 +12,16 @@ var Read = thinky.createModel('Read', {
   runID: type.string().required(),
   name: type.string().required(),
   MD5: type.string().required(),
-  fastQCLocation: type.string().required(),
-  moreInfo: type.string().required(),
-  safeName: type.string(),
-  path: type.string(),
+  fastQCLocation: type.string(),
+  safeName: type.string().required(),
+  fileName: type.string().required(),
+  path: type.string().required(),
   siblingID: type.string()
 });
 
 Read.pre('save', function (next) {
   var read = this;
+
   var unsafeName = read.name;
   if (!read.safeName) {
     Read.run().then(function (result) {
@@ -28,7 +29,15 @@ Read.pre('save', function (next) {
         read.safeName = name;
         util.generateUniqueName(read.name, result, function (newName) {
           read.name = newName;
-          next();
+
+          //TODO set path
+          Run.get(read.runID).run().then(function (run) {
+            var myFolder = read.processed ? 'processed' : 'raw';
+            read.path = run.path + '/' + myFolder + '/' + read.fileName;
+            read.fastQCLocation = run.path + '/' + myFolder + '/.fastqc';
+            next();
+          });
+
         });
       });
     });
@@ -40,16 +49,12 @@ Read.post('save', function (next) {
   var read = this;
   if (read.siblingID) {
     Read.get(read.siblingID).run().then(function (rResult) {
-      console.log('got 1');
       if (!rResult.siblingID) {
-        console.log('no siblingID yet');
         Read.get(read.siblingID)
           .update({siblingID: read.id})
           .run().then(function (updated) {
-          console.log('UPDATED!', updated);
           next();
         }).error(function (err) {
-          console.error('ERROR!', err);
           next();
         });
       } else {
@@ -69,8 +74,4 @@ module.exports = Read;
 
 var Run = require('./run.js');
 Read.belongsTo(Run, 'run', 'runID', 'id');
-
-//var ReadModel = require('./read');
-//Read.belongsTo(Read, 'sibling', 'siblingID', 'id');
-
 Read.belongsTo(Read, "sibling", "siblingID", "id");

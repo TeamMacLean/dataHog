@@ -13,7 +13,7 @@ var Sample = thinky.createModel('Sample', {
   conditions: type.string().required(),
   sampleGroup: type.string().required(),
   path: type.string().required(),
-  safeName: type.string()
+  safeName: type.string().required()
 });
 
 
@@ -25,8 +25,8 @@ Sample.pre('save', function (next) {
       util.generateSafeName(unsafeName, result, function (name) {
         sample.safeName = name;
         //now create sampleGroup
-        Project.get(sample.projectID).getJoin({group: true}).run().then(function (project) {
-          sample.path = '/' + project.group.safeName + '/' + project.safeName + '/' + sample.safeName;
+        Project.get(sample.projectID).run().then(function (project) {
+          sample.path = project.path + '/' + sample.safeName;
           sample.sampleGroup = project.safeName + '_' + name;
           util.generateUniqueName(sample.name, result, function (newName) {
             sample.name = newName;

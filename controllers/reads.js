@@ -64,15 +64,15 @@ Reads.fastQC = function (req, res) {
 
     var read = results[0];
 
-    var strippedReadName = read.name.replace('.gz', '').replace('.bz2', '');
+    var strippedReadName = read.fileName.replace('.gz', '').replace('.bz2', '');
 
-    var htmlPath = path.join(__dirname, '../', read.fastQCLocation, strippedReadName + '_fastqc.html');
+    var htmlPath = path.resolve(path.join(config.dataDir, read.fastQCLocation, strippedReadName + '_fastqc.html'));
 
     fs.stat(htmlPath, function (err) {
       if (!err) {
         res.sendFile(htmlPath);
       } else {
-        res.send('could not find fast qc report');
+        res.render('error', {error: 'could not find fast qc report'});
       }
     });
 
@@ -98,9 +98,9 @@ Reads.download = function (req, res) {
     .run().then(function (results) {
 
     var read = results[0];
-    var absPath = path.resolve(read.path);
-    console.log(absPath);
-    return res.download(absPath, 'filename.fasta.gz', function (err) {
+    var absPath = path.resolve(path.join(config.dataDir, read.path));
+
+    return res.download(absPath, read.fileName, function (err) {
       if (err) {
         console.error(err);
       }

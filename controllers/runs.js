@@ -293,15 +293,15 @@ function addReadToRun(req, processed, savedRun, pathToNewRunFolder, cb) {
                   console.error(err);
                   return cb(err);
                 } else {
+
+                  var fileName = path.basename(newPath);
                   var read = new Read({
                     name: md5AndPath.originalName,
                     runID: savedRun.id,
                     MD5: md5AndPath.md5,
-                    fastQCLocation: fqcPath,
-                    moreInfo: '',
-                    path: newFullPath,
                     processed: processed,
-                    siblingID: siblingID
+                    siblingID: siblingID,
+                    fileName: fileName
                   });
                   read.save().then(function (savedRead) {
                     previousID = read.id;
@@ -434,6 +434,7 @@ Runs.show = function (req, res) {
     }
 
     var run = results[0];
+
     var raw = [];
     var processed = [];
 
@@ -466,6 +467,8 @@ Runs.show = function (req, res) {
               group.push(r.sibling);
               raw.push(group);
             }
+          } else {
+            raw.push(r);
           }
         }
       });
@@ -487,6 +490,8 @@ Runs.show = function (req, res) {
               group.push(p.sibling);
               raw.push(group);
             }
+          } else {
+            raw.push(p);
           }
         }
       });

@@ -17,9 +17,9 @@ var Run = thinky.createModel('Run', {
   librarySelection: type.string().required(),
   libraryStrategy: type.string().required(),
   insertSize: type.string().required(),
-  submissionToGalaxy: type.boolean().required(), //send email
-  path: type.string(),
-  safeName: type.string()
+  submissionToGalaxy: type.boolean().required(), //TODO send email
+  path: type.string().required(),
+  safeName: type.string().required()
 });
 
 Run.pre('save', function (next) {
@@ -34,8 +34,8 @@ Run.pre('save', function (next) {
         run.safeName = name;
         util.generateUniqueName(run.name, result, function (newName) {
           run.name = newName;
-          Sample.get(run.sampleID).getJoin({project: {group: true}}).run().then(function (sample) {
-            run.path = '/' + sample.project.group.safeName + '/' + sample.project.safeName + '/' + sample.safeName + '/' + run.safeName;
+          Sample.get(run.sampleID).run().then(function (sample) {
+            run.path = sample.path + '/' + run.safeName;
             next();
           });
         });

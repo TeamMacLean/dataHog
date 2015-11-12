@@ -13,8 +13,8 @@ var Project = thinky.createModel('Project', {
   shortDescription: type.string().required(),
   longDescription: type.string().required(),
   createdAt: type.date().default(r.now()),
-  path: type.string(),
-  safeName: type.string()
+  path: type.string().required(),
+  safeName: type.string().required()
 });
 
 Project.pre('save', function (next) {
@@ -27,7 +27,7 @@ Project.pre('save', function (next) {
         util.generateUniqueName(project.name, result, function (newName) {
           project.name = newName;
           Group.get(project.groupID).run().then(function (group) {
-            project.path = '/' + group.safeName + '/' + project.safeName;
+            project.path = group.path + '/' + project.safeName;
             next();
           });
         });
