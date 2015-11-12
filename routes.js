@@ -109,6 +109,7 @@ function isAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
     return next();
   } else {
+
     req.session.returnTo = req.path;
     return res.redirect('/signin');
   }

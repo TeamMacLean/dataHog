@@ -50,7 +50,7 @@ Auth.signInPost = function (req, res, next) {
 
       //take them to the page they wanted before signing in :)
       if (req.session.returnTo) {
-        res.redirect(req.session.returnTo);
+        return res.redirect(req.session.returnTo);
       } else {
         return res.redirect('/groups');
       }

@@ -16,6 +16,7 @@
     "font-awesome": "~4.3.0",
     "taxlookup": "*",
     "terrier": "*",
-    "react": "~0.14.0"
+    "react": "~0.14.0",
+    "jquery": "~2.1.4"
   }
 }
