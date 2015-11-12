@@ -431,13 +431,16 @@ Runs.show = function (req, res) {
 
     var run = results[0];
 
-    var rawPRE = run.reads.filter(function (r) {
-      return r.processed === false;
-    });
+    if (run.reads && run.reads.length > 0) {
+      var rawPRE = run.reads.filter(function (r) {
+        return r.processed === false;
+      });
 
-    var processedPRE = run.reads.filter(function (r) {
-      return r.processed === true;
-    });
+      var processedPRE = run.reads.filter(function (r) {
+        return r.processed === true;
+      });
+    }
+
 
     var raw = [];
     var processed = [];
