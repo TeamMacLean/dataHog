@@ -4,7 +4,7 @@
 
     <h3>
         <a href="/<%- read.run.sample.project.group.safeName %>/<%- read.run.sample.project.safeName %>/<%- read.run.sample.safeName %>/<%- read.run.safeName %>">
-            <i class="fa fa-chevron-left"></i> Run: <%- read.run.name %></a></h3>
+            <i class="fa fa-chevron-left"></i> Back to run: <%- read.run.name %></a></h3>
 
     <h2><%- read.name %></h2>
 
@@ -14,7 +14,7 @@
 
     <label>Path</label>
 
-    <p><%- read.path %></p>
+    <p><%- read.hpcPath(); %></p>
 
     <a href="/<%- read.run.sample.project.group.safeName %>/<%- read.run.sample.project.safeName %>/<%- read.run.sample.safeName %>/<%- read.run.safeName %>/<%- read.safeName %>/fastqc"
        class="button" target="_blank">fqc

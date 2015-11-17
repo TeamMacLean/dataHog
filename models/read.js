@@ -2,8 +2,7 @@
 
 var thinky = require('../lib/thinky.js');
 var type = thinky.type;
-//var r = thinky.r;
-
+var config = require('../config.json');
 var util = require('../lib/util');
 
 var Read = thinky.createModel('Read', {
@@ -17,6 +16,14 @@ var Read = thinky.createModel('Read', {
   fileName: type.string().required(),
   path: type.string().required(),
   siblingID: type.string()
+});
+
+Read.define("hpcPath", function () {
+  if (config.hpcRoot) {
+    return config.hpcRoot + this.path;
+  } else {
+    return this.path;
+  }
 });
 
 Read.pre('save', function (next) {

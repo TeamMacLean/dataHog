@@ -2,13 +2,12 @@
 
 var thinky = require('../lib/thinky.js');
 var type = thinky.type;
-//var r = thinky.r;
 var util = require('../lib/util');
+var config = require('../config.json');
 
 var Run = thinky.createModel('Run', {
   id: type.string(),
   sampleID: type.string().required(),
-
   name: type.string().required(),
   libraryType: type.string().required(),
   sequencingProvider: type.string().required(),
@@ -20,6 +19,14 @@ var Run = thinky.createModel('Run', {
   submissionToGalaxy: type.boolean().required(), //TODO send email
   path: type.string().required(),
   safeName: type.string().required()
+});
+
+Run.define("hpcPath", function () {
+  if (config.hpcRoot) {
+    return config.hpcRoot + this.path;
+  } else {
+    return this.path;
+  }
 });
 
 Run.pre('save', function (next) {

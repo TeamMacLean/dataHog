@@ -2,14 +2,15 @@
   "appName": "DataHog",
   "port": "1337",
   "dataDir": "./reads",
+  "hpcRoot": "/my/data/folder",
   "tmpDir": "./uploads/",
   "fastQCCommand": "fastqc",
   "ldap": {
     "url": "ldap://localhost:389",
-    "bindDn": "cn=root",
+    "bindDn": "root",
     "bindCredentials": "secret",
     "searchBase": "ou=nbi.ac.uk",
-    "searchFilter": "(uid={{username}})"
+    "searchFilter": "(sAMAccountName={{username}})"
   },
   "ena": {
     "namespace": "JIC",

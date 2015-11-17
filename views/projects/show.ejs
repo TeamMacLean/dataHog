@@ -1,6 +1,6 @@
 <% include ../head %>
 <div class="container">
-    <h3><a href="/<%- project.group.safeName %>"><i class="fa fa-chevron-left"></i> Group: <%- project.group.name %></a>
+    <h3><a href="/<%- project.group.safeName %>"><i class="fa fa-chevron-left"></i> Back to group: <%- project.group.name %></a>
     </h3>
 
 
@@ -28,7 +28,7 @@
 
     <label>Path</label>
 
-    <p><%- project.path %></p>
+    <p><%- project.hpcPath(); %></p>
 
     <label>Additional Files</label>
     <%

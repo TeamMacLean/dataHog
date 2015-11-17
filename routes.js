@@ -9,6 +9,9 @@ var Reads = require(__dirname + '/controllers/reads.js');
 var Errors = require(__dirname + '/controllers/errors.js');
 var Auth = require(__dirname + '/controllers/auth.js');
 var AdditionalFiles = require(__dirname + '/controllers/additionalFiles.js');
+
+var config = require('./config.json');
+
 //get index
 router.route('/').get(Auth.index);
 
@@ -19,6 +22,9 @@ router.route('/signin')
 router.route('/signout')
   .get(Auth.signOut);
 
+router.route('/iamadmin').all([isAuthenticated, isAdmin], function (req, res, next) {
+  res.send('<html><body><img src="http://i.imgur.com/ZMvyKk2.gif"><h1>Your an admin Harry!</h1></body></html>');
+})
 
 //download additional File
 router.route('/additional/:id/download')
@@ -110,6 +116,28 @@ function isAuthenticated(req, res, next) {
     return next();
   } else {
 
+    req.session.returnTo = req.path;
+    return res.redirect('/signin');
+  }
+}
+
+function isAdmin(req, res, next) {
+  if (req.isAuthenticated()) {
+    //they are signed in
+
+    console.log(req);
+
+    if (config.admins.indexOf(req.user.username) > -1) {
+      //they are an admin
+      return next();
+
+    } else {
+      //they are signed in but not an admin
+      res.render('error', {error: 'you must be an admin to preform that action'});
+    }
+
+  } else {
+    //they are not signed in, cannot be an admin
     req.session.returnTo = req.path;
     return res.redirect('/signin');
   }

@@ -10,11 +10,14 @@
  */
 function fileUploader(mountNode, MD5S, fileID, MD5ID) {
 
+
   var input = React.createClass({
     displayName: 'input',
     render: function render() {
       var self = this;
       var paired = self.props.paired;
+
+      console.log(self.props);
 
       function makeItem(p) {
 
@@ -39,9 +42,26 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
           );
         }
 
+        var imCool = null;
+        if (self.acceptedTypes && self.acceptedTypes.length > 0) {
+          self.acceptedTypes.map(function (fta) {
+            if (imCool.length > 0) {
+              imCool += ', ' + fta;
+            } else {
+              imCool = fta;
+            }
+          });
+        }
+
+
         return React.createElement('div', {},
           React.createElement('label', {}, label),
-          React.createElement('input', {type: 'file', id: fileID + ind, name: fileID + ind}),
+          React.createElement('input', {
+            type: 'file',
+            id: fileID + ind,
+            name: fileID + ind,
+            accepts: imCool
+          }),
           React.createElement('br'),
           React.createElement('br'),
           md5Input);
@@ -98,7 +118,12 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
         return React.createElement(
           'div',
           {key: index, className: 'no-decoration'},
-          React.createElement(item, {removeInput: self.removeInput, index: index, paired: self.state.paired}),
+          React.createElement(item, {
+            removeInput: self.removeInput,
+            setAcceptedTypes: self.setAcceptedTypes,
+            index: index,
+            paired: self.state.paired
+          }),
           React.createElement('br')
         );
       };
@@ -131,6 +156,10 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
     setMin: function setMin(min) {
       this.setState({min: min});
       this.reachMinItems();
+      return this;
+    },
+    setAcceptedTypes: function (types) {
+      this.setState({acceptedTypes: types});
       return this;
     }
   });

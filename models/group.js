@@ -3,6 +3,7 @@
 var thinky = require('../lib/thinky.js');
 var type = thinky.type;
 var util = require('../lib/util');
+var config = require('../config.json');
 
 var Group = thinky.createModel('Group', {
   id: type.string(),
@@ -11,8 +12,15 @@ var Group = thinky.createModel('Group', {
   path: type.string().required()
 });
 
-Group.pre('save', function (next) {
+Group.define("hpcPath", function () {
+  if (config.hpcRoot) {
+    return config.hpcRoot + this.path;
+  } else {
+    return this.path;
+  }
+});
 
+Group.pre('save', function (next) {
   var group = this;
   var unsafeName = group.name;
   if (!group.safeName) {

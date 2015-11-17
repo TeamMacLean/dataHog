@@ -32,6 +32,7 @@ Projects.newPost = function (req, res) {
   var responsiblePerson = req.body.responsiblePerson;
   var shortDescription = req.body.shortDescription;
   var longDescription = req.body.longDescription;
+  var secondaryContact = req.body.secondaryContact;
 
   Group.get(groupID).run().then(function (group) {
 
@@ -40,6 +41,7 @@ Projects.newPost = function (req, res) {
       name: name,
       groupID: group.id,
       responsiblePerson: responsiblePerson,
+      secondaryContact: secondaryContact,
       shortDescription: shortDescription,
       longDescription: longDescription
     });

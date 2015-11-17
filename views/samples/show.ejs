@@ -1,7 +1,7 @@
 <% include ../head %>
 <div class="container">
     <h3><a href="/<%- sample.project.group.safeName %>/<%- sample.project.safeName %>"><i
-                    class="fa fa-chevron-left"></i> Project: <%- sample.project.name %></a></h3>
+                    class="fa fa-chevron-left"></i> Back to project: <%- sample.project.name %></a></h3>
 
 
     <h2><%- sample.name %></h2>
@@ -21,7 +21,7 @@
 
     <label>Path</label>
 
-    <p><%- sample.path %></p>
+    <p><%- sample.hpcPath(); %></p>
 
     <label>Additional Files</label>
     <%

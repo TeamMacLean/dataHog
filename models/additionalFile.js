@@ -2,6 +2,7 @@
 
 var thinky = require('../lib/thinky.js');
 var type = thinky.type;
+var config = require('../config.json');
 
 var AdditionalFile = thinky.createModel('AdditionalFile', {
   id: type.string(),
@@ -10,6 +11,14 @@ var AdditionalFile = thinky.createModel('AdditionalFile', {
   MD5: type.string(),
   safeName: type.string(),
   path: type.string().required()
+});
+
+AdditionalFile.define("hpcPath", function () {
+  if (config.hpcRoot) {
+    return config.hpcRoot + this.path;
+  } else {
+    return this.path;
+  }
 });
 
 AdditionalFile.pre('save', function (next) {

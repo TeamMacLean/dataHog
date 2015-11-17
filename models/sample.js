@@ -3,6 +3,7 @@
 var thinky = require('../lib/thinky.js');
 var type = thinky.type;
 var util = require('../lib/util');
+var config = require('../config.json');
 
 var Sample = thinky.createModel('Sample', {
   id: type.string(),
@@ -16,6 +17,13 @@ var Sample = thinky.createModel('Sample', {
   safeName: type.string().required()
 });
 
+Sample.define("hpcPath", function () {
+  if (config.hpcRoot) {
+    return config.hpcRoot + this.path;
+  } else {
+    return this.path;
+  }
+});
 
 Sample.pre('save', function (next) {
   var sample = this;

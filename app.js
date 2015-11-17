@@ -55,6 +55,7 @@ app.use(function (req, res, next) {
   if (req.user != null) {
     res.locals.signedInUser = {};
     res.locals.signedInUser.username = req.user.username;
+    res.locals.signedInUser.name = req.user.name;
     res.locals.signedInUser.mail = req.user.mail;
   }
   next(null, req, res);
