@@ -1,9 +1,19 @@
 <script src="/components/terrier/js/terrier.js"></script>
 <script src="/components/taxlookup/dist/taxlookup.min.js"></script>
 <script src="/js/ncbi.js"></script>
+<script src="/components/tooltipster/js/jquery.tooltipster.min.js"></script>
 
+<script>
+    $(document).ready(function () {
+        $('.tooltip').tooltipster({position: 'right'});
+    });
+</script>
 
-
+<script>
+    function goBack() {
+        window.history.back();
+    }
+</script>
 
 </body>
 </html>

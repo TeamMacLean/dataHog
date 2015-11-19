@@ -17,12 +17,8 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
       var self = this;
       var paired = self.props.paired;
 
-      console.log(self.props);
 
       function makeItem(p) {
-
-        console.log(p);
-
         var md5Input = null;
         var pairNumber = '';
         var label = '';
@@ -166,7 +162,6 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
 
 
   var out = ReactDOM.render(React.createElement(app, null), mountNode);
-  //console.log(out);
 
   out.reachMinItems();
   return out;

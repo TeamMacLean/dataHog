@@ -9,30 +9,38 @@
           enctype="multipart/form-data">
 
         <fieldset>
-            <label for="name">Title</label>
+            <label for="name">Name of sample
+                <i class="fa fa-info-circle tooltip" title="This is a tool tip!"></i>
+            </label>
             <input type="text" id="name" name="name" required>
         </fieldset>
 
         <fieldset>
-            <label for="organism">Organism</label>
+            <label for="ncbi">Taxonomy ID
+                <i class="fa fa-info-circle tooltip" title="This is a tool tip!"></i>
+            </label>
+            <input type="number" id="ncbi" name="ncbi" required>
+        </fieldset>
+
+        <fieldset>
+            <label for="organism">Organism
+                <i class="fa fa-info-circle tooltip" title="This is a tool tip!"></i>
+            </label>
             <input type="text" id="organism" name="organism" required>
             <ul id="listByText" class="no-margin no-decoration"></ul>
         </fieldset>
 
         <fieldset>
-            <label for="ncbi">Taxonomy ID</label>
-            <input type="number" id="ncbi" name="ncbi" required>
-            <!--<label><input type="checkbox" id="custom-org"> do not change organism</label>-->
-
-        </fieldset>
-
-        <fieldset>
-            <label for="conditions">Conditions</label>
-            <input type="text" id="conditions" name="conditions" required>
+            <label for="conditions">Conditions
+                <i class="fa fa-info-circle tooltip" title="This is a tool tip!"></i>
+            </label>
+            <textarea rows="3" id="conditions" name="conditions" required></textarea>
         </fieldset>
 
         <fieldset class="file-group" id="additionalDataDiv">
-            <label>Additional data</label>
+            <label>Supporting files
+                <i class="fa fa-info-circle tooltip" title="This is a tool tip!"></i>
+            </label>
 
             <div id="additionalData">
             </div>

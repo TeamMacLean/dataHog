@@ -6,41 +6,45 @@
 
     <form action="/<%- selectedGroup.safeName %>/new" method="POST" enctype="multipart/form-data">
 
-        <fieldset data-tooltip="a short name for the study" class="tooltip-bottom">
-            <label for="name">Name</label>
+        <fieldset>
+            <label for="name">Name of project
+                <i class="fa fa-info-circle tooltip" title="This is a tool tip!"></i>
+            </label>
             <input type="text" id="name" name="name" required>
         </fieldset>
 
-        <fieldset data-tooltip="The group/lab you are a member of" class="tooltip-bottom">
-            <label for="group">Group</label>
-            <select id="group" name="group" required>
-                <option value="<%- selectedGroup.id %>"><%- selectedGroup.name %></option>
-            </select>
-        </fieldset>
-
-        <fieldset data-tooltip="email address of the person to be contacted about the data in future"
-                  class="tooltip-bottom">
-            <label for="responsiblePerson">Data owner</label>
+        <fieldset>
+            <label for="responsiblePerson">Data owner's TSL email address
+                <i class="fa fa-info-circle tooltip" title="This is a tool tip!"></i>
+            </label>
             <input type="email" id="responsiblePerson" name="responsiblePerson" value="<%- locals.signedInUser.mail %>"
                    required>
         </fieldset>
-        <fieldset data-tooltip="email address of a backup person to be contacted about the data in future"
-                  class="tooltip-bottom">
-            <label for="secondaryContact">Secondary Contact</label>
+
+        <fieldset>
+            <label for="secondaryContact">Secondary Contact's TSL email address
+                <i class="fa fa-info-circle tooltip" title="This is a tool tip!"></i>
+            </label>
             <input type="email" id="secondaryContact" name="secondaryContact">
         </fieldset>
 
-        <fieldset data-tooltip="Basic overview" class="tooltip-bottom">
-            <label for="shortDescription">Short description</label>
+        <fieldset>
+            <label for="shortDescription">Short description of the project
+                <i class="fa fa-info-circle tooltip" title="This is a tool tip!"></i>
+            </label>
             <input type="text" id="shortDescription" name="shortDescription" required></textarea>
         </fieldset>
-        <fieldset data-tooltip="As much details as you can give" class="tooltip-bottom">
-            <label for="longDescription">Long description</label>
+        <fieldset>
+            <label for="longDescription">Long description of the project
+                <i class="fa fa-info-circle tooltip" title="This is a tool tip!"></i>
+            </label>
             <textarea rows="3" id="longDescription" name="longDescription" required></textarea>
         </fieldset>
 
         <fieldset class="file-group" id="additionalDataDiv">
-            <label>Additional data</label>
+            <label>Supporting files
+                <i class="fa fa-info-circle tooltip" title="This is a tool tip!"></i>
+            </label>
 
             <div id="additionalData">
             </div>

@@ -28,13 +28,22 @@ Projects.new = function (req, res) {
  */
 Projects.newPost = function (req, res) {
   var name = req.body.name;
-  var groupID = req.body.group;
+  //var groupID = req.body.group;
   var responsiblePerson = req.body.responsiblePerson;
   var shortDescription = req.body.shortDescription;
   var longDescription = req.body.longDescription;
   var secondaryContact = req.body.secondaryContact;
 
-  Group.get(groupID).run().then(function (group) {
+  var groupSafeName = req.params.group;
+
+
+  Group.filter({safeName: groupSafeName}).run().then(function (groups) {
+
+    if (!groups) {
+      return res.render('error', {error: 'group ' + groupSafeName + '  not found'});
+    }
+
+    var group = groups[0];
 
 
     var project = new Project({
@@ -46,8 +55,8 @@ Projects.newPost = function (req, res) {
       longDescription: longDescription
     });
 
-
     project.save().then(function (result) {
+
 
       var joinedPath = path.join(config.dataDir, group.safeName, result.safeName);
       fs.ensureDir(joinedPath, function (err) {
