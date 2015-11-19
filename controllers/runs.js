@@ -16,6 +16,7 @@ var config = require('../config.json');
 var util = require('../lib/util');
 var thinky = require('../lib/thinky');
 var async = require('async');
+var email = require('../lib/email');
 
 var Runs = {};
 
@@ -380,6 +381,17 @@ Runs.newPost = function (req, res) {
     run.save().then(function (savedRun) {
 
       var pathToNewRunFolder = path.join(config.dataDir, sample.project.group.safeName, sample.project.safeName, sample.safeName, savedRun.safeName);
+
+
+      if (submissionToGalaxy) {
+
+        var hpcPath = path.join(config.hpcRoot, savedRun.path);
+        var siteURL = req.protocol + '://' + req.host + '/' + savedRun.path;
+
+        var subject = "Request for data to be added to Galaxy";
+        var text = "Please add " + hpcPath + " to Galaxy.\n\n" + siteURL + "\n\nThanks :D\nDataHog";
+        email.send(subject, text);
+      }
 
       function renderOK() {
         Run.get(savedRun.id).getJoin({sample: {project: {group: true}}, reads: true}).then(function (result) {

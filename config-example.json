@@ -12,6 +12,15 @@
     "searchBase": "ou=nbi.ac.uk",
     "searchFilter": "(sAMAccountName={{username}})"
   },
+  "email": {
+    "host": "",
+    "port": "25",
+    "from": "sender@address",
+    "galaxyAdmin": [
+      "admin1@address",
+      "admin2@address"
+    ]
+  },
   "ena": {
     "namespace": "JIC",
     "center": "The Sainsbury Laboratory",

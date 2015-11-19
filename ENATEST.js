@@ -24,12 +24,12 @@ Sample.run().then(function (samples) {
     "SAMPLE": {
       "@": {
         "alias": sample.safeName,
-        "center_name": config.ena.center
+        "center_name": config.ena.namespace
       },
       "IDENTIFIERS": {
         "SUBMITTER_ID": {
           "@": {
-            "namespace": config.ena.center
+            "namespace": config.ena.namespace
           },
           "#": sample.safeName
         }

@@ -22,11 +22,14 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
         var md5Input = null;
         var pairNumber = '';
         var label = '';
+        var toolTip = '';
         if (p) {
           if (p === 1) {
             label = 'First read file (R1)';
+            toolTip = 'Please upload your read file here. If you have paired end data, please choose the file that contains the forward reads (usually having "R1" in the filename).';
           } else if (p === 2) {
             label = 'Second read file (R2)';
+            toolTip = ' Please upload your read file here. Choose the file that contains the reverse reads (usually having "R2" in the filename).';
           }
           pairNumber = '-' + p;
         }
@@ -38,7 +41,7 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
             React.createElement('label', {}, 'md5 ',
               React.createElement('i', {
                 className: "fa fa-info-circle tooltip",
-                title: 'The digital "fingerprint" of your file. Should be in the documents that you got from your sequencing provider. Otherwise,please consult the <a href="">TSL RDA manual</a>.'
+                title: 'The digital "fingerprint" of your file. Should be in the documents that you got from your sequencing provider.'
               })
             ),
             React.createElement('input', {type: 'text', id: MD5ID + ind, name: MD5ID + ind}),
