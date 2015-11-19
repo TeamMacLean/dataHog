@@ -1,31 +1,7 @@
 var js2xmlparser = require('js2xmlparser');
+var config = require('./config.json');
 
-//Sample
-var Sample = require('./models/sample');
-Sample.run().then(function (samples) {
-
-  var sample = samples[0];
-  var sampleObj = {
-    "SAMPLE": {
-      "@": {
-        "alias": "thisisatest",
-        "center_name": "JIC"
-      },
-      "IDENTIFIERS": {
-        "SUBMITTER_ID": {
-          "@": {
-            "namespace": "JIC"
-          },
-          "#": "thisisatest"
-        }
-      },
-      "SAMPLE_NAME": {
-        "TAXON_ID": 205918,
-        "COMMON_NAME": "Pseudomonas syringae pathovar syringae B728a",
-        "SCIENTIFIC_NAME": "Pseudomonas syringae pv. syringae B728a"
-      }
-    }
-  };
+///////////////////////////////////////Sample
 
 //<?xml version="1.0" encoding="UTF-8"?><SAMPLE_SET>
 //  <SAMPLE alias="thisisatest" center_name="JIC">
@@ -40,40 +16,35 @@ Sample.run().then(function (samples) {
 //  </SAMPLE>
 //</SAMPLE_SET>
 
+var Sample = require('./models/sample');
+Sample.run().then(function (samples) {
+
+  var sample = samples[0];
+  var sampleObj = {
+    "SAMPLE": {
+      "@": {
+        "alias": sample.safeName,
+        "center_name": config.ena.center
+      },
+      "IDENTIFIERS": {
+        "SUBMITTER_ID": {
+          "@": {
+            "namespace": config.ena.center
+          },
+          "#": sample.safeName
+        }
+      },
+      "SAMPLE_NAME": {
+        "TAXON_ID": sample.ncbi,
+        "COMMON_NAME": sample.organism, //TODO
+        "SCIENTIFIC_NAME": sample.organism //TODO
+      }
+    }
+  };
   //console.log(js2xmlparser("SAMPLE_SET", sampleObj));
 });
 
-//Study
-
-var studyObj = {
-  "STUDY": {
-    "@": {
-      "alias": "thisisatest",
-      "center_name": "JIC"
-    },
-    "IDENTIFIERS": {
-      "SUBMITTER_ID": {
-        "@": {
-          "namespace": "JIC"
-        },
-        "#": "thisisatest"
-      }
-    },
-    "DESCRIPTOR": {
-      "STUDY_TITLE": "Identification of causative SNPs in the mob54-3/mob56-1BC mutants derived from bak1-5 remutagenesis",
-      "STUDY_ABSTRACT": "lots of text",
-      "STUDY_DESCRIPTION": "lots of text",
-      "CENTER_PROJECT_NAME": "Variant detection in A. thaliana mob mutants mob54-3/mob56-1BC",
-      "STUDY_TYPE": {
-        "@": {
-          "existing_study_type": "other"
-        }
-      }
-    }
-  }
-};
-
-console.log(js2xmlparser("STUDY_SET", studyObj));
+///////////////////////////////////////Study
 
 //<?xml version="1.0" encoding="UTF-8"?>
 //<STUDY_SET>
@@ -109,7 +80,38 @@ console.log(js2xmlparser("STUDY_SET", studyObj));
 //  </STUDY>
 //</STUDY_SET>
 
-//Submission
+var studyObj = {
+  "STUDY": {
+    "@": {
+      "alias": "thisisatest",
+      "center_name": "JIC"
+    },
+    "IDENTIFIERS": {
+      "SUBMITTER_ID": {
+        "@": {
+          "namespace": "JIC"
+        },
+        "#": "thisisatest"
+      }
+    },
+    "DESCRIPTOR": {
+      "STUDY_TITLE": "Identification of causative SNPs in the mob54-3/mob56-1BC mutants derived from bak1-5 remutagenesis",
+      "STUDY_ABSTRACT": "lots of text",
+      "STUDY_DESCRIPTION": "lots of text",
+      "CENTER_PROJECT_NAME": "Variant detection in A. thaliana mob mutants mob54-3/mob56-1BC",
+      "STUDY_TYPE": {
+        "@": {
+          "existing_study_type": "other"
+        }
+      }
+    }
+  }
+};
+
+//console.log(js2xmlparser("STUDY_SET", studyObj));
+
+
+///////////////////////////////////////Submission
 
 //<?xml version="1.0" encoding="UTF-8"?>
 //<SUBMISSION_SET>
@@ -137,7 +139,35 @@ console.log(js2xmlparser("STUDY_SET", studyObj));
 //  </SUBMISSION>
 //</SUBMISSION_SET>
 
-//Run
+var submissionObj = {
+  "SUBMISSION": {
+    "center_name": "JIC",
+    "IDENTIFIERS": {
+      "SUBMITTER_ID": {
+        "@": {
+          "namespace": "JIC"
+        },
+        "#": "thisisatest"
+      }
+    },
+    "ACTIONS": {
+      "ACTION": [
+        {
+          "RELEASE": {}
+        },
+        {
+          "ADD": {}
+        },
+        {
+          "ADD": {}
+        }
+      ]
+    }
+  }
+};
+console.log(js2xmlparser("SUBMISSION_SET", submissionObj));
+
+///////////////////////////////////////Run
 
 //<?xml version="1.0" encoding="UTF-8"?><RUN_SET>
 //  <RUN alias="thisisatest" run_date="2008-02-07T00:00:00.000Z" run_center="JIC" center_name="JIC">
@@ -172,7 +202,7 @@ console.log(js2xmlparser("STUDY_SET", studyObj));
 //  </RUN>
 //</RUN_SET>
 
-//Experiment
+///////////////////////////////////////Experiment
 
 //<?xml version="1.0" encoding="UTF-8"?>
 //<EXPERIMENT_SET>
@@ -239,5 +269,7 @@ console.log(js2xmlparser("STUDY_SET", studyObj));
 //    </EXPERIMENT_ATTRIBUTES>
 //  </EXPERIMENT>
 //</EXPERIMENT_SET>
+
+
 
 

@@ -3,28 +3,32 @@
     <h3><a href="/<%- project.group.safeName %>/<%- project.safeName %>"><i
                     class="fa fa-chevron-left"></i> Back to project: <%- project.name %></a></h3>
 
-    <h2>New Sample</h2>
+    <h2>Create Sample</h2>
 
     <form action="/<%- project.group.safeName %>/<%- project.safeName %>/new" method="POST"
           enctype="multipart/form-data">
 
         <fieldset>
-            <label for="name">Name of sample
-                <i class="fa fa-info-circle tooltip" title="This is a tool tip!"></i>
+            <label for="name">Sample name
+                <i class="fa fa-info-circle tooltip"
+                   title="Please choose a short, informative name to identify your sample."></i>
             </label>
             <input type="text" id="name" name="name" required>
         </fieldset>
 
         <fieldset>
-            <label for="ncbi">Taxonomy ID
-                <i class="fa fa-info-circle tooltip" title="This is a tool tip!"></i>
+            <label for="ncbi">NCBI Taxonomy ID (Get it from <a
+                        href="http://www.ncbi.nlm.nih.gov/taxonomy" target="_blank">here</a>).
+                <i class="fa fa-info-circle tooltip" title="Please obtain the Taxonomy ID for your sample's organism.
+(Choose the host if you're investigating host - pathogen interactions.)."></i>
             </label>
             <input type="number" id="ncbi" name="ncbi" required>
         </fieldset>
 
         <fieldset>
             <label for="organism">Organism
-                <i class="fa fa-info-circle tooltip" title="This is a tool tip!"></i>
+                <i class="fa fa-info-circle tooltip" title="This should automatically update upon entering the taxonomy id.
+You may modify this to add line/accession information."></i>
             </label>
             <input type="text" id="organism" name="organism" required>
             <ul id="listByText" class="no-margin no-decoration"></ul>
@@ -32,14 +36,19 @@
 
         <fieldset>
             <label for="conditions">Conditions
-                <i class="fa fa-info-circle tooltip" title="This is a tool tip!"></i>
+                <i class="fa fa-info-circle tooltip" title="Please provide information about the sample conditions
+(environmental conditions, is it a pathogen interaction?, what pathogen?
+etc.)"></i>
             </label>
             <textarea rows="3" id="conditions" name="conditions" required></textarea>
         </fieldset>
 
         <fieldset class="file-group" id="additionalDataDiv">
             <label>Supporting files
-                <i class="fa fa-info-circle tooltip" title="This is a tool tip!"></i>
+                <i class="fa fa-info-circle tooltip" title="Please upload any documentation obtained from the sequencing
+provider, including copies of the communication. If the documentation
+pertains to the whole project or only to a certain data set, then please
+add it there instead."></i>
             </label>
 
             <div id="additionalData">
@@ -47,7 +56,7 @@
 
         </fieldset>
 
-        <button type="submit" class="button button-primary">Add</button>
+        <button type="submit" class="button button-primary">Submit</button>
     </form>
 
 </div>

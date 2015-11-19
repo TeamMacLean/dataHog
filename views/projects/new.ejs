@@ -7,43 +7,52 @@
     <form action="/<%- selectedGroup.safeName %>/new" method="POST" enctype="multipart/form-data">
 
         <fieldset>
-            <label for="name">Name of project
-                <i class="fa fa-info-circle tooltip" title="This is a tool tip!"></i>
+            <label for="name">Project name
+                <i class="fa fa-info-circle tooltip"
+                   title="Please choose a short, informative name to identify your project."></i>
             </label>
             <input type="text" id="name" name="name" required>
         </fieldset>
 
         <fieldset>
             <label for="responsiblePerson">Data owner's TSL email address
-                <i class="fa fa-info-circle tooltip" title="This is a tool tip!"></i>
+                <i class="fa fa-info-circle tooltip" title="If you are submitting this project on behalf of somebody else,
+please provide their TSL email address."></i>
             </label>
             <input type="email" id="responsiblePerson" name="responsiblePerson" value="<%- locals.signedInUser.mail %>"
                    required>
         </fieldset>
 
         <fieldset>
-            <label for="secondaryContact">Secondary Contact's TSL email address
-                <i class="fa fa-info-circle tooltip" title="This is a tool tip!"></i>
+            <label for="secondaryContact">Secondary contact's TSL email
+                address
+                <i class="fa fa-info-circle tooltip" title="This should be your closest collaborator on the project.
+Alternatively, name the RA/lab manager of your group."></i>
             </label>
             <input type="email" id="secondaryContact" name="secondaryContact">
         </fieldset>
 
         <fieldset>
             <label for="shortDescription">Short description of the project
-                <i class="fa fa-info-circle tooltip" title="This is a tool tip!"></i>
+                <i class="fa fa-info-circle tooltip"
+                   title=" One short, descriptive sentence of what the project is about."></i>
             </label>
             <input type="text" id="shortDescription" name="shortDescription" required></textarea>
         </fieldset>
         <fieldset>
             <label for="longDescription">Long description of the project
-                <i class="fa fa-info-circle tooltip" title="This is a tool tip!"></i>
+                <i class="fa fa-info-circle tooltip" title="Please provide a longer description/abstract of what the
+project is about."></i>
             </label>
             <textarea rows="3" id="longDescription" name="longDescription" required></textarea>
         </fieldset>
 
         <fieldset class="file-group" id="additionalDataDiv">
             <label>Supporting files
-                <i class="fa fa-info-circle tooltip" title="This is a tool tip!"></i>
+                <i class="fa fa-info-circle tooltip" title="Please upload any documentation obtained from the sequencing
+provider, including copies of the communication. If the documentation
+pertains only to a certain sample or data set, then please add it there
+instead."></i>
             </label>
 
             <div id="additionalData">
@@ -51,7 +60,7 @@
 
         </fieldset>
 
-        <button type="submit" class="button button-primary">Add</button>
+        <button type="submit" class="button button-primary">Submit</button>
     </form>
 
 </div>

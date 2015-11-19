@@ -23,7 +23,11 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
         var pairNumber = '';
         var label = '';
         if (p) {
-          label = 'part ' + p;
+          if (p === 1) {
+            label = 'First read file (R1)';
+          } else if (p === 2) {
+            label = 'Second read file (R2)';
+          }
           pairNumber = '-' + p;
         }
 
@@ -31,7 +35,12 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
 
         if (MD5S) {
           md5Input = React.createElement('div', {},
-            React.createElement('label', {}, 'md5'),
+            React.createElement('label', {}, 'md5 ',
+              React.createElement('i', {
+                className: "fa fa-info-circle tooltip",
+                title: 'The digital "fingerprint" of your file. Should be in the documents that you got from your sequencing provider. Otherwise,please consult the <a href="">TSL RDA manual</a>.'
+              })
+            ),
             React.createElement('input', {type: 'text', id: MD5ID + ind, name: MD5ID + ind}),
             React.createElement('br'),
             React.createElement('br')
