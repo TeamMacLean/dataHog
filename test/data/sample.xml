@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?><SAMPLE_SET>
+<?xml version="1.0" encoding="UTF-8"?>
+<SAMPLE_SET>
     <SAMPLE alias="thisisatest" center_name="JIC">
         <IDENTIFIERS>
             <SUBMITTER_ID namespace="JIC">thisisatest</SUBMITTER_ID>
