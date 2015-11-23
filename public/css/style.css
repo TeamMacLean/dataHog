@@ -1,17 +1,63 @@
-/*@import url(http://fonts.googleapis.com/css?family=Raleway);*/
-
 html {
     position: relative;
     min-height: 100%;
 }
 
 body {
-    /*font: 14px 'Raleway', sans-serif;*/
     -webkit-font-smoothing: antialiased;
     height: auto;
-    /*margin-bottom: 32px;*/
+    margin-top: 56px;
+}
 
-    margin-top: 8px;
+::selection {
+    background: #F15563;
+}
+
+::-moz-selection {
+    background: #F15563;
+}
+
+.head {
+    position: fixed;
+    z-index: 200;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    background-color: #46C0EB;
+    font-weight: 800;
+
+
+    webkit-box-shadow: 0 4px 0 0 rgba(0, 0, 0, 0.1);
+    -moz-box-shadow: 0 4px 0 0 rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 0 0 rgba(0, 0, 0, 0.1);
+}
+
+/*.head:before {*/
+/*webkit-box-shadow: 0 0 4px rgba(0, 0, 0, .14), 0 4px 8px rgba(0, 0, 0, .28);*/
+/*-moz-box-shadow: 0 0 4px rgba(0, 0, 0, .14), 0 4px 8px rgba(0, 0, 0, .28);*/
+/*box-shadow: 0 0 4px rgba(0, 0, 0, .14), 0 4px 8px rgba(0, 0, 0, .28);*/
+/*content: "";*/
+/*height: 40px;*/
+/*left: -2%;*/
+/*position: fixed;*/
+/*width: 104%;*/
+/*will-change: top, left;*/
+/*top: 0;*/
+/*}*/
+
+.head img {
+    height: 18px;
+    vertical-align: middle;
+}
+
+.head a {
+    color: white;
+}
+
+.head a:hover {
+    color: #3D4351;
 }
 
 a {
@@ -143,4 +189,8 @@ h1, h2, h3, h4, h5, h6 {
 
 .fa-info-circle {
     color: #00B5FF;
+}
+
+.tile i {
+    line-height: 2rem;
 }

@@ -29,14 +29,19 @@
 </head>
 <body>
 
-
-<div class="container">
-    <div class="right">
-        <% if(locals.signedInUser){ %>
-        <i class="fa fa-user"></i> <%- locals.signedInUser.name %> - <a href="/signout">Sign out</a>
-        <% } else { %>
-        <a href="/signin">Sign in</a>
-        <% } %>
+<div class="head">
+    <div class="container">
+        <div class="left">
+            <a href="/">TSL Data Read Archive</a>
+        </div>
+        <div class="right">
+            <% if(locals.signedInUser){ %>
+            <!--<i class="fa fa-user"></i>-->
+            <%- locals.signedInUser.name %> - <a href="/signout">Sign out</a>
+            <% } else { %>
+            <a href="/signin">Sign in</a>
+            <% } %>
+        </div>
     </div>
 </div>
 

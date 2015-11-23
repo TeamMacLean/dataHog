@@ -6,19 +6,19 @@
 
     <h2>Read data: <%- run.name %></h2>
 
-    <label>Sequencing provider</label>
+    <label>Sequencing provider:</label>
 
     <p><%- run.sequencingProvider %></p>
 
-    <label>Sequencing technology</label>
+    <label>Sequencing technology:</label>
 
     <p><%- run.sequencingTechnology %></p>
 
-    <label>Path</label>
+    <label>Path:</label>
 
     <p><%- run.hpcPath(); %></p>
 
-    <label>Additional Files</label>
+    <label>Additional File:</label>
     <%
     if(run.additionalFiles && run.additionalFiles.length > 0){
     run.additionalFiles.map(function(file){
@@ -30,27 +30,27 @@
     <p>none</p>
     <% } %>
 
-    <label>Library Source</label>
+    <label>Library Source:</label>
 
     <p> <%- run.librarySource %></p>
 
-    <label>Library type</label>
+    <label>Library type:</label>
 
     <p><%- run.libraryType %></p>
 
-    <label>Library Selection</label>
+    <label>Library Selection:</label>
 
     <p><%- run.librarySelection %></p>
 
-    <label>Insert Size</label>
+    <label>Insert Size:</label>
 
     <p><%- run.insertSize %></p>
 
-    <label>Submission to Galaxy</label>
+    <label>Submission to Galaxy:</label>
 
     <p><%- run.submissionToGalaxy %></p>
 
-    <h2>Raw</h2>
+    <h2>Raw:</h2>
     <% if(raw && raw.length > 0){ %>
 
     <div class="row">

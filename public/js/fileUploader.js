@@ -24,12 +24,18 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
         var label = '';
         var toolTip = '';
         if (p) {
+          toolTip = React.createElement('i', {
+            className: "fa fa-info-circle tooltip",
+            title: 'Please upload your read file here. If you have paired end data, please choose the file that contains the forward reads (usually having "R1" in the filename).'
+          });
           if (p === 1) {
-            label = 'First read file (R1)';
-            toolTip = 'Please upload your read file here. If you have paired end data, please choose the file that contains the forward reads (usually having "R1" in the filename).';
+            label = React.createElement('span', {}, 'First read file (R1) ', toolTip);
           } else if (p === 2) {
-            label = 'Second read file (R2)';
-            toolTip = ' Please upload your read file here. Choose the file that contains the reverse reads (usually having "R2" in the filename).';
+            toolTip = React.createElement('i', {
+              className: "fa fa-info-circle tooltip",
+              title: 'Please upload your read file here. Choose the file that contains the reverse reads (usually having "R2" in the filename).'
+            });
+            label = React.createElement('span', {}, 'Second read file (R2) ', toolTip);
           }
           pairNumber = '-' + p;
         }

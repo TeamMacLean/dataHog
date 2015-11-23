@@ -3,6 +3,7 @@
 var thinky = require('../lib/thinky.js');
 var type = thinky.type;
 var util = require('../lib/util');
+var js2xmlparser = require('js2xmlparser');
 var config = require('../config.json');
 
 var Sample = thinky.createModel('Sample', {
@@ -23,6 +24,31 @@ Sample.define("hpcPath", function () {
   } else {
     return this.path;
   }
+});
+
+Sample.define("toENA", function () {
+  var sampleObj = {
+    "SAMPLE": {
+      "@": {
+        "alias": this.safeName,
+        "center_name": config.ena.namespace
+      },
+      "IDENTIFIERS": {
+        "SUBMITTER_ID": {
+          "@": {
+            "namespace": config.ena.namespace
+          },
+          "#": this.safeName
+        }
+      },
+      "SAMPLE_NAME": {
+        "TAXON_ID": this.ncbi,
+        "COMMON_NAME": this.organism,
+        "SCIENTIFIC_NAME": this.organism
+      }
+    }
+  };
+  return js2xmlparser("SAMPLE_SET", sampleObj);
 });
 
 Sample.pre('save', function (next) {

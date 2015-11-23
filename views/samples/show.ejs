@@ -6,24 +6,24 @@
 
     <h2><%- sample.name %></h2>
 
-    <label>Sample group</label>
+    <label>Sample group:</label>
 
     <p><%- sample.sampleGroup %></p>
-    <label>Organism</label>
+    <label>Organism:</label>
 
     <p><%- sample.organism %></p>
-    <label>NCBI</label>
+    <label>NCBI:</label>
 
     <p><%- sample.ncbi %></p>
-    <label>Conditions</label>
+    <label>Conditions:</label>
 
     <p><%- sample.conditions %></p>
 
-    <label>Path</label>
+    <label>Path:</label>
 
     <p><%- sample.hpcPath(); %></p>
 
-    <label>Additional Files</label>
+    <label>Additional Files:</label>
     <%
     if(sample.additionalFiles && sample.additionalFiles.length > 0){
     sample.additionalFiles.map(function(file){

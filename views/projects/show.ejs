@@ -23,11 +23,11 @@
 
     <p><%- project.longDescription %></p>
 
-    <label>Path</label>
+    <label>Path:</label>
 
     <p><%- project.hpcPath(); %></p>
 
-    <label>Additional Files</label>
+    <label>Additional Files:</label>
     <%
     if(project.additionalFiles && project.additionalFiles.length > 0){
     project.additionalFiles.map(function(file){
@@ -40,7 +40,7 @@
     <% } %>
 
     <a class="button button-primary" href="/<%- project.group.safeName %>/<%- project.safeName %>/new"><i
-                class="fa fa-plus"></i> new sample</a>
+                class="fa fa-plus"></i> Add sample</a>
 
     <div class="row">
         <% var i = 0; %>

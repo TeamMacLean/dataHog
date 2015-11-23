@@ -53,7 +53,6 @@ app.use(passport.session());
 
 app.use(function (req, res, next) {
 
-  console.log(req.host);
 
   if (req.user != null) {
     res.locals.signedInUser = {};

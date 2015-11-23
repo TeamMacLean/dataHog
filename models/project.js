@@ -5,6 +5,7 @@ var type = thinky.type;
 var r = thinky.r;
 var util = require('../lib/util');
 var config = require('../config.json');
+var js2xmlparser = require('js2xmlparser');
 
 var Project = thinky.createModel('Project', {
   id: type.string(),
@@ -26,6 +27,38 @@ Project.define("hpcPath", function () {
     return this.path;
   }
 });
+
+Project.define("toENA", function () {
+  var studyObj = {
+    "STUDY": {
+      "@": {
+        "alias": this.safeName,
+        "center_name": config.ena.namespace
+      },
+      "IDENTIFIERS": {
+        "SUBMITTER_ID": {
+          "@": {
+            "namespace": config.ena.namespace
+          },
+          "#": this.safeName
+        }
+      },
+      "DESCRIPTOR": {
+        "STUDY_TITLE": this.name,
+        "STUDY_ABSTRACT": this.shortDescription,
+        "STUDY_DESCRIPTION": this.longDescription,
+        "CENTER_PROJECT_NAME": this.name,
+        "STUDY_TYPE": {
+          "@": {
+            "existing_study_type": "other"
+          }
+        }
+      }
+    }
+  };
+  return js2xmlparser("STUDY_SET", studyObj);
+});
+
 
 Project.pre('save', function (next) {
   var project = this;
