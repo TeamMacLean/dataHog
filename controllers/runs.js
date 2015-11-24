@@ -37,6 +37,7 @@ function deleteRun(run, cb) {
 
                 var absPath = path.resolve(path.join(config.dataDir, run.path));
 
+                //TODO safety check this!!!
                 rimraf(absPath, function (err) {
                     if (err) {
                         console.error(err);
@@ -48,8 +49,6 @@ function deleteRun(run, cb) {
                 });
             });
         });
-
-
     } else {
         cb(new Error('you did not give me a run!'));
     }
@@ -125,7 +124,7 @@ function ensureCompressed(fileAndMD5, cb) {
 
     var originalName = file.originalname;
 
-    if (!compressed && ['.fq', '.fasq'].indexOf(fileExtention) < 0) {
+    if (!compressed && ['.fq', '.fastq'].indexOf(fileExtention) < 0) {
         var err = new Error('not compressed and not a fastq/fq file extention');
 
         return cb(err);

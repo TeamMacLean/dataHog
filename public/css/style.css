@@ -22,10 +22,6 @@ body {
     background: #F15563;
 }
 
-.head i, .footer i {
-    vertical-align: middle;
-}
-
 .head {
     position: fixed;
     z-index: 200;
@@ -35,11 +31,10 @@ body {
     padding-top: 8px;
     padding-bottom: 8px;
     background-color: #46C0EB;
-    font-weight: 800;
 
-    webkit-box-shadow: 0 4px 0 0 rgba(0, 0, 0, 0.1);
-    -moz-box-shadow: 0 4px 0 0 rgba(0, 0, 0, 0.1);
-    box-shadow: 0 4px 0 0 rgba(0, 0, 0, 0.1);
+    /*webkit-box-shadow: 0 4px 0 0 rgba(0, 0, 0, 0.1);*/
+    /*-moz-box-shadow: 0 4px 0 0 rgba(0, 0, 0, 0.1);*/
+    /*box-shadow: 0 4px 0 0 rgba(0, 0, 0, 0.1);*/
 }
 
 .footer {
@@ -52,12 +47,21 @@ body {
     padding-top: 8px;
     padding-bottom: 8px;
     background-color: #46C0EB;
-    font-weight: 800;
 
-    webkit-box-shadow: 0 -4px 0 0 rgba(0, 0, 0, 0.1);
-    -moz-box-shadow: 0 -4px 0 0 rgba(0, 0, 0, 0.1);
-    box-shadow: 0 -4px 0 0 rgba(0, 0, 0, 0.1);
+    /*webkit-box-shadow: 0 -4px 0 0 rgba(0, 0, 0, 0.1);*/
+    /*-moz-box-shadow: 0 -4px 0 0 rgba(0, 0, 0, 0.1);*/
+    /*box-shadow: 0 -4px 0 0 rgba(0, 0, 0, 0.1);*/
 
+}
+
+.button:hover, .tile:hover{
+    /*webkit-box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.1);*/
+    /*-moz-box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.1);*/
+    /*box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.1);*/
+}
+
+.head i, .footer i {
+    vertical-align: middle;
 }
 
 .head img {
@@ -65,12 +69,16 @@ body {
     vertical-align: middle;
 }
 
-.head a {
+.head, .footer {
+    color: white;
+}
+
+.head a, .footer a {
     color: white;
 }
 
 .head a:hover {
-    color: #3D4351;
+    color: #3d4351;
 }
 
 a {
@@ -186,4 +194,8 @@ ul.no-decoration, li.no-decoration {
 
 .tile i {
     line-height: 2rem;
+}
+
+b {
+    font-weight: 900;
 }
