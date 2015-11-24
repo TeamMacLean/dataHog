@@ -77,7 +77,7 @@ body {
     color: white;
 }
 
-.head a:hover, .footer a {
+.head a:hover, .footer a:hover {
     color: #3d4351;
 }
 
