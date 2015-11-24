@@ -14,7 +14,5 @@ before_install:
 before_script:
   - cp config-example.json config.json
   - rethinkdb --daemon
-after_script:
-  - npm run coveralls
 matrix:
   fast_finish: true

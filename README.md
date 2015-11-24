@@ -4,7 +4,6 @@
 
 [![Build Status](https://travis-ci.org/TeamMacLean/dataHog.svg)](https://travis-ci.org/TeamMacLean/dataHog)
 [![Code Climate](https://codeclimate.com/github/TeamMacLean/dataHog/badges/gpa.svg)](https://codeclimate.com/github/TeamMacLean/dataHog)
-[![Coverage Status](https://coveralls.io/repos/TeamMacLean/dataHog/badge.svg?branch=master&service=github)](https://coveralls.io/github/TeamMacLean/dataHog?branch=master)
 
 ## About
 Data Hog is a project better manage read data at [TSL](http://tsl.ac.uk). Data Hog also handles the auto uploading of read data to [ENA](https://www.ebi.ac.uk/ena/).
