@@ -37,7 +37,7 @@ AdditionalFile.pre('save', function (next) {
 
         if (!file.MD5) {
 
-          util.md5Stream(file.path, function (md5) {
+          helper.md5Stream(file.path, function (md5) {
             file.MD5 = md5;
             next();
           });
