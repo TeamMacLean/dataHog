@@ -4,6 +4,8 @@ var thinky = require('../lib/thinky.js');
 var type = thinky.type;
 var config = require('../config.json');
 
+var util = require('../lib/util');
+
 var AdditionalFile = thinky.createModel('AdditionalFile', {
   id: type.string(),
   parentID: type.string(),
@@ -24,8 +26,6 @@ AdditionalFile.define("hpcPath", function () {
 AdditionalFile.pre('save', function (next) {
 
   var helper = require('../lib/util.js');
-  var fs = require('fs');
-  var MD5 = require('md5');
 
   var file = this;
   var unsafeName = file.name;
@@ -35,13 +35,16 @@ AdditionalFile.pre('save', function (next) {
       helper.generateSafeName(unsafeName, result, function (name) {
         file.safeName = name;
 
-        fs.readFile(file.path, function (err, buf) {
-          file.MD5 = MD5(buf);
-          next();
-        });
+        if (!file.MD5) {
+
+          util.md5Stream(file.path, function (md5) {
+            file.MD5 = md5;
+            next();
+          });
+        }
       });
     });
   }
-});
+})
 
 module.exports = AdditionalFile;
