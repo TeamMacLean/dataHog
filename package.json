@@ -28,7 +28,7 @@
     "passport-ldapauth": "^0.4.0",
     "request": "^2.64.0",
     "rimraf": "^2.4.3",
-    "thinky": "^2.1.11"
+    "thinky": "^2.2.1"
   },
   "devDependencies": {
     "chai": "^3.4.0",
