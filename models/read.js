@@ -28,7 +28,6 @@ Read.define("hpcPath", function () {
 
 Read.pre('save', function (next) {
   var read = this;
-
   var unsafeName = read.name;
   if (!read.safeName) {
     Read.filter({runID: read.runID}).run().then(function (result) {
@@ -36,17 +35,19 @@ Read.pre('save', function (next) {
         read.safeName = name;
         util.generateUniqueName(read.name, result, function (newName) {
           read.name = newName;
-
           //TODO set path
           Run.get(read.runID).run().then(function (run) {
             var myFolder = read.processed ? 'processed' : 'raw';
             read.path = run.path + '/' + myFolder + '/' + read.fileName;
             read.fastQCLocation = run.path + '/' + myFolder + '/.fastqc'; //TODO check if exists
             next();
+          }).error(function (err) {
+            next(err);
           });
-
         });
       });
+    }).error(function (err) {
+      next(err);
     });
   }
 });
