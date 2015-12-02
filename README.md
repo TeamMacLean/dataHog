@@ -35,3 +35,11 @@ npm install -g pm2
 pm2 start --name datahog server.js
 ```
 
+## Import Legacy
+* Stop the web server
+* Delete the database
+* Restart the databse
+* Run `node lib/importLegacy.js`
+* Start the web server
+
+
