@@ -30,7 +30,7 @@ AdditionalFile.pre('save', function (next) {
   var file = this;
   var unsafeName = file.name;
   if (!file.safeName) {
-    AdditionalFile.run().then(function (result) {
+    AdditionalFile.filter({parentID: file.parentID}).run().then(function (result) {
 
       helper.generateSafeName(unsafeName, result, function (name) {
         file.safeName = name;
@@ -46,5 +46,6 @@ AdditionalFile.pre('save', function (next) {
     });
   }
 });
+
 
 module.exports = AdditionalFile;

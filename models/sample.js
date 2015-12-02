@@ -22,7 +22,7 @@ Sample.pre('save', function (next) {
   var sample = this;
   var unsafeName = sample.name;
   if (!sample.safeName) {
-    Sample.run().filter({projectID: sample.projectID}).then(function (result) {
+    Sample.filter({projectID: sample.projectID}).run().then(function (result) {
       util.generateSafeName(unsafeName, result, function (name) {
         sample.safeName = name;
         //now create sampleGroup

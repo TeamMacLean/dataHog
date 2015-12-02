@@ -31,7 +31,7 @@ Read.pre('save', function (next) {
 
   var unsafeName = read.name;
   if (!read.safeName) {
-    Read.run().filter({runID: read.runID}).then(function (result) {
+    Read.filter({runID: read.runID}).run().then(function (result) {
       util.generateSafeName(unsafeName, result, function (name) {
         read.safeName = name;
         util.generateUniqueName(read.name, result, function (newName) {

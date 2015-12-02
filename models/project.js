@@ -24,7 +24,7 @@ Project.pre('save', function (next) {
   var project = this;
   var unsafeName = project.name;
   if (!project.safeName) {
-    Project.run().filter({groupID: project.groupID}).then(function (result) {
+    Project.filter({groupID: project.groupID}).run().then(function (result) {
       util.generateSafeName(unsafeName, result, function (newSafeName) {
         project.safeName = newSafeName;
         util.generateUniqueName(project.name, result, function (newName) {
