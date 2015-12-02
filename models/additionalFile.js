@@ -45,6 +45,6 @@ AdditionalFile.pre('save', function (next) {
       });
     });
   }
-})
+});
 
 module.exports = AdditionalFile;

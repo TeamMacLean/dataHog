@@ -36,7 +36,7 @@ Run.pre('save', function (next) {
 
     run.additionalFiles = [];
 
-    Run.run().then(function (result) {
+    Run.run().filter({sampleID: run.sampleID}).then(function (result) {
       util.generateSafeName(unsafeName, result, function (name) {
         run.safeName = name;
         util.generateUniqueName(run.name, result, function (newName) {

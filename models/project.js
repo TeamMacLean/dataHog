@@ -20,6 +20,25 @@ var Project = thinky.createModel('Project', {
   safeName: type.string().required()
 });
 
+Project.pre('save', function (next) {
+  var project = this;
+  var unsafeName = project.name;
+  if (!project.safeName) {
+    Project.run().filter({groupID: project.groupID}).then(function (result) {
+      util.generateSafeName(unsafeName, result, function (newSafeName) {
+        project.safeName = newSafeName;
+        util.generateUniqueName(project.name, result, function (newName) {
+          project.name = newName;
+          Group.get(project.groupID).run().then(function (group) {
+            project.path = group.path + '/' + project.safeName;
+            next();
+          });
+        });
+      });
+    });
+  }
+});
+
 Project.define("hpcPath", function () {
   if (config.hpcRoot) {
     return config.hpcRoot + this.path;
@@ -57,26 +76,6 @@ Project.define("toENA", function () {
     }
   };
   return js2xmlparser("STUDY_SET", studyObj);
-});
-
-
-Project.pre('save', function (next) {
-  var project = this;
-  var unsafeName = project.name;
-  if (!project.safeName) {
-    Project.run().then(function (result) {
-      util.generateSafeName(unsafeName, result, function (newSafeName) {
-        project.safeName = newSafeName;
-        util.generateUniqueName(project.name, result, function (newName) {
-          project.name = newName;
-          Group.get(project.groupID).run().then(function (group) {
-            project.path = group.path + '/' + project.safeName;
-            next();
-          });
-        });
-      });
-    });
-  }
 });
 
 module.exports = Project;

@@ -18,6 +18,27 @@ var Sample = thinky.createModel('Sample', {
   safeName: type.string().required()
 });
 
+Sample.pre('save', function (next) {
+  var sample = this;
+  var unsafeName = sample.name;
+  if (!sample.safeName) {
+    Sample.run().filter({projectID: sample.projectID}).then(function (result) {
+      util.generateSafeName(unsafeName, result, function (name) {
+        sample.safeName = name;
+        //now create sampleGroup
+        Project.get(sample.projectID).run().then(function (project) {
+          sample.path = project.path + '/' + sample.safeName;
+          sample.sampleGroup = project.safeName + '_' + name;
+          util.generateUniqueName(sample.name, result, function (newName) {
+            sample.name = newName;
+            next();
+          });
+        });
+      });
+    });
+  }
+});
+
 Sample.define("hpcPath", function () {
   if (config.hpcRoot) {
     return config.hpcRoot + this.path;
@@ -49,27 +70,6 @@ Sample.define("toENA", function () {
     }
   };
   return js2xmlparser("SAMPLE_SET", sampleObj);
-});
-
-Sample.pre('save', function (next) {
-  var sample = this;
-  var unsafeName = sample.name;
-  if (!sample.safeName) {
-    Sample.run().then(function (result) {
-      util.generateSafeName(unsafeName, result, function (name) {
-        sample.safeName = name;
-        //now create sampleGroup
-        Project.get(sample.projectID).run().then(function (project) {
-          sample.path = project.path + '/' + sample.safeName;
-          sample.sampleGroup = project.safeName + '_' + name;
-          util.generateUniqueName(sample.name, result, function (newName) {
-            sample.name = newName;
-            next();
-          });
-        });
-      });
-    });
-  }
 });
 
 module.exports = Sample;
