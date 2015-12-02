@@ -108,7 +108,8 @@ Projects.show = function (req, res, next) {
   }).filter({group: {safeName: groupSN}}).run().then(function (projects) {
 
     if (projects.length < 1) {
-      return next();
+      return res.render('error', {error: 'could not find project ' + projectSN});
+      //return next();
     }
 
     var project = projects[0];

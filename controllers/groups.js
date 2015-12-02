@@ -31,7 +31,8 @@ Groups.show = function (req, res, next) {
   Group.filter({safeName: requestedGroup}).getJoin({projects: true}).then(function (groups) {
 
     if (groups.length < 1) {
-      return next();
+      return res.render('error', {error: 'could not find group ' + requestedGroup});
+      //return next();
     }
 
     var group = groups[0];
