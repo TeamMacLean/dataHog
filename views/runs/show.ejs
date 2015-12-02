@@ -61,11 +61,17 @@
                 <a class="tile"
                    href="/<%- run.sample.project.group.safeName %>/<%- run.sample.project.safeName %>/<%- run.sample.safeName %>/<%- run.safeName %>/<%- read[0].safeName %>">
                     <%- read[0].name %>
+                    <div class="sub-title">
+                        File
+                    </div>
                 </a>
 
                 <a class="tile"
                    href="/<%- run.sample.project.group.safeName %>/<%- run.sample.project.safeName %>/<%- run.sample.safeName %>/<%- run.safeName %>/<%- read[1].safeName %>">
                     <%- read[1].name %>
+                    <div class="sub-title">
+                        File
+                    </div>
                 </a>
             </div>
         </div>
@@ -73,8 +79,13 @@
         <div class="col6">
             <a href="/<%- run.sample.project.group.safeName %>/<%- run.sample.project.safeName %>/<%- run.sample.safeName %>/<%- run.safeName %>/<%- read.safeName %>">
                 <div class="tile">
-                    File:
-                    <%- read.name %>
+                    <div class="title">
+                        <%- read.name %>
+                    </div>
+
+                    <div class="sub-title">
+                        File
+                    </div>
                 </div>
             </a>
         </div>
