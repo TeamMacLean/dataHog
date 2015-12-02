@@ -32,7 +32,6 @@ Groups.show = function (req, res, next) {
 
     if (groups.length < 1) {
       return res.render('error', {error: 'could not find group ' + requestedGroup});
-      //return next();
     }
 
     var group = groups[0];

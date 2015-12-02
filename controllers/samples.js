@@ -36,52 +36,52 @@ Samples.newPost = function (req, res) {
   var projectSafeName = req.params.project;
 
   Project.filter({safeName: projectSafeName}).getJoin({group: true}).run().then(function (projects) {
-    var project = projects[0];
+      var project = projects[0];
 
-    var name = req.body.name;
-    var organism = req.body.organism;
-    var ncbi = req.body.ncbi;
-    var conditions = req.body.conditions;
+      var name = req.body.name;
+      var organism = req.body.organism;
+      var ncbi = req.body.ncbi;
+      var conditions = req.body.conditions;
 
-    var newSample = new Sample({
-      name: name,
-      projectID: project.id,
-      organism: organism,
-      ncbi: ncbi,
-      conditions: conditions
-    });
+      var newSample = new Sample({
+        name: name,
+        projectID: project.id,
+        organism: organism,
+        ncbi: ncbi,
+        conditions: conditions
+      });
 
-    newSample.save().then(function (result) {
+      newSample.save().then(function (result) {
 
-      var joinedPath = path.join(config.dataDir, project.group.safeName, project.safeName, result.safeName);
+        var joinedPath = path.join(config.dataDir, project.group.safeName, project.safeName, result.safeName);
 
-      fs.ensureDir(joinedPath, function (err) {
-        if (err) {
-          return res.render('error', {error: err});
-        } else {
+        fs.ensureDir(joinedPath, function (err) {
+          if (err) {
+            return res.render('error', {error: err});
+          } else {
 
-          var additionalFiles = [];
-          for (var p in req.files) {
-            if (req.files.hasOwnProperty(p)) {
-              if (p.indexOf('additional') > -1) {
-                additionalFiles.push(req.files[p]);
+            var additionalFiles = [];
+            for (var p in req.files) {
+              if (req.files.hasOwnProperty(p)) {
+                if (p.indexOf('additional') > -1) {
+                  additionalFiles.push(req.files[p]);
+                }
               }
             }
-          }
-          util.addAdditional(result, additionalFiles, joinedPath, function (err) {
-            if (err) {
-              console.error(err);
-            }
-          });
+            util.addAdditional(result, additionalFiles, joinedPath, function (err) {
+              if (err) {
+                console.error(err);
+              }
+            });
 
-          var url = path.join('/', project.group.safeName, project.safeName, result.safeName);
-          return res.redirect(url);
-        }
+            var url = path.join('/', project.group.safeName, project.safeName, result.safeName);
+            return res.redirect(url);
+          }
+        });
+      }).error(function (err) {
+        console.error(err);
       });
-    }).error(function (err) {
-      console.error(err);
-    });
-  })
+    })
     .error(function () {
       return res.render('error', {error: 'could not find project'});
     });
@@ -104,13 +104,14 @@ Samples.show = function (req, res) {
     additionalFiles: true
   }).filter({project: {safeName: projectSN, group: {safeName: groupSN}}}).run().then(function (results) {
 
-    if (results.length > 1) {
-      console.error('multiple samples', results);
-    }
-    var sample = results[0];
+      if (results.length > 1) {
+        return res.render('error', {error: 'could not find sample ' + sampleSafeName});
 
-    res.render('samples/show', {sample: sample});
-  })
+      }
+      var sample = results[0];
+
+      res.render('samples/show', {sample: sample});
+    })
     .error(function (err) {
       console.error(err);
       return res.render('error', {error: 'could not find sample'});

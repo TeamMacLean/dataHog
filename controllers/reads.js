@@ -29,7 +29,7 @@ Reads.show = function (req, res, next) {
   }).run().then(function (results) {
 
     if (results.length < 1) {
-      return next();
+      return res.render('error', {error: 'could not find read ' + readSN});
     }
 
     var read = results[0];
