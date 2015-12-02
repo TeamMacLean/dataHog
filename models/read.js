@@ -39,7 +39,7 @@ Read.pre('save', function (next) {
           Run.get(read.runID).run().then(function (run) {
             var myFolder = read.processed ? 'processed' : 'raw';
             read.path = run.path + '/' + myFolder + '/' + read.fileName;
-            read.fastQCLocation = run.path + '/' + myFolder + '/.fastqc'; //TODO check if exists
+            //read.fastQCLocation = run.path + '/' + myFolder + '/.fastqc'; //TODO check if exists
             next();
           }).error(function (err) {
             next(err);

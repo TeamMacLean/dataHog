@@ -304,11 +304,12 @@ function addReadToRun(req, processed, savedRun, pathToNewRunFolder, cb) {
                     siblingID: siblingID,
                     fileName: fileName
                   });
-                  read.save().then(function (savedRead) {
-                    previousID = read.id;
-                    savedReads.push(savedRead);
-                    fastqc.run(newFullPath, fqcPath, function () {
-                      console.log('created fastqc report');
+                  fastqc.run(newFullPath, fqcPath, function () {
+                    console.log('created fastqc report');
+                    read.fastQCLocation = fqcPath;
+                    read.save().then(function (savedRead) {
+                      previousID = read.id;
+                      savedReads.push(savedRead);
                       return nextHappyFile(); //IMPORTANT!!
                     });
                   }).error(function (err) {
