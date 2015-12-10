@@ -304,6 +304,8 @@ function addReadToRun(req, processed, savedRun, pathToNewRunFolder, cb) {
                     siblingID: siblingID,
                     fileName: fileName
                   });
+
+
                   fastqc.run(newFullPath, fqcPath, function () {
                     console.log('created fastqc report');
                     read.fastQCLocation = fqcPath;
@@ -311,11 +313,12 @@ function addReadToRun(req, processed, savedRun, pathToNewRunFolder, cb) {
                       previousID = read.id;
                       savedReads.push(savedRead);
                       return nextHappyFile(); //IMPORTANT!!
+
+                    }).error(function (err) {
+                      if (err) {
+                        return cb(err);
+                      }
                     });
-                  }).error(function (err) {
-                    if (err) {
-                      return cb(err);
-                    }
                   });
                 }
               });
