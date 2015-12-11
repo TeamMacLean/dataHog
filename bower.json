@@ -17,7 +17,6 @@
     "taxlookup": "*",
     "terrier": "*",
     "react": "~0.14.0",
-    "jquery": "~2.1.4",
-    "tooltipster": "~3.3.0"
+    "jquery": "~2.1.4"
   }
 }
