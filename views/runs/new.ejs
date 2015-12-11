@@ -10,37 +10,29 @@
           enctype="multipart/form-data">
 
         <fieldset>
-            <label for="name">Data set name
-                <i class="fa fa-info-circle tooltip"
-                   title="Please choose a short, informative name to identify your data set."></i>
-            </label>
+            <label for="name">Data set name</label>
             <input type="text" id="name" name="name" required>
+            <span>Please choose a short, informative name to identify your data set.</span>
         </fieldset>
 
         <fieldset>
-            <label for="libraryType">Library type
-                <i class="fa fa-info-circle tooltip" title="Do you have unpaired, paired, or mate-pair reads?"></i>
-            </label>
+            <label for="libraryType">Library type</label>
             <select id="libraryType" name="libraryType" required>
                 <option>paired</option>
                 <option>mate</option>
                 <option>unpaired</option>
             </select>
+            <span>Do you have unpaired, paired, or mate-pair reads?</span>
         </fieldset>
 
         <fieldset>
-            <label for="sequencingProvider">Sequencing provider
-                <i class="fa fa-info-circle tooltip" title="Which company/institute did your sequencing? Please provide at
-least the name."></i>
-            </label>
+            <label for="sequencingProvider">Sequencing provider</label>
             <input type="text" id="sequencingProvider" name="sequencingProvider" required>
+            <span>Which company/institute did your sequencing? Please provide at least the name.</span>
         </fieldset>
 
         <fieldset>
-            <label for="sequencingTechnology">Sequencing technology
-                <i class="fa fa-info-circle tooltip" title="What was the technology used for sequencing? This should be in
-the communication with your provider."></i>
-            </label>
+            <label for="sequencingTechnology">Sequencing technology</label>
             <select id="sequencingTechnology" name="sequencingTechnology" required>
                 <option value=""></option>
                 <option value="454 GS">454 GS</option>
@@ -81,12 +73,11 @@ the communication with your provider."></i>
                 <option value="AB 3130 Genetic Analyzer">AB 3130 Genetic Analyzer</option>
                 <option value="AB 310 Genetic Analyzer">AB 310 Genetic Analyzer</option>
             </select>
+            <span>What was the technology used for sequencing? This should be in the communication with your provider.</span>
         </fieldset>
 
         <fieldset>
-            <label for="librarySource">Library source
-                <i class="fa fa-info-circle tooltip" title="From what kind of material was your library prepared?"></i>
-            </label>
+            <label for="librarySource">Library source</label>
             <select id="librarySource" name="librarySource" class="textBox" required>
                 <option value=""></option>
                 <option value="GENOMIC">GENOMIC</option>
@@ -97,12 +88,11 @@ the communication with your provider."></i>
                 <option value="VIRAL RNA">VIRAL RNA</option>
                 <option value="OTHER">OTHER</option>
             </select>
+            <span>From what kind of material was your library prepared?</span>
         </fieldset>
 
         <fieldset>
-            <label for="librarySelection">Library selection
-                <i class="fa fa-info-circle tooltip" title="Which protocol was used when creating the library?"></i>
-            </label>
+            <label for="librarySelection">Library selection</label>
             <select id="librarySelection" name="librarySelection" class="textBox" required>
                 <option value=""></option>
                 <option value="RANDOM">RANDOM</option>
@@ -132,12 +122,11 @@ the communication with your provider."></i>
                 <option value="other">other</option>
                 <option value="unspecified">unspecified</option>
             </select>
+            <span>Which protocol was used when creating the library?</span>
         </fieldset>
 
         <fieldset>
-            <label for="libraryStrategy">Library strategy
-                <i class="fa fa-info-circle tooltip" title="What kind of sequencing experiment was performed?"></i>
-            </label>
+            <label for="libraryStrategy">Library strategy</label>
             <select id="libraryStrategy" name="libraryStrategy" class="textBox" required>
                 <option value=""></option>
                 <option value="WGS">WGS</option>
@@ -171,27 +160,23 @@ the communication with your provider."></i>
                 <option value="RAD-Seq">RAD-Seq</option>
                 <option value="OTHER">OTHER</option>
             </select>
+            <span>What kind of sequencing experiment was performed?</span>
         </fieldset>
 
         <fieldset>
             <label for="insertSize">Insert size
-                <i class="fa fa-info-circle tooltip" title="What is the average insert size covered by your read pairs?
-This should be in the communication with your provider."></i>
             </label>
             <input type="number" id="insertSize" name="insertSize" min="0" required>
+            <span>What is the average insert size covered by your read pairs?
+This should be in the communication with your provider.</span>
         </fieldset>
 
         <fieldset class="file-group" id="additionalDataDiv">
-            <label>Supporting files
-                <i class="fa fa-info-circle tooltip" title="Please upload any documentation obtained from the sequencing
-provider, including copies of the communication. If the documentation
-pertains to the whole project or only to a certain sample, then please
-add it there instead."></i>
-            </label>
+            <label>Supporting files</label>
 
             <div id="additionalData">
             </div>
-
+            <span>Please upload any documentation obtained from the sequencing provider, including copies of the communication. If the documentation pertains to the whole project or only to a certain sample, then please add it there instead.</span>
         </fieldset>
 
         <fieldset id="md5Inputs" class="file-group">
@@ -206,11 +191,10 @@ add it there instead."></i>
                 <label>
                     <input type="checkbox" id="submissionToGalaxy" name="submissionToGalaxy"> Add data to <a
                             href="http://galaxy.tsl.ac.uk" target="_blank">Galaxy
-                        <i class="fa fa-info-circle tooltip" title="This notifies the Bioinformatics Team to make your data
-available on the TSL Galaxy Server. We will get in touch with you."></i>
                     </a>
                 </label>
             </div>
+            <span>This notifies the Bioinformatics Team to make your data available on the TSL Galaxy Server. We will get in touch with you.</span>
         </fieldset>
 
         <button type="submit" class="button button-primary">Submit</button>
