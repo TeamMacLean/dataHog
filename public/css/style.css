@@ -22,6 +22,11 @@ body {
     background: #F15563;
 }
 
+fieldset span {
+    font-size: 0.8em;
+    font-weight: 300;
+}
+
 .head {
     position: fixed;
     z-index: 200;
