@@ -28,10 +28,9 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
           if (p === 1) {
             label = React.createElement('span', {}, 'First read file (R1) ', toolTip);
           } else if (p === 2) {
-            toolTip = React.createElement('i', {
-              className: "fa fa-info-circle tooltip",
-              title: 'Please upload your read file here. Choose the file that contains the reverse reads (usually having "R2" in the filename).'
-            });
+            toolTip = React.createElement('span', {},
+              'Please upload your read file here. Choose the file that contains the reverse reads (usually having "R2" in the filename).'
+            );
             label = React.createElement('span', {}, 'Second read file (R2) ', toolTip);
           }
           pairNumber = '-' + p;
@@ -42,7 +41,7 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
         if (MD5S) {
           md5Input = React.createElement('div', {},
             React.createElement('label', {}, 'md5 ',
-              React.createElement('i', {},
+              React.createElement('span', {},
                 'The digital "fingerprint" of your file. Should be in the documents that you got from your sequencing provider.'
               )
             ),
