@@ -76,7 +76,7 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
         React.createElement('input', {
           type: 'button',
           value: 'remove',
-          className: 'error',
+          className: 'error thin',
           onClick: self.props.removeInput
         })
       );
@@ -153,7 +153,7 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
         this.state.items.map(toList),
         React.createElement(
           'input',
-          {type: 'button', className: 'button primary', onClick: this.addInput, value: 'add another'}
+          {type: 'button', className: 'button primary thin', onClick: this.addInput, value: 'add another'}
         )
       );
     },

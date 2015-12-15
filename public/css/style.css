@@ -24,7 +24,7 @@ body {
 
 fieldset span {
     font-size: 0.8em;
-    font-weight: 300;
+    font-weight: 400;
     display: block;
 }
 
@@ -208,4 +208,10 @@ b {
 
 label, legend {
     margin-bottom: 0;
+}
+
+button.thin, input.thin {
+    height: 20px;
+    line-height: 18px;
+    padding: 0 6px;
 }
