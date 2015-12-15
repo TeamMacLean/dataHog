@@ -205,3 +205,7 @@ ul.no-decoration, li.no-decoration {
 b {
     font-weight: 900;
 }
+
+label, legend {
+    margin-bottom: 0;
+}
