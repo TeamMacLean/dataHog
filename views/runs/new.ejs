@@ -11,28 +11,31 @@
 
         <fieldset>
             <label for="name">Data set name</label>
-            <input type="text" id="name" name="name" required>
             <span>Please choose a short, informative name to identify your data set.</span>
+
+            <input type="text" id="name" name="name" required>
         </fieldset>
 
         <fieldset>
             <label for="libraryType">Library type</label>
+            <span>Do you have unpaired, paired, or mate-pair reads?</span>
+
             <select id="libraryType" name="libraryType" required>
                 <option>paired</option>
                 <option>mate</option>
                 <option>unpaired</option>
             </select>
-            <span>Do you have unpaired, paired, or mate-pair reads?</span>
         </fieldset>
 
         <fieldset>
             <label for="sequencingProvider">Sequencing provider</label>
-            <input type="text" id="sequencingProvider" name="sequencingProvider" required>
             <span>Which company/institute did your sequencing? Please provide at least the name.</span>
+            <input type="text" id="sequencingProvider" name="sequencingProvider" required>
         </fieldset>
 
         <fieldset>
             <label for="sequencingTechnology">Sequencing technology</label>
+            <span>What was the technology used for sequencing? This should be in the communication with your provider.</span>
             <select id="sequencingTechnology" name="sequencingTechnology" required>
                 <option value=""></option>
                 <option value="454 GS">454 GS</option>
@@ -73,11 +76,11 @@
                 <option value="AB 3130 Genetic Analyzer">AB 3130 Genetic Analyzer</option>
                 <option value="AB 310 Genetic Analyzer">AB 310 Genetic Analyzer</option>
             </select>
-            <span>What was the technology used for sequencing? This should be in the communication with your provider.</span>
         </fieldset>
 
         <fieldset>
             <label for="librarySource">Library source</label>
+            <span>From what kind of material was your library prepared?</span>
             <select id="librarySource" name="librarySource" class="textBox" required>
                 <option value=""></option>
                 <option value="GENOMIC">GENOMIC</option>
@@ -88,11 +91,11 @@
                 <option value="VIRAL RNA">VIRAL RNA</option>
                 <option value="OTHER">OTHER</option>
             </select>
-            <span>From what kind of material was your library prepared?</span>
         </fieldset>
 
         <fieldset>
             <label for="librarySelection">Library selection</label>
+            <span>Which protocol was used when creating the library?</span>
             <select id="librarySelection" name="librarySelection" class="textBox" required>
                 <option value=""></option>
                 <option value="RANDOM">RANDOM</option>
@@ -122,11 +125,11 @@
                 <option value="other">other</option>
                 <option value="unspecified">unspecified</option>
             </select>
-            <span>Which protocol was used when creating the library?</span>
         </fieldset>
 
         <fieldset>
             <label for="libraryStrategy">Library strategy</label>
+            <span>What kind of sequencing experiment was performed?</span>
             <select id="libraryStrategy" name="libraryStrategy" class="textBox" required>
                 <option value=""></option>
                 <option value="WGS">WGS</option>
@@ -160,30 +163,23 @@
                 <option value="RAD-Seq">RAD-Seq</option>
                 <option value="OTHER">OTHER</option>
             </select>
-            <span>What kind of sequencing experiment was performed?</span>
         </fieldset>
 
         <fieldset>
-            <label for="insertSize">Insert size
-            </label>
+            <label for="insertSize">Insert size</label>
+            <span>What is the average insert size covered by your read pairs? This should be in the communication with your provider.</span>
             <input type="number" id="insertSize" name="insertSize" min="0" required>
-            <span>What is the average insert size covered by your read pairs?
-This should be in the communication with your provider.</span>
         </fieldset>
 
         <fieldset class="file-group" id="additionalDataDiv">
             <label>Supporting files</label>
-
-            <div id="additionalData">
-            </div>
             <span>Please upload any documentation obtained from the sequencing provider, including copies of the communication. If the documentation pertains to the whole project or only to a certain sample, then please add it there instead.</span>
+            <div id="additionalData"></div>
         </fieldset>
 
         <fieldset id="md5Inputs" class="file-group">
             <label>Raw read data</label>
-
-            <div id="filesRoot">
-            </div>
+            <div id="filesRoot"></div>
         </fieldset>
 
         <fieldset>
@@ -193,8 +189,8 @@ This should be in the communication with your provider.</span>
                             href="http://galaxy.tsl.ac.uk" target="_blank">Galaxy
                     </a>
                 </label>
+                <span>This notifies the Bioinformatics Team to make your data available on the TSL Galaxy Server. We will get in touch with you.</span>
             </div>
-            <span>This notifies the Bioinformatics Team to make your data available on the TSL Galaxy Server. We will get in touch with you.</span>
         </fieldset>
 
         <button type="submit" class="button button-primary">Submit</button>

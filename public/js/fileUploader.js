@@ -26,12 +26,10 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
         if (p) {
           toolTip = React.createElement('span', {}, 'Please upload your read file here. If you have paired end data, please choose the file that contains the forward reads (usually having "R1" in the filename).');
           if (p === 1) {
-            label = React.createElement('label', {}, 'First read file (R1) ', toolTip);
+            label = React.createElement('label', {}, 'First read file (R1)');
           } else if (p === 2) {
-            toolTip = React.createElement('span', {},
-              'Please upload your read file here. Choose the file that contains the reverse reads (usually having "R2" in the filename).'
-            );
-            label = React.createElement('span', {}, 'Second read file (R2) ', toolTip);
+            toolTip = React.createElement('span', {}, 'Please upload your read file here. Choose the file that contains the reverse reads (usually having "R2" in the filename).');
+            label = React.createElement('label', {}, 'Second read file (R2)');
           }
           pairNumber = '-' + p;
         }
@@ -40,11 +38,8 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
 
         if (MD5S) {
           md5Input = React.createElement('div', {},
-            React.createElement('label', {}, 'md5 ',
-              React.createElement('span', {},
-                'The digital "fingerprint" of your file. Should be in the documents that you got from your sequencing provider.'
-              )
-            ),
+            React.createElement('label', {}, 'md5'),
+            React.createElement('span', {}, 'The digital "fingerprint" of your file. Should be in the documents that you got from your sequencing provider.'),
             React.createElement('input', {type: 'text', id: MD5ID + ind, name: MD5ID + ind}),
             React.createElement('br'),
             React.createElement('br')
@@ -52,7 +47,8 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
         }
 
         return React.createElement('div', {},
-          React.createElement('label', {}, label),
+          React.createElement('div', {}, label),
+          React.createElement('div', {}, toolTip),
           React.createElement('input', {
             type: 'file',
             id: fileID + ind,

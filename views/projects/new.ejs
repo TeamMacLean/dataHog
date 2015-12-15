@@ -8,39 +8,41 @@
 
         <fieldset>
             <label for="name">Project name</label>
-            <input type="text" id="name" name="name" required>
             <span>Please choose a short, informative name to identify your project.</span>
+            <input type="text" id="name" name="name" required>
         </fieldset>
 
         <fieldset>
             <label for="responsiblePerson">Data owner's TSL email address</label>
+            <span>If you are submitting this project on behalf of somebody else, please provide their TSL email address.</span>
+
             <input type="email" id="responsiblePerson" name="responsiblePerson" value="<%- locals.signedInUser.mail %>"
                    required>
-            <span>If you are submitting this project on behalf of somebody else, please provide their TSL email address.</span>
         </fieldset>
 
         <fieldset>
             <label for="secondaryContact">Secondary contact's TSL email address</label>
-            <input type="email" id="secondaryContact" name="secondaryContact">
             <span>This should be your closest collaborator on the project. Alternatively, name the RA/lab manager of your group.</span>
+
+            <input type="email" id="secondaryContact" name="secondaryContact">
         </fieldset>
 
         <fieldset>
             <label for="shortDescription">Short description of the project</label>
-            <input type="text" id="shortDescription" name="shortDescription" required></textarea>
             <span>One short, descriptive sentence of what the project is about."</span>
+            <input type="text" id="shortDescription" name="shortDescription" required></textarea>
         </fieldset>
+
         <fieldset>
             <label for="longDescription">Long description of the project</label>
-            <textarea rows="3" id="longDescription" name="longDescription" required></textarea>
             <span>Please provide a longer description/abstract of what the project is about.</span>
+            <textarea rows="3" id="longDescription" name="longDescription" required></textarea>
         </fieldset>
 
         <fieldset class="file-group" id="additionalDataDiv">
             <label>Supporting files</label>
-            <div id="additionalData">
-            </div>
             <span>Please upload any documentation obtained from the sequencing provider, including copies of the communication. If the documentation pertains only to a certain sample or data set, then please add it there instead."</span>
+            <div id="additionalData"></div>
         </fieldset>
 
         <button type="submit" class="button button-primary">Submit</button>

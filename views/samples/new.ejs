@@ -10,35 +10,36 @@
 
         <fieldset>
             <label for="name">Sample name</label>
-            <input type="text" id="name" name="name" required>
             <span>Please choose a short, informative name to identify your sample.</span>
+            <input type="text" id="name" name="name" required>
         </fieldset>
 
         <fieldset>
             <label for="ncbi">NCBI Taxonomy ID (Get it from <a href="http://www.ncbi.nlm.nih.gov/taxonomy"
                                                                target="_blank">here</a>).</label>
-            <input type="number" id="ncbi" name="ncbi" required>
             <span>Please obtain the Taxonomy ID for your sample's organism. (Choose the host if you're investigating host - pathogen interactions.)</span>
+            <input type="number" id="ncbi" name="ncbi" required>
         </fieldset>
 
         <fieldset>
             <label for="organism">Organism</label>
+            <span>This should automatically update upon entering the taxonomy id. You may modify this to add line/accession information.</span>
+
             <input type="text" id="organism" name="organism" required>
             <ul id="listByText" class="no-margin no-decoration"></ul>
-            <span>This should automatically update upon entering the taxonomy id. You may modify this to add line/accession information.</span>
         </fieldset>
 
         <fieldset>
             <label for="conditions">Conditions</label>
-            <textarea rows="3" id="conditions" name="conditions" required></textarea>
             <span>Please provide information about the sample conditions (environmental conditions, is it a pathogen interaction?, what pathogen? etc.)</span>
+
+            <textarea rows="3" id="conditions" name="conditions" required></textarea>
         </fieldset>
 
         <fieldset class="file-group" id="additionalDataDiv">
             <label>Supporting files</label>
-            <div id="additionalData">
-            </div>
             <span>Please upload any documentation obtained from the sequencing provider, including copies of the communication. If the documentation pertains to the whole project or only to a certain data set, then please add it there instead.</span>
+            <div id="additionalData"></div>
         </fieldset>
 
         <button type="submit" class="button button-primary">Submit</button>
