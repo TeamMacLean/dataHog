@@ -153,7 +153,7 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
         this.state.items.map(toList),
         React.createElement(
           'input',
-          {type: 'button', className: 'button', onClick: this.addInput, value: 'add another'}
+          {type: 'button', className: 'button primary', onClick: this.addInput, value: 'add another'}
         )
       );
     },
