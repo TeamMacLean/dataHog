@@ -34,18 +34,21 @@
   "groups": [
     {
       "name": "group1",
+      "email": "",
       "division": "dept1",
-      //      "folderName": "group_1" //TODO
+      "folderName": "group_1"
     },
     {
       "name": "group2",
+      "email": "",
       "division": "dept2",
-      //      "folderName": "group_2" //TODO
+      "folderName": "group_1"
     },
     {
       "name": "group3",
+      "email": "",
       "division": "dept3",
-      //      "folderName": "group_3" //TODO
+      "folderName": "group_1"
     }
   ],
   "admins": [

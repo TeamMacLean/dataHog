@@ -17,9 +17,9 @@ if (!config.appName || !config.port || !config.dataDir || !config.tmpDir) {
   process.exit(1);
 }
 
-init.reloadAllGroups();
-init.ensureBaseFolders();
-init.checkForBadFolders();
+//init.reloadAllGroups();
+//init.ensureBaseFolders();
+//init.checkForBadFolders();
 
 if (!fs.existsSync(config.dataDir)) {
   console.error('dataDir', config.dataDir, 'does not exist');

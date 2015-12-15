@@ -39,6 +39,9 @@ pm2 start --name datahog server.js
 * Stop the web server
 * Delete the database
 * Restart the databse
+
+...not decided on the rest yet...
+
 * Run `node lib/importLegacy.js`
 * Start the web server
 
