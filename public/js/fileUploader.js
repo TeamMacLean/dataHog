@@ -26,7 +26,7 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
         if (p) {
           toolTip = React.createElement('span', {}, 'Please upload your read file here. If you have paired end data, please choose the file that contains the forward reads (usually having "R1" in the filename).');
           if (p === 1) {
-            label = React.createElement('span', {}, 'First read file (R1) ', toolTip);
+            label = React.createElement('label', {}, 'First read file (R1) ', toolTip);
           } else if (p === 2) {
             toolTip = React.createElement('span', {},
               'Please upload your read file here. Choose the file that contains the reverse reads (usually having "R2" in the filename).'

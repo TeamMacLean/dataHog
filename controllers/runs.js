@@ -434,6 +434,7 @@ Runs.show = function (req, res) {
   var runSN = req.params.run;
   var sampleSN = req.params.sample;
   var projectSN = req.params.project;
+  var groupSN = req.params.group;
 
   Run.filter({safeName: runSN}).getJoin({
     sample: {project: {group: true}},
@@ -442,7 +443,10 @@ Runs.show = function (req, res) {
   }).filter({
     sample: {
       safeName: sampleSN,
-      project: {safeName: projectSN}
+      project: {
+        safeName: projectSN,
+        group: {safeName: groupSN}
+      }
     }
   }).then(function (results) {
 
@@ -452,7 +456,7 @@ Runs.show = function (req, res) {
     }
 
     if (results.length > 1) {
-      console.error('too many runs', results);
+      console.error('too many runs!', results);
     }
 
     var run = results[0];
