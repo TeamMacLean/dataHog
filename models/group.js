@@ -22,7 +22,7 @@ Group.define("hpcPath", function () {
 
 Group.pre('save', function (next) {
   var group = this;
-  var unsafeName = group.name;
+  var unsafeName = group.name.name;
   if (!group.safeName) {
     Group.run().then(function (result) {
       util.generateSafeName(unsafeName, result, function (name) {

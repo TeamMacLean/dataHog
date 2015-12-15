@@ -52,8 +52,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(function (req, res, next) {
-
-
   if (req.user != null) {
     res.locals.signedInUser = {};
     res.locals.signedInUser.username = req.user.username;

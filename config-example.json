@@ -32,9 +32,21 @@
     "password": ""
   },
   "groups": [
-    "group1",
-    "group2",
-    "group3"
+    {
+      "name": "group1",
+      "division": "dept1",
+      //      "folderName": "group_1" //TODO
+    },
+    {
+      "name": "group2",
+      "division": "dept2",
+      //      "folderName": "group_2" //TODO
+    },
+    {
+      "name": "group3",
+      "division": "dept3",
+      //      "folderName": "group_3" //TODO
+    }
   ],
   "admins": [
     "username",

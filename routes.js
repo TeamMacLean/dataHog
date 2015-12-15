@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 
+var Group = require('./models/group');
+
 var Groups = require(__dirname + '/controllers/groups.js');
 var Projects = require(__dirname + '/controllers/projects.js');
 var Runs = require(__dirname + '/controllers/runs.js');
@@ -22,9 +24,9 @@ router.route('/signin')
 router.route('/signout')
   .get(Auth.signOut);
 
-router.route('/iamadmin').all([isAuthenticated, isAdmin], function (req, res, next) {
-  res.send('<html><body><img src="http://i.imgur.com/ZMvyKk2.gif"><h1>Your an admin Harry!</h1></body></html>');
-})
+//router.route('/iamadmin').all([isAuthenticated, isAdmin], function (req, res, next) {
+//  res.send('<html><body><img src="http://i.imgur.com/ZMvyKk2.gif"><h1>Your an admin Harry!</h1></body></html>');
+//});
 
 //download additional File
 router.route('/additional/:id/download')
@@ -38,71 +40,85 @@ router.route('/groups')
 //show by lab name
 router.route('/:group')
   .all(isAuthenticated)
+  .all(isPartOfGroup)
   .get(Groups.show);
 
 //get new project
 router.route('/:group/new')
   .all(isAuthenticated)
+  .all(isPartOfGroup)
   .get(Projects.new);
 
 //post new project
 router.route('/:group/new')
   .all(isAuthenticated)
+  .all(isPartOfGroup)
   .post(Projects.newPost);
 
 //get project
 router.route('/:group/:project')
   .all(isAuthenticated)
+  .all(isPartOfGroup)
   .get(Projects.show);
 
 //get new sample
 router.route('/:group/:project/new')
   .all(isAuthenticated)
+  .all(isPartOfGroup)
   .get(Samples.new);
 
 //post new sample
 router.route('/:group/:project/new')
   .all(isAuthenticated)
+  .all(isPartOfGroup)
   .post(Samples.newPost);
 
 //get sample
 router.route('/:group/:project/:sample')
   .all(isAuthenticated)
+  .all(isPartOfGroup)
   .get(Samples.show);
 
 //get new run
 router.route('/:group/:project/:sample/new')
   .all(isAuthenticated)
+  .all(isPartOfGroup)
   .get(Runs.new);
 
 //post new run
 router.route('/:group/:project/:sample/new')
   .all(isAuthenticated)
+  .all(isPartOfGroup)
   .post(Runs.newPost);
 
 //show run
 router.route('/:group/:project/:sample/:run')
   .all(isAuthenticated)
+  .all(isPartOfGroup)
   .get(Runs.show);
 
 //new read
 router.post('/:group/:project/:sample/:run/add')
   .all(isAuthenticated)
+  .all(isPartOfGroup)
   .post(Runs.addPost);
 
 //show read
 router.route('/:group/:project/:sample/:run/:read')
   .all(isAuthenticated)
+  .all(isPartOfGroup)
   .get(Reads.show);
 
 //show run qc
 router.route('/:group/:project/:sample/:run/:read/fastqc')
   .all(isAuthenticated)
+  .all(isPartOfGroup)
   .get(Reads.fastQC);
 
 //download run file
 router.route('/:group/:project/:sample/:run/:read/download')
   .all(isAuthenticated)
+  .all(isPartOfGroup)
   .get(Reads.download);
 
 //404 page
@@ -110,32 +126,68 @@ router.get('*', Errors.show);
 
 
 function isAuthenticated(req, res, next) {
-  //next(); //TODO!!
-
   if (req.isAuthenticated()) {
     return next();
   } else {
-
     req.session.returnTo = req.path;
     return res.redirect('/signin');
   }
 }
 
+function isPartOfGroup(req, res, next) {
+
+  if (_isAdmin(req)) {
+    return next();
+  }
+
+  if (!req.user) {
+    return next('not signed in');
+  }
+  var currentUserGroup = req.user.group;
+  var reqGroup = req.params.group;
+
+  if (!reqGroup) {
+    return next('not found');
+  }
+
+
+  var match = config.groups.filter(function (g) {
+    return g.ldapName === currentUserGroup;
+  });
+
+  if (match.length > 1) {
+    return next('error, too many groups found. sorry');
+  }
+
+  Group.filter({name: match[0].name}).then(function (groups) {
+    if (groups.length != 1) {
+      return next('error, groups.length != 1');
+    } else {
+      var group = groups[0];
+      if (group.safeName == reqGroup) {
+        return next();
+      } else {
+        return next('you do not have permission to view this group');
+      }
+    }
+  });
+}
+
+function _isAdmin(req) {
+  if (req.isAuthenticated()) {
+    return config.admins.indexOf(req.user.username) > -1;
+  } else {
+    return false;
+  }
+}
+
 function isAdmin(req, res, next) {
   if (req.isAuthenticated()) {
-    //they are signed in
-
-    console.log(req);
-
-    if (config.admins.indexOf(req.user.username) > -1) {
-      //they are an admin
+    if (isAdmin(req)) {
       return next();
-
     } else {
-      //they are signed in but not an admin
-      res.render('error', {error: 'you must be an admin to preform that action'});
+      return res.render('error', {error: 'you must be an admin to preform that action'});
     }
-
   } else {
     //they are not signed in, cannot be an admin
     req.session.returnTo = req.path;
