@@ -154,27 +154,13 @@ function isPartOfGroup(req, res, next) {
   //currentUserGroup is an array of all groups the user is a member of
 
   var match = config.groups.filter(function (g) {
-
     var groupsGroupName = g.memberOf;
-
-    currentUserGroups.map(function (cug) {
-
+    return currentUserGroups.map(function (cug) {
       console.log(groupsGroupName, 'in', cug, cug.indexOf(groupsGroupName) > -1);
-
       if (cug.indexOf(groupsGroupName) > -1) {
         return true;
       }
     });
-
-    //currentUserGroup.map(function (gg) {
-    //  console.log(g, 'in', gg);
-    //  if (gg.indexOf(g) > -1) {
-    //    return true;
-    //  }
-    //});
-
-    //console.log(g.memberOf, 'IS', g.memberOf.indexOf(currentUserGroup) > -1);
-    //return g.memberOf.indexOf(currentUserGroup) > -1;
   });
 
   if (match.length > 1) {
