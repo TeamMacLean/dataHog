@@ -155,13 +155,17 @@ function isPartOfGroup(req, res, next) {
 
   var match = config.groups.filter(function (g) {
     var groupsGroupName = g.memberOf;
-    var found = false;
-    currentUserGroups.map(function (cug) {
-      if (cug.indexOf(groupsGroupName) > -1) {
-        found = true;
-      }
-    });
-    return found;
+
+    return currentUserGroups.indexOf(groupsGroupName);
+
+    //var found = false;
+    //currentUserGroups.map(function (cug) {
+    //  console.log(groupsGroupName, 'in', cug, cug.indexOf(groupsGroupName) > -1);
+    //  if (cug.indexOf(groupsGroupName) > -1) {
+    //    found = true;
+    //  }
+    //});
+    //return found;
   });
 
   if (match.length > 1) {
