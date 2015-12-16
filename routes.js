@@ -152,7 +152,7 @@ function isPartOfGroup(req, res, next) {
 
 
   var match = config.groups.filter(function (g) {
-    return g.ldapName === currentUserGroup;
+    return g.ldapName == currentUserGroup;
   });
 
   if (match.length > 1) {
