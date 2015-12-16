@@ -152,7 +152,7 @@ function isPartOfGroup(req, res, next) {
 
 
   var match = config.groups.filter(function (g) {
-    console.log(g.memberOf, currentUserGroup, g.memberOf == currentUserGroup);
+    console.log(currentUserGroup, 'IS', g.memberOf == currentUserGroup);
     return g.memberOf.indexOf(currentUserGroup) > -1;
   });
 
@@ -160,7 +160,7 @@ function isPartOfGroup(req, res, next) {
     return next('error, too many groups found. sorry');
   }
   if (match.length < 1) {
-    return next('you could not be found in the groups list, you belong to ' + currentUserGroup);
+    return next('you could not be found in the groups list');
   }
 
   Group.filter({name: match[0].name}).then(function (groups) {
