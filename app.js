@@ -61,6 +61,16 @@ app.use(function (req, res, next) {
   next(null, req, res);
 });
 
+app.use(function (err, req, res, next) {
+
+  if (err) {
+    console.error(err);
+    res.render('error', {error: err});
+  } else {
+    return next();
+  }
+});
+
 util.setupPassport();
 
 app.use(routes);
