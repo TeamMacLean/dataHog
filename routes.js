@@ -152,8 +152,8 @@ function isPartOfGroup(req, res, next) {
 
 
   var match = config.groups.filter(function (g) {
-    console.log(g.division, currentUserGroup, g.division == currentUserGroup);
-    return g.division == currentUserGroup;
+    //console.log(g.division, currentUserGroup, g.division == currentUserGroup);
+    return g.memberOf.indexOf(currentUserGroup) > -1;
   });
 
   if (match.length > 1) {
@@ -165,7 +165,7 @@ function isPartOfGroup(req, res, next) {
 
   Group.filter({name: match[0].name}).then(function (groups) {
     if (groups.length < 1) {
-      return next('group name ' + match[0].name + ' not found, please check that the config matches the group folder names');
+      return next('group name ' + match[0].name + ' not found, please check that the config matches the group names in the DB');
     } else {
       var group = groups[0];
       if (group.safeName == reqGroup) {
