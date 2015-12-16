@@ -152,7 +152,7 @@ function isPartOfGroup(req, res, next) {
 
 
   var match = config.groups.filter(function (g) {
-    //console.log(g.division, currentUserGroup, g.division == currentUserGroup);
+    console.log(g.memberOf, currentUserGroup, g.memberOf == currentUserGroup);
     return g.memberOf.indexOf(currentUserGroup) > -1;
   });
 
