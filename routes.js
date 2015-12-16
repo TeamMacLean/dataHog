@@ -143,7 +143,7 @@ function isPartOfGroup(req, res, next) {
   if (!req.user) {
     return next('not signed in');
   }
-  var currentUserGroup = req.user.group;
+  var currentUserGroup = req.user.memberOf;
   var reqGroup = req.params.group;
 
   if (!reqGroup) {
