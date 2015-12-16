@@ -61,18 +61,18 @@ app.use(function (req, res, next) {
   next(null, req, res);
 });
 
+util.setupPassport();
+
+app.use(routes);
+
 app.use(function (err, req, res, next) {
   if (err) {
     console.error(err);
-    return res.render('error', {error: err});
+    return res.status(500).render('error', {error: err});
   } else {
     return next();
   }
 });
-
-util.setupPassport();
-
-app.use(routes);
 
 module.exports = app;
 
