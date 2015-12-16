@@ -62,10 +62,9 @@ app.use(function (req, res, next) {
 });
 
 app.use(function (err, req, res, next) {
-
   if (err) {
     console.error(err);
-    res.render('error', {error: err});
+    return res.render('error', {error: err});
   } else {
     return next();
   }
