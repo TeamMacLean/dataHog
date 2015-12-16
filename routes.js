@@ -156,6 +156,8 @@ function isPartOfGroup(req, res, next) {
   var match = config.groups.filter(function (g) {
     var groupsGroupName = g.memberOf;
 
+
+    console.log(groupsGroupName, 'in', currentUserGroups, currentUserGroups.indexOf(groupsGroupName) > -1);
     return currentUserGroups.indexOf(groupsGroupName);
 
     //var found = false;
