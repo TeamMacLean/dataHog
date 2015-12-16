@@ -400,6 +400,10 @@ Runs.newPost = function (req, res) {
 
       function renderOK() {
         Run.get(savedRun.id).getJoin({sample: {project: {group: true}}, reads: true}).then(function (result) {
+
+
+          //TODO new submission
+
           var url = path.join('/', result.sample.project.group.safeName, result.sample.project.safeName, result.sample.safeName, result.safeName);
           return res.redirect(url);
         });

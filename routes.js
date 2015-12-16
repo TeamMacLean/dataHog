@@ -158,6 +158,9 @@ function isPartOfGroup(req, res, next) {
   if (match.length > 1) {
     return next('error, too many groups found. sorry');
   }
+  if (match.length < 1) {
+    return next('you could not be found in the groups list, you belong to ' + currentUserGroup);
+  }
 
   Group.filter({name: match[0].name}).then(function (groups) {
     if (groups.length != 1) {
