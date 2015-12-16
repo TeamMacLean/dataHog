@@ -152,8 +152,15 @@ function isPartOfGroup(req, res, next) {
 
 
   var match = config.groups.filter(function (g) {
-    console.log(g.memberOf, 'IS', g.memberOf.indexOf(currentUserGroup) > -1);
-    return g.memberOf.indexOf(currentUserGroup) > -1;
+
+    g.memberOf.map(function (gg) {
+      if (gg.indexOf(currentUserGroup) > -1) {
+        return true;
+      }
+    });
+
+    //console.log(g.memberOf, 'IS', g.memberOf.indexOf(currentUserGroup) > -1);
+    //return g.memberOf.indexOf(currentUserGroup) > -1;
   });
 
   if (match.length > 1) {
