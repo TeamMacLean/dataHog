@@ -151,11 +151,12 @@ function isPartOfGroup(req, res, next) {
   }
 
 
-  var match = config.groups.filter(function (g) {
+  //currentUserGroup is an array of all groups the user is a member of
 
-    console.log('------', g.memberOf, '------');
+  var match = config.groups.filter(function (g) {
+    console.log('------', currentUserGroup, '------');
     g.memberOf.map(function (gg) {
-      if (gg.indexOf(currentUserGroup) > -1) {
+      if (currentUserGroup.indexOf(gg) > -1) {
         return true;
       }
     });
