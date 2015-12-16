@@ -143,7 +143,7 @@ function isPartOfGroup(req, res, next) {
   if (!req.user) {
     return next('not signed in');
   }
-  var currentUserGroup = req.user.memberOf;
+  var currentUserGroups = req.user.memberOf;
   var reqGroup = req.params.group;
 
   if (!reqGroup) {
@@ -154,12 +154,20 @@ function isPartOfGroup(req, res, next) {
   //currentUserGroup is an array of all groups the user is a member of
 
   var match = config.groups.filter(function (g) {
-    currentUserGroup.map(function (gg) {
-      console.log(g, 'in', gg);
-      if (gg.indexOf(g) > -1) {
-        return true;
-      }
-    });
+
+    var groupsGroupName = g.memberOf;
+
+    if(currentUserGroups.indexOf(groupsGroupName)>-1){
+      return true;
+    }
+
+
+    //currentUserGroup.map(function (gg) {
+    //  console.log(g, 'in', gg);
+    //  if (gg.indexOf(g) > -1) {
+    //    return true;
+    //  }
+    //});
 
     //console.log(g.memberOf, 'IS', g.memberOf.indexOf(currentUserGroup) > -1);
     //return g.memberOf.indexOf(currentUserGroup) > -1;
