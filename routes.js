@@ -164,8 +164,8 @@ function isPartOfGroup(req, res, next) {
   }
 
   Group.filter({name: match[0].name}).then(function (groups) {
-    if (groups.length != 1) {
-      return next('error, groups.length != 1');
+    if (groups.length < 1) {
+      return next('group name ' + match[0].name + ' not found, please check that the config matches the group folder names');
     } else {
       var group = groups[0];
       if (group.safeName == reqGroup) {
