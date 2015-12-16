@@ -156,18 +156,14 @@ function isPartOfGroup(req, res, next) {
   var match = config.groups.filter(function (g) {
     var groupsGroupName = g.memberOf;
 
-
-    console.log(groupsGroupName, 'in', currentUserGroups, currentUserGroups.indexOf(groupsGroupName) > -1);
-    return currentUserGroups.indexOf(groupsGroupName);
-
-    //var found = false;
-    //currentUserGroups.map(function (cug) {
-    //  console.log(groupsGroupName, 'in', cug, cug.indexOf(groupsGroupName) > -1);
-    //  if (cug.indexOf(groupsGroupName) > -1) {
-    //    found = true;
-    //  }
-    //});
-    //return found;
+    var found = false;
+    currentUserGroups.map(function (cug) {
+      console.log(groupsGroupName, 'in', cug, cug.indexOf(groupsGroupName) > -1);
+      if (cug == groupsGroupName) {
+        found = true;
+      }
+    });
+    return found;
   });
 
   if (match.length > 1) {
