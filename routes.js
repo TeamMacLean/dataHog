@@ -157,9 +157,7 @@ function isPartOfGroup(req, res, next) {
     var groupsGroupName = g.memberOf;
     return currentUserGroups.map(function (cug) {
       console.log(groupsGroupName, 'in', cug, cug.indexOf(groupsGroupName) > -1);
-      if (cug.indexOf(groupsGroupName) > -1) {
-        return true;
-      }
+      return cug.indexOf(groupsGroupName) > -1;
     });
   });
 
