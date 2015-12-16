@@ -159,7 +159,7 @@ function isPartOfGroup(req, res, next) {
 
     currentUserGroups.map(function (cug) {
 
-      console.log(groupsGroupName, 'in', cug);
+      console.log(groupsGroupName, 'in', cug, cug.indexOf(groupsGroupName) > -1);
 
       if (cug.indexOf(groupsGroupName) > -1) {
         return true;
