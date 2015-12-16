@@ -155,8 +155,8 @@ function isPartOfGroup(req, res, next) {
 
   var match = config.groups.filter(function (g) {
     console.log('------', currentUserGroup, '------');
-    g.memberOf.map(function (gg) {
-      if (currentUserGroup.indexOf(gg) > -1) {
+    currentUserGroup.map(function (gg) {
+      if (gg.indexOf(g) > -1) {
         return true;
       }
     });
