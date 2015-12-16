@@ -154,8 +154,8 @@ function isPartOfGroup(req, res, next) {
   //currentUserGroup is an array of all groups the user is a member of
 
   var match = config.groups.filter(function (g) {
-    console.log('------', currentUserGroup, '------');
     currentUserGroup.map(function (gg) {
+      console.log(g, 'in', gg);
       if (gg.indexOf(g) > -1) {
         return true;
       }
