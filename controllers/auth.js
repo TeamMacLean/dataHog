@@ -28,34 +28,26 @@ Auth.signInPost = function (req, res, next) {
       console.error(err);
       return next(err);
     }
-
     if (info) {
       console.log(info);
     }
-
     if (!user) {
-
       var message = 'No such user';
       if (info && info.message) {
         message += ', ' + info.message;
       }
-
       return res.render('error', {error: message});
     }
-
     req.logIn(user, function (err) {
-
       if (err) {
         return next(err);
       }
-
       //take them to the page they wanted before signing in :)
       if (req.session.returnTo) {
         return res.redirect(req.session.returnTo);
       } else {
         return res.redirect('/groups');
       }
-
     });
   })(req, res, next);
 };
