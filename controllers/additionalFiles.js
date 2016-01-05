@@ -3,6 +3,7 @@
 var AdditionalFile = require('../models/additionalFile');
 var path = require('path');
 var AdditionalFiles = {};
+var config = require('../config.json');
 
 
 AdditionalFiles.download = function (req, res) {
@@ -10,7 +11,8 @@ AdditionalFiles.download = function (req, res) {
 
 
   AdditionalFile.get(fID).run().then(function (file) {
-    var absPath = path.resolve(file.path);
+    var insideReadPath = path.join(config, file.path);
+    var absPath = path.resolve(insideReadPath);
     return res.download(absPath, file.name);
   });
 
