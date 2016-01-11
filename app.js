@@ -5,11 +5,12 @@ var bodyParser = require('body-parser');
 var routes = require('./routes');
 var config = require('./config.json');
 var fs = require('fs');
-var init = require('./lib/init');
+//var init = require('./lib/init');
 var session = require('express-session');
 var passport = require('passport');
 var cookieParser = require('cookie-parser');
 var util = require('./lib/util');
+var crons = require('./lib/cron');
 
 
 if (!config.appName || !config.port || !config.dataDir || !config.tmpDir) {
@@ -73,6 +74,11 @@ app.use(function (err, req, res, next) {
     return next();
   }
 });
+
+
+//kick off all existing schedules jobs
+crons.loadFromDB();
+
 
 module.exports = app;
 

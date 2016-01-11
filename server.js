@@ -3,7 +3,6 @@
 var app = require('./app');
 var config = require('./config.json');
 
-
 /**
  * Start the server
  */
