@@ -72,10 +72,11 @@ Samples.newPost = function (req, res) {
               if (err) {
                 console.error(err);
               }
+              var url = path.join('/', project.group.safeName, project.safeName, result.safeName);
+              return res.redirect(url);
             });
 
-            var url = path.join('/', project.group.safeName, project.safeName, result.safeName);
-            return res.redirect(url);
+
           }
         });
       }).error(function (err) {

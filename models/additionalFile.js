@@ -3,6 +3,7 @@
 var thinky = require('../lib/thinky.js');
 var type = thinky.type;
 var config = require('../config.json');
+var pathLib = require('path');
 
 var util = require('../lib/util');
 
@@ -29,6 +30,10 @@ AdditionalFile.pre('save', function (next) {
 
   var file = this;
   var unsafeName = file.name;
+
+
+  var fullFilePath = pathLib.join(config.dataDir, file.path);
+
   if (!file.safeName) {
     AdditionalFile.filter({parentID: file.parentID}).run().then(function (result) {
 
@@ -37,7 +42,7 @@ AdditionalFile.pre('save', function (next) {
 
         if (!file.MD5) {
 
-          helper.md5Stream(file.path, function (md5) {
+          helper.md5Stream(fullFilePath, function (md5) {
             file.MD5 = md5;
             next();
           });

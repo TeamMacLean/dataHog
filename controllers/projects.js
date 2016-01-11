@@ -77,11 +77,11 @@ Projects.newPost = function (req, res) {
           if (err) {
             console.error(err);
           }
+          var url = path.join('/', group.safeName, project.safeName);
+          return res.redirect(url);
         });
 
-        var url = path.join('/', group.safeName, project.safeName);
 
-        return res.redirect(url);
       });
     }).error(function (err) {
       console.error(err);
