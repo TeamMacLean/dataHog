@@ -11,7 +11,7 @@ AdditionalFiles.download = function (req, res) {
 
 
   AdditionalFile.get(fID).run().then(function (file) {
-    var insideReadPath = path.join(config, file.path);
+    var insideReadPath = path.join(config.dataDir, file.path);
     var absPath = path.resolve(insideReadPath);
     return res.download(absPath, file.name);
   });
