@@ -16,7 +16,7 @@
 
     <p><%- read.hpcPath(); %></p>
 
-    <% if(read.fastQCLocation){ %>
+    <% if(read.fastQCLocation && read.areReports()){ %>
     <a href="/<%- read.run.sample.project.group.safeName %>/<%- read.run.sample.project.safeName %>/<%- read.run.sample.safeName %>/<%- read.run.safeName %>/<%- read.safeName %>/fastqc"
        class="button primary" target="_blank">
         <i class="fa fa-area-chart"></i> fqc report</a>

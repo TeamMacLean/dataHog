@@ -5,6 +5,9 @@ var type = thinky.type;
 var config = require('../config.json');
 var util = require('../lib/util');
 
+var fs = require('fs');
+var path = require('path');
+
 var Read = thinky.createModel('Read', {
   processed: type.boolean().required(),
   id: type.string(),
@@ -26,6 +29,11 @@ Read.define("hpcPath", function () {
   }
 });
 
+Read.define("areReports", function () {
+  var files = fs.readdirSync(path.join(config.dataDir,this.fastQCLocation));
+  return !!(files && files.length > 0);
+});
+
 Read.pre('save', function (next) {
   var read = this;
   var unsafeName = read.name;
@@ -39,6 +47,7 @@ Read.pre('save', function (next) {
           Run.get(read.runID).run().then(function (run) {
             var myFolder = read.processed ? 'processed' : 'raw';
             read.path = run.path + '/' + myFolder + '/' + read.fileName;
+            read.fastQCLocation = run.path + '/' + myFolder + '/' + '.fastqc';
             //read.fastQCLocation = run.path + '/' + myFolder + '/.fastqc'; //TODO check if exists
             next();
           }).error(function (err) {

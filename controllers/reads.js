@@ -70,9 +70,11 @@ Reads.fastQC = function (req, res) {
 
     fs.stat(htmlPath, function (err) {
       if (!err) {
-        res.sendFile(htmlPath);
+
+
+        return res.sendFile(htmlPath);
       } else {
-        res.render('error', {error: 'could not find fast qc report'});
+        return res.render('error', {error: 'could not find fast qc report'});
       }
     });
 

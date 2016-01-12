@@ -308,7 +308,7 @@ function addReadToRun(req, processed, savedRun, pathToNewRunFolder, cb) {
 
                   fastqc.run(newFullPath, fqcPath, function () {
                     console.log('created fastqc report');
-                    read.fastQCLocation = fqcPath;
+                    //read.fastQCLocation = fqcPath;
                     read.save().then(function (savedRead) {
                       previousID = read.id;
                       savedReads.push(savedRead);
