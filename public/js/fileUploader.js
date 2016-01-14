@@ -53,7 +53,8 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
             type: 'file',
             id: fileID + ind,
             name: fileID + ind,
-            accept: self.props.acceptedTypes
+            accept: self.props.acceptedTypes,
+            required: "required"
           }),
           React.createElement('br'),
           React.createElement('br'),
