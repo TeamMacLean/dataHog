@@ -45,7 +45,7 @@ app.use(multer({
 }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-varptions = {
+var options = {
   servers: [
     {host: 'localhost', port: 28015}
   ],
