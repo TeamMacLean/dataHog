@@ -47,7 +47,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 var options = {
   servers: [
-    {host: 'localhost', port: 28015}
+    {host: 'localhost', port: 28015, db: 'hog'}
   ]
 };
 
