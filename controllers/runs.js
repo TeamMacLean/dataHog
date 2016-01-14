@@ -219,118 +219,125 @@ function addReadToRun(req, processed, savedRun, pathToNewRunFolder, cb) {
         var happyFiles = [];
         var sadFiles = [];
 
-        filesAndSums.map(function (fsum) {
-          var buf = fs.readFileSync(fsum.file.path);
-          var sum = md5(buf);
-          if (sum === fsum.md5) {
-            happyFiles.push(fsum);
-          } else {
-            sadFiles.push(fsum);
-          }
-        });
-        if (sadFiles.length > 0) {
-          console.warn('some bad md5 sums');
-          return cb(new Error('md5 sums do not match'));
-        }
+        //TODO just changed this to process one md5 at a time
+        async.eachSeries(filesAndSums, function iterator(fsum, hhnext) {
 
-        if (happyFiles.length < 1) {
-          return cb(new Error('no read files attached'));
-        }
-
-        var usedFileNames = [];
-        var previousID = '';
-        async.eachSeries(happyFiles, function iterator(fileAndMD5, nextHappyFile) {
-
-          //async.each(happyFiles, function iterator(fileAndMD5, nextHappyFile) {
-
-          var file = fileAndMD5.file;
-
-          var fileName = file.originalname;
-          var testName = file.originalname;
-
-          var exts = '';
-
-          if (testName.indexOf('.') > -1) {
-
-            var preSplit = testName;
-
-            testName = preSplit.substr(0, preSplit.indexOf('.'));
-            exts = preSplit.substr(preSplit.indexOf('.'));
-          }
-
-          if (usedFileNames.indexOf(testName) > -1) {
-            var i = 0;
-            while (usedFileNames.indexOf(testName) > -1) {
-              i++;
-              testName = testName + i;
+          //TODO after this async process
+          util.md5Stream(fsum.file.path, function (sum) {
+            if (sum === fsum.md5) {
+              happyFiles.push(fsum);
+            } else {
+              sadFiles.push(fsum);
             }
-            fileName = testName + exts;
+            hhnext();
+          });
+
+
+        }, function done(err) {
+          //cb(err); //IMPORTANT after all reads, run and fastaqc created!
+
+
+          if (sadFiles.length > 0) {
+            console.warn('some bad md5 sums');
+            return cb(new Error('md5 sums do not match'));
           }
-          usedFileNames.push(testName);
-          fileAndMD5.file.originalname = fileName;
 
-          ensureCompressed(fileAndMD5, function (err, md5AndPath) {
+          if (happyFiles.length < 1) {
+            return cb(new Error('no read files attached'));
+          }
 
-            var newFullPath = path.join(pathToNewRunFolder, md5AndPath.originalName);
+          var usedFileNames = [];
+          var previousID = '';
+          async.eachSeries(happyFiles, function iterator(fileAndMD5, nextHappyFile) {
 
-            util.safeMove(md5AndPath.path, newFullPath, function (err, newPath) {
-              if (newPath) { //it may have found a new name!
-                newFullPath = newPath;
+            var file = fileAndMD5.file;
+
+            var fileName = file.originalname;
+            var testName = file.originalname;
+
+            var exts = '';
+
+            if (testName.indexOf('.') > -1) {
+
+              var preSplit = testName;
+
+              testName = preSplit.substr(0, preSplit.indexOf('.'));
+              exts = preSplit.substr(preSplit.indexOf('.'));
+            }
+
+            if (usedFileNames.indexOf(testName) > -1) {
+              var i = 0;
+              while (usedFileNames.indexOf(testName) > -1) {
+                i++;
+                testName = testName + i;
               }
-              var fqcPath = path.join(pathToNewRunFolder, '.fastqc');
+              fileName = testName + exts;
+            }
+            usedFileNames.push(testName);
+            fileAndMD5.file.originalname = fileName;
 
-              var siblingID = null;
-              var split = fileAndMD5.file.fieldname.split('-');
-              if (split.length === 3) { //its paired/mated
+            ensureCompressed(fileAndMD5, function (err, md5AndPath) {
 
-                var second = split[2] === '2';
-                if (second) {
-                  siblingID = previousID;
+              var newFullPath = path.join(pathToNewRunFolder, md5AndPath.originalName);
+
+              util.safeMove(md5AndPath.path, newFullPath, function (err, newPath) {
+                if (newPath) { //it may have found a new name!
+                  newFullPath = newPath;
                 }
-              }
+                var fqcPath = path.join(pathToNewRunFolder, '.fastqc');
 
-              fs.ensureDir(fqcPath, function (err) { // create fastqc folder
-                if (err) {
-                  console.error(err);
-                  return cb(err);
-                } else {
+                var siblingID = null;
+                var split = fileAndMD5.file.fieldname.split('-');
+                if (split.length === 3) { //its paired/mated
 
-                  var fileName = path.basename(newPath);
-                  var read = new Read({
-                    name: md5AndPath.originalName,
-                    runID: savedRun.id,
-                    MD5: md5AndPath.md5,
-                    processed: processed,
-                    siblingID: siblingID,
-                    fileName: fileName
-                  });
+                  var second = split[2] === '2';
+                  if (second) {
+                    siblingID = previousID;
+                  }
+                }
 
+                fs.ensureDir(fqcPath, function (err) { // create fastqc folder
+                  if (err) {
+                    console.error(err);
+                    return cb(err);
+                  } else {
 
-                  fastqc.run(newFullPath, fqcPath, function () {
-                    console.log('created fastqc report');
-                    //read.fastQCLocation = fqcPath;
-                    read.save().then(function (savedRead) {
-                      previousID = read.id;
-                      savedReads.push(savedRead);
-                      return nextHappyFile(); //IMPORTANT!!
-
-                    }).error(function (err) {
-                      if (err) {
-                        return cb(err);
-                      }
+                    var fileName = path.basename(newPath);
+                    var read = new Read({
+                      name: md5AndPath.originalName,
+                      runID: savedRun.id,
+                      MD5: md5AndPath.md5,
+                      processed: processed,
+                      siblingID: siblingID,
+                      fileName: fileName
                     });
-                  });
-                }
+
+
+                    fastqc.run(newFullPath, fqcPath, function () {
+                      console.log('created fastqc report');
+                      //read.fastQCLocation = fqcPath;
+                      read.save().then(function (savedRead) {
+                        previousID = read.id;
+                        savedReads.push(savedRead);
+                        return nextHappyFile(); //IMPORTANT!!
+
+                      }).error(function (err) {
+                        if (err) {
+                          return cb(err);
+                        }
+                      });
+                    });
+                  }
+                });
               });
             });
+          }, function done(err) {
+            cb(err); //IMPORTANT after all reads, run and fastaqc created!
           });
-        }, function done(err) {
-          cb(err); //IMPORTANT after all reads, run and fastaqc created!
         });
       });
     }
   });
-
 }
 
 

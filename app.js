@@ -44,7 +44,7 @@ app.use(multer({
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(session({
-  secret: util.genSecret(),
+  secret: config.secret,
   resave: false,
   saveUninitialized: false
 }));

@@ -1,6 +1,7 @@
 {
   "appName": "DataHog",
   "port": "1337",
+  "secret":"cats",
   "dataDir": "./reads",
   "hpcRoot": "/my/data/folder",
   "tmpDir": "./uploads/",

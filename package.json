@@ -20,7 +20,6 @@
     "is-bzip2": "^1.0.0",
     "is-gzip": "^1.0.0",
     "js2xmlparser": "^1.0.0",
-    "md5": "^2.0.0",
     "morgan": "~1.5.1",
     "multer": "^0.1.8",
     "node-schedule": "^0.6.0",
