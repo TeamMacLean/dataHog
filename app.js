@@ -12,7 +12,7 @@ var cookieParser = require('cookie-parser');
 var util = require('./lib/util');
 var crons = require('./lib/cron');
 
-var rethinkSession = require('session-rethinkdb');
+var rethinkSession = require('session-rethinkdb')(session);
 
 
 if (!config.appName || !config.port || !config.dataDir || !config.tmpDir) {
@@ -48,9 +48,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 var options = {
   servers: [
     {host: 'localhost', port: 28015}
-  ],
-  clearInterval: 5000, // optional, default is 60000 (60 seconds). Time between clearing expired sessions.
-  table: 'session' // optional, default is 'session'
+  ]
 };
 
 var store = new rethinkSession(options);
