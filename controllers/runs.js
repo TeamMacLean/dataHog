@@ -6,7 +6,6 @@ var Read = require('../models/read.js');
 var fs = require('fs-extra');
 var path = require('path');
 var fastqc = require('../lib/fastqc');
-var md5 = require('md5');
 var zlib = require('zlib');
 var isGzip = require('is-gzip');
 var isBzip2 = require('is-bzip2');
