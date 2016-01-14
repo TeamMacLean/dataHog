@@ -12,6 +12,8 @@ var cookieParser = require('cookie-parser');
 var util = require('./lib/util');
 var crons = require('./lib/cron');
 
+var rethinkSession = require('session-rethinkdb');
+
 
 if (!config.appName || !config.port || !config.dataDir || !config.tmpDir) {
   console.error('please fill out config.json');
@@ -43,10 +45,21 @@ app.use(multer({
 }));
 app.use(express.static(path.join(__dirname, 'public')));
 
+varptions = {
+  servers: [
+    {host: 'localhost', port: 28015}
+  ],
+  clearInterval: 5000, // optional, default is 60000 (60 seconds). Time between clearing expired sessions.
+  table: 'session' // optional, default is 'session'
+};
+
+var store = new rethinkSession(options);
+
 app.use(session({
   secret: config.secret,
   resave: false,
-  saveUninitialized: false
+  saveUninitialized: false,
+  store: store
 }));
 
 app.use(passport.initialize());
