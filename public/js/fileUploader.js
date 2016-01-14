@@ -40,7 +40,7 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
           md5Input = React.createElement('div', {},
             React.createElement('label', {}, 'md5'),
             React.createElement('span', {}, 'The digital "fingerprint" of your file. Should be in the documents that you got from your sequencing provider.'),
-            React.createElement('input', {type: 'text', id: MD5ID + ind, name: MD5ID + ind}),
+            React.createElement('input', {type: 'text', id: MD5ID + ind, name: MD5ID + ind, required: "required"}),
             React.createElement('br'),
             React.createElement('br')
           );
