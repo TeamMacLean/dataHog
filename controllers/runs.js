@@ -184,7 +184,7 @@ function processAllFiles(req, cb) {
  * @param req {request}
  * @param processed {boolean}
  * @param savedRun {run}
- * @param pathToNewRunFolder {string==}
+ * @param pathToNewRunFolder
  * @param cb {function}
  */
 function addReadToRun(req, processed, savedRun, pathToNewRunFolder, cb) {
