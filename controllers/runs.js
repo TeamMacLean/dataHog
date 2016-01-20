@@ -396,6 +396,12 @@ Runs.newPost = function (req, res) {
 
       if (submissionToGalaxy) {
 
+
+        var project = savedRun.sample.project;
+
+        var p1 = project.responsiblePerson;
+        var p2 = project.secondaryContact;
+
         var hpcPath = path.join(config.hpcRoot, savedRun.path);
         var siteURL = req.protocol + '://' + req.headers.host + savedRun.path;
 

@@ -105,7 +105,7 @@ Samples.show = function (req, res) {
     additionalFiles: true
   }).filter({project: {safeName: projectSN, group: {safeName: groupSN}}}).run().then(function (results) {
 
-      if (results.length > 1) {
+      if (results.length < 1) {
         return res.render('error', {error: 'could not find sample ' + sampleSafeName});
 
       }
