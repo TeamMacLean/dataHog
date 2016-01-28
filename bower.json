@@ -17,6 +17,8 @@
     "taxlookup": "*",
     "terrier": "*",
     "react": "~0.14.0",
-    "jquery": "~2.1.4"
+    "jquery": "~2.1.4",
+    "socket.io-client": "~1.4.4",
+    "jquery-validation": "~1.14.0"
   }
 }

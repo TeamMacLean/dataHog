@@ -1,5 +1,5 @@
 "use strict";
-
+var error = require('../lib/error');
 var Project = require('../models/project.js');
 var Group = require('../models/group');
 var fs = require('fs-extra');
@@ -40,7 +40,7 @@ Projects.newPost = function (req, res) {
   Group.filter({safeName: groupSafeName}).run().then(function (groups) {
 
     if (!groups) {
-      return res.render('error', {error: 'group ' + groupSafeName + '  not found'});
+      return error('group ' + groupSafeName + '  not found', req, res);
     }
 
     var group = groups[0];
@@ -62,7 +62,7 @@ Projects.newPost = function (req, res) {
       fs.ensureDir(joinedPath, function (err) {
         if (err) {
           console.error(err);
-          return res.render('error', {error: err});
+          return error(err, req, res);
         }
 
         var additionalFiles = [];
@@ -108,7 +108,7 @@ Projects.show = function (req, res, next) {
   }).filter({group: {safeName: groupSN}}).run().then(function (projects) {
 
     if (projects.length < 1) {
-      return res.render('error', {error: 'could not find project ' + projectSN});
+      return error('could not find project ' + projectSN, req, res);
       //return next();
     }
 
@@ -117,7 +117,7 @@ Projects.show = function (req, res, next) {
     return res.render('projects/show', {project: project});
     //});
   }).error(function () {
-    return res.render('error', {error: 'could not find project'});
+    return error('could not find project ' + projectSN, req, res);
   });
 };
 

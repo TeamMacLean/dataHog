@@ -17,6 +17,7 @@ var config = require('./config.json');
 //get index
 router.route('/').get(Auth.index);
 
+
 router.route('/signin')
   .get(Auth.signIn)
   .post(Auth.signInPost);
@@ -121,6 +122,7 @@ router.route('/:group/:project/:sample/:run/:read/download')
   .all(isPartOfGroup)
   .get(Reads.download);
 
+
 //404 page
 router.get('*', Errors.show);
 
@@ -172,12 +174,12 @@ function isPartOfGroup(req, res, next) {
     return next('you could not be found in the groups list');
   }
 
-  Group.filter({name: match[0].name}).then(function (groups) {
+  Group.filter({name: match[0].name.toLowerCase()}).then(function (groups) {
     if (groups.length < 1) {
       return next('group name ' + match[0].name + ' not found, please check that the config matches the group names in the DB');
     } else {
       var group = groups[0];
-      if (group.safeName == reqGroup) {
+      if (group.safeName.toLowerCase() == reqGroup.toLowerCase()) {
         return next();
       } else {
         return next('you do not have permission to view this group');

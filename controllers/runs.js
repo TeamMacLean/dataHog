@@ -362,6 +362,8 @@ Runs.newPost = function (req, res) {
   var librarySelection = req.body.librarySelection;
   var libraryStrategy = req.body.libraryStrategy;
 
+  console.log('RECEIVED POST!');
+
   console.log(req.files);
 
   Sample.filter({safeName: sampleSN}).getJoin({project: {group: true}}).filter({

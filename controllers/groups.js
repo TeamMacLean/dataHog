@@ -1,5 +1,6 @@
 "use strict";
 
+var error = require('../lib/error');
 var Group = require('../models/group');
 
 var Groups = {};
@@ -31,7 +32,7 @@ Groups.show = function (req, res, next) {
   Group.filter({safeName: requestedGroup}).getJoin({projects: true}).then(function (groups) {
 
     if (groups.length < 1) {
-      return res.render('error', {error: 'could not find group ' + requestedGroup});
+      return error('could not find group ' + requestedGroup, req, res);
     }
 
     var group = groups[0];

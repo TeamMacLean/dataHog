@@ -3,6 +3,11 @@ html {
     min-height: 100%;
 }
 
+button:disabled, input[type="submit"]:disabled {
+    background-color: grey;
+    color: white;
+}
+
 body {
     -webkit-font-smoothing: antialiased;
     height: auto;
@@ -214,4 +219,30 @@ button.thin, input.thin {
     height: 20px;
     line-height: 18px;
     padding: 0 6px;
+}
+
+/*CSS PROGRESS BAR*/
+
+.meter {
+    /*height: 20px; !* Can be anything *!*/
+    position: relative;
+    -moz-border-radius: 25px;
+    -webkit-border-radius: 25px;
+    border-radius: 25px;
+    padding: 4px;
+    border: 1px solid #d1d1d1;
+}
+
+.meter > span {
+    text-align: center;
+    line-height: 1.4rem;
+    font-size: 1.2rem;
+    height: 23px;
+    width: 0;
+    -moz-border-radius: 25px;
+    -webkit-border-radius: 25px;
+    border-radius: 25px;
+    background-color: #a0d468;
+    position: relative;
+    overflow: hidden;
 }

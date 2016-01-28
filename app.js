@@ -1,17 +1,16 @@
-var express = require('express');
 var path = require('path');
 var multer = require('multer');
 var bodyParser = require('body-parser');
 var routes = require('./routes');
 var config = require('./config.json');
 var fs = require('fs');
-//var init = require('./lib/init');
+var init = require('./lib/init');
 var session = require('express-session');
 var passport = require('passport');
 var cookieParser = require('cookie-parser');
 var util = require('./lib/util');
 var crons = require('./lib/cron');
-
+var socketUploader = require('./lib/socketUploader');
 var rethinkSession = require('session-rethinkdb')(session);
 
 
@@ -20,9 +19,6 @@ if (!config.appName || !config.port || !config.dataDir || !config.tmpDir) {
   process.exit(1);
 }
 
-//init.reloadAllGroups();
-//init.ensureBaseFolders();
-//init.checkForBadFolders();
 
 if (!fs.existsSync(config.dataDir)) {
   console.error('dataDir', config.dataDir, 'does not exist');
@@ -33,8 +29,16 @@ if (!fs.existsSync(config.tmpDir)) {
   console.error('tmpDir', config.tmpDir, 'does not exist');
 }
 
+
+var express = require('express');
 var app = express();
+var server = require('http').createServer(app);
+var io = require('socket.io')(server);
+
+
 app.locals.title = config.appName;
+app.use(express.static(__dirname + '/public'));
+
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.use(bodyParser.json());
@@ -43,7 +47,7 @@ app.use(cookieParser());
 app.use(multer({
   dest: config.tmpDir
 }));
-app.use(express.static(path.join(__dirname, 'public')));
+
 
 var options = {
   servers: [
@@ -75,6 +79,7 @@ app.use(function (req, res, next) {
 
 util.setupPassport();
 
+
 app.use(routes);
 
 app.use(function (err, req, res, next) {
@@ -86,11 +91,13 @@ app.use(function (err, req, res, next) {
   }
 });
 
+socketUploader(io);
+
 
 //kick off all existing schedules jobs
 crons.loadFromDB();
 
 
-module.exports = app;
+module.exports = server;
 
 

@@ -58,7 +58,17 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
           }),
           React.createElement('br'),
           React.createElement('br'),
-          md5Input);
+          md5Input,
+          React.createElement(
+            'div',
+            {className: 'meter hidden'},
+            React.createElement(
+              'span',
+              null,
+              '100%'
+            )
+          )
+        )
       }
 
       var subs = [];
@@ -74,13 +84,22 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
 
       return React.createElement('div', {className: 'file-group'},
         subs,
+        //React.createElement(
+        //  'div',
+        //  {className: 'meter'},
+        //  React.createElement(
+        //    'span',
+        //    null
+        //  )
+        //),
         React.createElement('input', {
           type: 'button',
           value: 'remove',
           className: 'error thin',
           onClick: self.props.removeInput
         })
-      );
+      )
+        ;
     }
   });
 
