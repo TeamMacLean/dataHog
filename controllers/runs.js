@@ -152,30 +152,72 @@ function processAllFiles(req, cb) {
   var filesAndSums = [];
   var additionalFiles = [];
 
-  for (var p in req.files) {
+  var bodyArray = [];
 
-    if (req.files.hasOwnProperty(p)) {
-      if (p.indexOf('file') > -1) {
+  Object.keys(req.body).forEach(function (key) {
+    //console.log(key, req.body[key]);
+    var val = req.body[key];
+    //bodyArray.push()
+    //logic();
 
-        var file = req.files[p];
+    if (key.indexOf('file') > -1) {
 
-        var split = p.split('-');
-        if (split.length === 3) {
-          console.log('its paired');
-        } else {
-          console.log('its not paired');
-        }
 
-        var num = p.substring(p.indexOf('-') + 1);
-
-        var md5Lookup = 'md5-' + num;
-
-        filesAndSums.push({file: file, md5: req.body[md5Lookup]});
-      } else if (p.indexOf('additional') > -1) {
-        additionalFiles.push(req.files[p]);
+      var split = val.split('-');
+      if (split.length === 3) {
+        console.log('its paired');
+      } else {
+        console.log('its not paired');
       }
+
+      var num = p.substring(key.indexOf('-') + 1);
+
+      var md5Lookup = 'md5-' + num;
+
+      console.log('md5Lookup', md5Lookup);
+
+      //filesAndSums.push({file: file, md5: req.body[md5Lookup]});
+    } else if (key.indexOf('additional') > -1) {
+      //additionalFiles.push(req.files[p]);
     }
-  }
+  });
+
+  //var fileUUIDs = req.body.filter(function (i) {
+  //  return i.indexOf('file' > -1)
+  //});
+  //
+  //fileUUIDs.map(function (f) {
+  //
+  //  var filePath = path.join('/tmp', f);
+  //
+  //  console.log('path', f, filePath)
+  //
+  //});
+
+  //for (var p in req.files) {
+
+  //if (req.files.hasOwnProperty(p)) {
+  //  if (p.indexOf('file') > -1) {
+  //
+  //    var file = req.files[p];
+  //
+  //    var split = p.split('-');
+  //    if (split.length === 3) {
+  //      console.log('its paired');
+  //    } else {
+  //      console.log('its not paired');
+  //    }
+  //
+  //    var num = p.substring(p.indexOf('-') + 1);
+  //
+  //    var md5Lookup = 'md5-' + num;
+  //
+  //    filesAndSums.push({file: file, md5: req.body[md5Lookup]});
+  //  } else if (p.indexOf('additional') > -1) {
+  //    additionalFiles.push(req.files[p]);
+  //  }
+  //}
+  //}
   cb(filesAndSums, additionalFiles);
 }
 
@@ -362,9 +404,8 @@ Runs.newPost = function (req, res) {
   var librarySelection = req.body.librarySelection;
   var libraryStrategy = req.body.libraryStrategy;
 
-  console.log('RECEIVED POST!');
+  console.log('RECEIVED POST!', req.body);
 
-  console.log(req.files);
 
   Sample.filter({safeName: sampleSN}).getJoin({project: {group: true}}).filter({
     project: {
@@ -401,8 +442,8 @@ Runs.newPost = function (req, res) {
 
         var project = savedRun.sample.project;
 
-        var p1 = project.responsiblePerson;
-        var p2 = project.secondaryContact;
+        //var p1 = project.responsiblePerson;
+        //var p2 = project.secondaryContact;
 
         var hpcPath = path.join(config.hpcRoot, savedRun.path);
         var siteURL = req.protocol + '://' + req.headers.host + savedRun.path;
@@ -410,17 +451,6 @@ Runs.newPost = function (req, res) {
         var subject = "Request for data to be added to Galaxy";
         var text = "Please add " + hpcPath + " to Galaxy.\n\n" + siteURL + "\n\nThanks :D\nDataHog";
         email.send(subject, text);
-      }
-
-      function renderOK() {
-        Run.get(savedRun.id).getJoin({sample: {project: {group: true}}, reads: true}).then(function (result) {
-
-
-          //TODO new submission
-
-          var url = path.join('/', result.sample.project.group.safeName, result.sample.project.safeName, result.sample.safeName, result.safeName);
-          return res.redirect(url);
-        });
       }
 
       var processed = false;
@@ -437,6 +467,17 @@ Runs.newPost = function (req, res) {
         }
 
       });
+
+      function renderOK() {
+        Run.get(savedRun.id).getJoin({sample: {project: {group: true}}, reads: true}).then(function (result) {
+
+
+          //TODO new submission
+
+          var url = path.join('/', result.sample.project.group.safeName, result.sample.project.safeName, result.sample.safeName, result.safeName);
+          return res.redirect(url);
+        });
+      }
 
     });
   });

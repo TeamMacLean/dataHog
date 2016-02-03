@@ -3,11 +3,6 @@ html {
     min-height: 100%;
 }
 
-button:disabled, input[type="submit"]:disabled {
-    background-color: grey;
-    color: white;
-}
-
 body {
     -webkit-font-smoothing: antialiased;
     height: auto;
@@ -245,4 +240,15 @@ button.thin, input.thin {
     background-color: #a0d468;
     position: relative;
     overflow: hidden;
+}
+
+input[type=submit][disabled=disabled],
+button[disabled=disabled],
+input[type=submit]:disabled,
+button:disabled {
+    /*background-color: grey !important;*/
+    /*border-color: darkgray !important;*/
+    /*color: white !important;*/
+    opacity: 0.65 !important;
+    cursor: not-allowed !important;
 }

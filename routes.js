@@ -167,9 +167,9 @@ function isPartOfGroup(req, res, next) {
     return found;
   });
 
-  if (match.length > 1) {
-    return next('error, too many groups found. sorry');
-  }
+  //if (match.length > 1) {
+  //  return next('error, too many groups found. sorry');
+  //}
   if (match.length < 1) {
     return next('you could not be found in the groups list');
   }
