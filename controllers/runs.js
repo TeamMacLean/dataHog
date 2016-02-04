@@ -152,17 +152,11 @@ function processAllFiles(req, cb) {
   var filesAndSums = [];
   var additionalFiles = [];
 
-  var bodyArray = [];
 
   Object.keys(req.body).forEach(function (key) {
-    //console.log(key, req.body[key]);
     var val = req.body[key];
-    //bodyArray.push()
-    //logic();
 
     if (key.indexOf('file') > -1) {
-
-
       var split = val.split('-');
       if (split.length === 3) {
         console.log('its paired');
@@ -175,6 +169,8 @@ function processAllFiles(req, cb) {
       var md5Lookup = 'md5-' + num;
 
       console.log('md5Lookup', md5Lookup);
+
+      //TODO find the file in the file system (under /tmp/*UUID*)
 
       //filesAndSums.push({file: file, md5: req.body[md5Lookup]});
     } else if (key.indexOf('additional') > -1) {
