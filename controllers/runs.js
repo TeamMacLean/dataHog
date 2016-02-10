@@ -1,8 +1,9 @@
 "use strict";
 
-var Sample = require('../models/sample.js');
-var Run = require('../models/run.js');
-var Read = require('../models/read.js');
+var Sample = require('../models/sample');
+var Run = require('../models/run');
+var Read = require('../models/read');
+var Upload = require('../models/upload');
 var fs = require('fs-extra');
 var path = require('path');
 var fastqc = require('../lib/fastqc');
@@ -16,6 +17,7 @@ var util = require('../lib/util');
 var thinky = require('../lib/thinky');
 var async = require('async');
 var email = require('../lib/email');
+
 
 var Runs = {};
 
@@ -113,15 +115,15 @@ function compressFile(filename, callback) {
  */
 function ensureCompressed(fileAndMD5, cb) {
 
-  var file = fileAndMD5.file;
+  //var file = fileAndMD5.file;
   var md5er = fileAndMD5.md5;
 
-  var fileBuff = read(file.path);
+  var fileBuff = read(fileAndMD5.path);
 
   var compressed = isBzip2(fileBuff) || isGzip(fileBuff);
-  var fileExtention = path.extname(file.originalname);
+  var fileExtention = path.extname(fileAndMD5.name);
 
-  var originalName = file.originalname;
+  var name = fileAndMD5.name;
 
   if (!compressed && ['.fq', '.fastq'].indexOf(fileExtention) < 0) {
     var err = new Error('not compressed and not a fastq/fq file extention');
@@ -129,15 +131,15 @@ function ensureCompressed(fileAndMD5, cb) {
     return cb(err);
 
   } else if (!compressed) { //not compressed
-    compressFile(file.path, function (compressedPath) {
+    compressFile(fileAndMD5.path, function (compressedPath) {
 
-      util.md5Stream(file.path, function (md5) {
+      util.md5Stream(fileAndMD5.path, function (md5) {
 
-        return cb(null, {md5: md5, path: path.resolve(compressedPath), originalName: originalName + '.gz'});
+        return cb(null, {md5: md5, path: path.resolve(compressedPath), name: name + '.gz'});
       });
     });
   } else { //is compressed already
-    return cb(null, {md5: md5er, path: path.resolve(file.path), originalName: originalName});
+    return cb(null, {md5: md5er, path: path.resolve(fileAndMD5.path), name: name});
   }
 }
 
@@ -151,10 +153,15 @@ function processAllFiles(req, cb) {
 
   var filesAndSums = [];
   var additionalFiles = [];
+  //var __filesAndSums = [];
+  //var __additionalFiles = [];
+  var absTmpPath = path.resolve(config.tmpDir);
 
 
-  Object.keys(req.body).forEach(function (key) {
+  async.eachSeries(Object.keys(req.body), function iterator(key, theNextOne) {
+
     var val = req.body[key];
+    var filePath = path.join(absTmpPath, val);
 
     if (key.indexOf('file') > -1) {
       var split = val.split('-');
@@ -164,57 +171,48 @@ function processAllFiles(req, cb) {
         console.log('its not paired');
       }
 
-      var num = p.substring(key.indexOf('-') + 1);
+      var num = key.substring(key.indexOf('-') + 1);
 
       var md5Lookup = 'md5-' + num;
 
-      console.log('md5Lookup', md5Lookup);
 
-      //TODO find the file in the file system (under /tmp/*UUID*)
+      Upload.filter({uuid: val}).run().then(function (foundFS) {
+        var f = foundFS[0];
+        filesAndSums.push({
+          name: f.name,
+          uuid: f.uuid,
+          path: filePath,
+          md5: req.body[md5Lookup],
+          fieldname: key
+        });
+        theNextOne();
+      })
 
-      //filesAndSums.push({file: file, md5: req.body[md5Lookup]});
     } else if (key.indexOf('additional') > -1) {
-      //additionalFiles.push(req.files[p]);
+      Upload.filter({uuid: val}).run().then(function (foundAF) {
+        var a = foundAF[0];
+        additionalFiles.push({
+          name: a.name,
+          uuid: a.uuid,
+          path: filePath,
+          fieldname: key
+        });
+        //console.log('additional', additionalFiles);
+        theNextOne();
+      })
+    } else {
+      theNextOne();
     }
+  }, function done(err) {
+
+    if (err) {
+      console.error(err);
+    }
+
+    //console.log('calling back', filesAndSums, additionalFiles);
+
+    cb(filesAndSums, additionalFiles);
   });
-
-  //var fileUUIDs = req.body.filter(function (i) {
-  //  return i.indexOf('file' > -1)
-  //});
-  //
-  //fileUUIDs.map(function (f) {
-  //
-  //  var filePath = path.join('/tmp', f);
-  //
-  //  console.log('path', f, filePath)
-  //
-  //});
-
-  //for (var p in req.files) {
-
-  //if (req.files.hasOwnProperty(p)) {
-  //  if (p.indexOf('file') > -1) {
-  //
-  //    var file = req.files[p];
-  //
-  //    var split = p.split('-');
-  //    if (split.length === 3) {
-  //      console.log('its paired');
-  //    } else {
-  //      console.log('its not paired');
-  //    }
-  //
-  //    var num = p.substring(p.indexOf('-') + 1);
-  //
-  //    var md5Lookup = 'md5-' + num;
-  //
-  //    filesAndSums.push({file: file, md5: req.body[md5Lookup]});
-  //  } else if (p.indexOf('additional') > -1) {
-  //    additionalFiles.push(req.files[p]);
-  //  }
-  //}
-  //}
-  cb(filesAndSums, additionalFiles);
 }
 
 /**
@@ -260,7 +258,7 @@ function addReadToRun(req, processed, savedRun, pathToNewRunFolder, cb) {
         async.eachSeries(filesAndSums, function iterator(fsum, hhnext) {
 
           //TODO after this async process
-          util.md5Stream(fsum.file.path, function (sum) {
+          util.md5Stream(fsum.path, function (sum) {
             if (sum === fsum.md5) {
               happyFiles.push(fsum);
             } else {
@@ -287,10 +285,10 @@ function addReadToRun(req, processed, savedRun, pathToNewRunFolder, cb) {
           var previousID = '';
           async.eachSeries(happyFiles, function iterator(fileAndMD5, nextHappyFile) {
 
-            var file = fileAndMD5.file;
+            //var file = fileAndMD5.path;
 
-            var fileName = file.originalname;
-            var testName = file.originalname;
+            var fileName = fileAndMD5.name;
+            var testName = fileAndMD5.name;
 
             var exts = '';
 
@@ -311,11 +309,13 @@ function addReadToRun(req, processed, savedRun, pathToNewRunFolder, cb) {
               fileName = testName + exts;
             }
             usedFileNames.push(testName);
-            fileAndMD5.file.originalname = fileName;
+            fileAndMD5.name = fileName;
 
             ensureCompressed(fileAndMD5, function (err, md5AndPath) {
 
-              var newFullPath = path.join(pathToNewRunFolder, md5AndPath.originalName);
+              console.log('PRE ERROR', pathToNewRunFolder, md5AndPath, md5AndPath.name);
+
+              var newFullPath = path.join(pathToNewRunFolder, md5AndPath.name);
 
               util.safeMove(md5AndPath.path, newFullPath, function (err, newPath) {
                 if (newPath) { //it may have found a new name!
@@ -324,7 +324,7 @@ function addReadToRun(req, processed, savedRun, pathToNewRunFolder, cb) {
                 var fqcPath = path.join(pathToNewRunFolder, '.fastqc');
 
                 var siblingID = null;
-                var split = fileAndMD5.file.fieldname.split('-');
+                var split = fileAndMD5.fieldname.split('-');
                 if (split.length === 3) { //its paired/mated
 
                   var second = split[2] === '2';
@@ -341,7 +341,7 @@ function addReadToRun(req, processed, savedRun, pathToNewRunFolder, cb) {
 
                     var fileName = path.basename(newPath);
                     var read = new Read({
-                      name: md5AndPath.originalName,
+                      name: md5AndPath.name,
                       runID: savedRun.id,
                       MD5: md5AndPath.md5,
                       processed: processed,
@@ -384,6 +384,7 @@ function addReadToRun(req, processed, savedRun, pathToNewRunFolder, cb) {
  * @param res {response}
  */
 Runs.newPost = function (req, res) {
+  console.log('new post', req.body);
 
   var projectSN = req.params.project;
   var sampleSN = req.params.sample;
@@ -399,8 +400,6 @@ Runs.newPost = function (req, res) {
   var librarySource = req.body.librarySource;
   var librarySelection = req.body.librarySelection;
   var libraryStrategy = req.body.libraryStrategy;
-
-  console.log('RECEIVED POST!', req.body);
 
 
   Sample.filter({safeName: sampleSN}).getJoin({project: {group: true}}).filter({
@@ -434,7 +433,6 @@ Runs.newPost = function (req, res) {
 
 
       if (submissionToGalaxy) {
-
 
         var project = savedRun.sample.project;
 

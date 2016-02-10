@@ -22,10 +22,16 @@
         </fieldset>
 
         <fieldset>
-            <label for="organism">Organism</label>
-            <span>This should automatically update upon entering the taxonomy id. You may modify this to add line/accession information.</span>
+            <label for="scientificName">Scientific Name</label>
+            <!--<span>This should automatically update upon entering the taxonomy id. You may modify this to add line/accession information.</span>-->
+            <input type="text" id="scientificName" name="scientificName" required>
+            <ul id="listByText" class="no-margin no-decoration"></ul>
+        </fieldset>
 
-            <input type="text" id="organism" name="organism" required>
+        <fieldset>
+            <label for="commonName">Common Name</label>
+            <!--<span>This should automatically update upon entering the taxonomy id. You may modify this to add line/accession information.</span>-->
+            <input type="text" id="commonName" name="commonName" required>
             <ul id="listByText" class="no-margin no-decoration"></ul>
         </fieldset>
 
@@ -49,8 +55,10 @@
 
 
 <script>
-    var additional = document.getElementById('additionalData');
-    var addtionalLoader = fileUploader(additional, false, 'additional').setMin(0);
+    $(function () {
+        var additional = document.getElementById('additionalData');
+        var addtionalLoader = fileUploader(additional, false, 'additional').setMin(0);
+    });
 
 </script>
 

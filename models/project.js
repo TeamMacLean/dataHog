@@ -14,7 +14,7 @@ var Project = thinky.createModel('Project', {
   groupID: type.string().required(),
   shortDescription: type.string().required(),
   longDescription: type.string().required(),
-  secondaryContact: type.string(),
+  secondaryContact: type.string().required(),
   createdAt: type.date().default(r.now()),
   path: type.string().required(),
   safeName: type.string().required()
@@ -47,6 +47,12 @@ Project.define("hpcPath", function () {
   }
 });
 
+Project.define('submit', function (cb) {
+  console.log('submitting');
+
+  cb(null, null);
+});
+
 Project.define("toENA", function () {
   var studyObj = {
     "STUDY": {
@@ -69,7 +75,7 @@ Project.define("toENA", function () {
         "CENTER_PROJECT_NAME": this.name,
         "STUDY_TYPE": {
           "@": {
-            "existing_study_type": "other"
+            "existing_study_type": "Other"
           }
         }
       }

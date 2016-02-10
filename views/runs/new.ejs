@@ -210,8 +210,10 @@
 
             function updateType() {
                 if ($libType.val() === 'unpaired') {
+                    console.log('unpaired', md5Loader)
                     md5Loader.setPaired(false);
                 } else {
+                    console.log('paired', md5Loader)
                     md5Loader.setPaired(true);
                 }
             }

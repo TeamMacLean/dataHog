@@ -6,7 +6,8 @@
         </IDENTIFIERS>
         <ACTIONS>
             <ACTION>
-                <RELEASE/>
+                <!--<RELEASE/> will be immediate is this is uncommented-->
+                <HOLD HoldUntilDate="TODO: hold until date 2020-01-01"/>
             </ACTION>
             <ACTION>
                 <ADD schema="experiment" source="experiment.xml"/>

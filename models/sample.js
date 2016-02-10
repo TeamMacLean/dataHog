@@ -10,7 +10,8 @@ var Sample = thinky.createModel('Sample', {
   id: type.string(),
   projectID: type.string().required(),
   name: type.string().required(),
-  organism: type.string().required(),
+  scientificName: type.string().required(), //TODO used to be organism
+  commonName: type.string().required(),
   ncbi: type.string().required(),
   conditions: type.string().required(),
   sampleGroup: type.string().required(),
@@ -64,8 +65,8 @@ Sample.define("toENA", function () {
       },
       "SAMPLE_NAME": {
         "TAXON_ID": this.ncbi,
-        "COMMON_NAME": this.organism,
-        "SCIENTIFIC_NAME": this.organism
+        "COMMON_NAME": this.commonName,
+        "SCIENTIFIC_NAME": this.scientificName
       }
     }
   };

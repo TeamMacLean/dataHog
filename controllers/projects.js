@@ -2,10 +2,12 @@
 var error = require('../lib/error');
 var Project = require('../models/project.js');
 var Group = require('../models/group');
+var Upload = require('../models/upload');
 var fs = require('fs-extra');
 var path = require('path');
 var util = require('../lib/util');
 var config = require('../config.json');
+var async = require('async');
 
 var Projects = {};
 
@@ -65,22 +67,47 @@ Projects.newPost = function (req, res) {
           return error(err, req, res);
         }
 
+        var absTmpPath = path.resolve(config.tmpDir);
         var additionalFiles = [];
-        for (var p in req.files) {
-          if (req.files.hasOwnProperty(p)) {
-            if (p.indexOf('additional') > -1) {
-              additionalFiles.push(req.files[p]);
-            }
+
+
+        async.eachSeries(Object.keys(req.body), function iterator(key, theNextOne) {
+
+          var val = req.body[key];
+          var filePath = path.join(absTmpPath, val);
+
+
+          if (key.indexOf('additional') > -1) {
+            Upload.filter({uuid: val}).run().then(function (foundAF) {
+              var a = foundAF[0];
+              additionalFiles.push({
+                name: a.name,
+                uuid: a.uuid,
+                path: filePath,
+                fieldname: key
+              });
+              //console.log('additional', additionalFiles);
+              theNextOne();
+            })
+          } else {
+            theNextOne();
           }
-        }
-        util.addAdditional(result, additionalFiles, joinedPath, function (err) {
+
+        }, function done(err) {
+
           if (err) {
             console.error(err);
           }
-          var url = path.join('/', group.safeName, project.safeName);
-          return res.redirect(url);
-        });
 
+          util.addAdditional(result, additionalFiles, joinedPath, function (err) {
+            if (err) {
+              console.error(err);
+            }
+            var url = path.join('/', group.safeName, project.safeName);
+            return res.redirect(url);
+          });
+
+        });
 
       });
     }).error(function (err) {

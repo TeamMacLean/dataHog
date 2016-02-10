@@ -3,10 +3,12 @@
 var Samples = {};
 var Project = require('../models/project');
 var Sample = require('../models/sample');
+var Upload = require('../models/upload');
 var fs = require('fs-extra');
 var util = require('../lib/util');
 var path = require('path');
 var config = require('../config.json');
+var async = require('async');
 
 /**
  * render new sample form
@@ -39,14 +41,16 @@ Samples.newPost = function (req, res) {
       var project = projects[0];
 
       var name = req.body.name;
-      var organism = req.body.organism;
+      var commonName = req.body.commonName;
+      var scientificName = req.body.scientificName;
       var ncbi = req.body.ncbi;
       var conditions = req.body.conditions;
 
       var newSample = new Sample({
         name: name,
         projectID: project.id,
-        organism: organism,
+        commonName: commonName,
+        scientificName: scientificName,
         ncbi: ncbi,
         conditions: conditions
       });
@@ -61,22 +65,54 @@ Samples.newPost = function (req, res) {
           } else {
 
             var additionalFiles = [];
-            for (var p in req.files) {
-              if (req.files.hasOwnProperty(p)) {
-                if (p.indexOf('additional') > -1) {
-                  additionalFiles.push(req.files[p]);
-                }
+
+            var absTmpPath = path.resolve(config.tmpDir);
+
+
+            //for (var p in req.files) {
+            //  if (req.files.hasOwnProperty(p)) {
+            //    if (p.indexOf('additional') > -1) {
+            //      additionalFiles.push(req.files[p]);
+            //    }
+            //  }
+            //}
+
+
+            async.eachSeries(Object.keys(req.body), function iterator(key, theNextOne) {
+
+              var val = req.body[key];
+              var filePath = path.join(absTmpPath, val);
+
+
+              if (key.indexOf('additional') > -1) {
+                Upload.filter({uuid: val}).run().then(function (foundAF) {
+                  var a = foundAF[0];
+                  additionalFiles.push({
+                    name: a.name,
+                    uuid: a.uuid,
+                    path: filePath,
+                    fieldname: key
+                  });
+                  //console.log('additional', additionalFiles);
+                  theNextOne();
+                })
+              } else {
+                theNextOne();
               }
-            }
-            util.addAdditional(result, additionalFiles, joinedPath, function (err) {
+
+            }, function done(err) {
+
               if (err) {
                 console.error(err);
               }
-              var url = path.join('/', project.group.safeName, project.safeName, result.safeName);
-              return res.redirect(url);
+              util.addAdditional(result, additionalFiles, joinedPath, function (err) {
+                if (err) {
+                  console.error(err);
+                }
+                var url = path.join('/', project.group.safeName, project.safeName, result.safeName);
+                return res.redirect(url);
+              });
             });
-
-
           }
         });
       }).error(function (err) {

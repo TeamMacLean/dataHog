@@ -1,32 +1,30 @@
-/**
- *
- * @param mountNode el
- * @param MD5S bool
- * @param fileID string
- * @param MD5ID string
- * @returns self
- */
-
 function fileUploader(mountNode, MD5S, fileID, MD5ID) {
 
   var socket = io(window.location.host);
   var Files = [];
 
+  function generateUUID() {
+    var d = new Date().getTime();
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+      var r = (d + Math.random() * 16) % 16 | 0;
+      d = Math.floor(d / 16);
+      return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+    });
+  }
+
   var App = React.createClass({
     getInitialState: function getInitialState() {
-      return {inputGroups: [1], setAcceptedTypes: [], paired: false, min: 1};
-    },
-    addInputGroups: function addInputGroups() {
-      console.log('adding group');
-      return (<InputGroup paired={this.state.paired}/>)
+      return {inputGroups: [], acceptedTypes: [], paired: false, min: 1};
     },
     reachMinItems: function reachMinItems() {
-      //while (out.state.items.length < out.state.min) {
-      //  out.addInput();
-      //}
+      while (this.state.inputGroups.length < out.state.min) {
+        this.addInputButton();
+      }
       return this;
     },
-    setPaired: function setPaired() {
+    setPaired: function setPaired(option) {
+      this.setState({paired: option});
+      console.log(this.state.paired);
       return this;
     },
     setMin: function setMin(min) {
@@ -38,67 +36,195 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
       this.setState({acceptedTypes: types});
       return this;
     },
-    render: function render() {
-      return (
-        <div>
-          {this.state.inputGroups.map(this.addInputGroups)}
-        </div>
-      )
-    }
-  });
+    addInputButton: function addInputButton(e) {
+      if (e && e.preventDefault) {
+        e.preventDefault();
+      }
+      var cnt = this.state.inputGroups.length;
 
-  var InputItem = React.createClass({
-    render: function render() {
+      var guuid = generateUUID();
 
-      var type = this.props.type;
+      this.setState({
+        inputGroups: this.state.inputGroups.concat([{
+          key: guuid,
+          guuid: guuid,
+          index: cnt
+        }])
+      });
 
-      var tooltip = 'Please upload your read file here. If you have paired end data, please choose the file that contains the forward reads (usually having "R1" in the filename).';
-      var label = 'First read file (R1)';
-      if (type == 2) {
-        tooltip = 'Please upload your read file here. Choose the file that contains the reverse reads (usually having "R2" in the filename).';
-        label = 'Second read file (R2)';
+    },
+    removeGroup: function removeGroup(group, event) {
+
+      event.preventDefault();
+
+      Files = Files.filter(function (f) {
+        return f.guuid != group.props.guuid;
+      });
+
+      delete Files[group.props.guuid];
+
+      if (this.state.inputGroups.length > this.state.min) {
+
+        this.setState({
+          inputGroups: this.state.inputGroups.filter(function (g, _) {
+            return g.index !== group.props.index;
+          })
+        });
+
+      } else {
+        alert('Must be at least ' + this.state.min + ' items');
       }
 
-      var md5 = null;
+    },
+    render: function render() {
+      var self = this;
 
-      if (MD5S) {
-        md5 = (
-          <div>
-            <label>MD5</label>
-            <span>The digital "fingerprint" of your file. Should be in the documents that you got from your sequencing provider.</span>
-            <input type="text" required/>
-          </div>
-        )
-      }
+      var groups = self.state.inputGroups.map(function (ig) {
+        return <InputGroup paired={self.state.paired} guuid={ig.guuid} index={ig.index} key={ig.key}
+                           acceptedTypes={self.state.acceptedTypes} removeGroup={self.removeGroup}/>
+      });
+
       return (
         <div>
-          <span>{tooltip}</span>
-          <label>{label}</label>
-          <input type="file" required/>
-          {md5}
+          {groups}
+          <button className="button primary thin" onClick={self.addInputButton}>ADD ANOTHER</button>
         </div>
       )
     }
   });
 
   var InputGroup = React.createClass({
-    //if paired mated this should contain 2 inputs
     render: function render() {
+      var self = this;
+      var inputs = [];
 
-      var inputs = [<InputItem type="1"/>];
+
       if (this.props.paired) {
-        inputs.push(<InputItem type="2"/>)
+        inputs.push(<InputItem type={1} groupIndex={self.props.index} acceptedTypes={self.props.acceptedTypes}
+                               guuid={self.props.guuid}/>);
+        inputs.push(<hr/>);
+        inputs.push(<InputItem type={2} groupIndex={self.props.index} acceptedTypes={self.props.acceptedTypes}
+                               guuid={self.props.guuid}/>)
+      } else {
+        inputs.push(<InputItem type={0} groupIndex={self.props.index} acceptedTypes={self.props.acceptedTypes}
+                               guuid={self.props.guuid}/>);
       }
-
-
       return (
         <div>
-          {inputs}
+          <div className="file-group">
+            {inputs}
+            <button className="error thin" onClick={self.props.removeGroup.bind(this,self)}>REMOVE</button>
+            <br/>
+          </div>
+          <br/>
         </div>
       )
     }
   });
 
+  var InputItem = React.createClass({
+
+    socketUpload: function socketUpload(inputItem, event) {
+
+
+      var input = event.target;
+      var $input = $(input);
+
+      if (input.files.length) {
+
+        var uuid = generateUUID();
+
+        Files[uuid] = input.files[0];
+        Files[uuid].guuid = inputItem.props.guuid;
+        Files[uuid].input = input;
+        Files[uuid].meter = $input.parent().find('.meter');
+        Files[uuid].meter.show();
+        Files[uuid].reader = new FileReader();
+        Files[uuid].percent = 0;
+
+        Files[uuid].reader.onloadend = function (evnt) {
+          socket.emit('Upload', {'Name': Files[uuid].name, Data: evnt.target.result, 'UUID': uuid});
+        };
+
+        //TODO lock the submit button
+        $('button[type=submit]').prop('disabled', true);
+
+        socket.emit('Start', {
+          'Name': Files[uuid].name,
+          'Size': Files[uuid].size,
+          'Dir': window.location.pathname,
+          'UUID': uuid
+        });
+      } else {
+        console.log('no file in input');
+
+        var meter = $input.parent().find('.meter');
+
+        UpdateBar(meter, 0);
+        meter.hide();
+
+      }
+    },
+    render: function render() {
+
+      var self = this;
+      var pairNumber = '';
+      var label = '';
+      var toolTip = '';
+      var type = self.props.type;
+
+
+      if (type && type > 0) {
+
+        toolTip =
+          <span>Please upload your read file here. If you have paired end data, please choose the file that contains the forward reads (usually having "R1" in the filename).</span>;
+        if (type === 1) {
+          label = <label>First read file (R1)</label>
+        } else if (type === 2) {
+          toolTip =
+            <span>Please upload your read file here. Choose the file that contains the reverse reads (usually having "R2" in the filename).</span>;
+          label = <label>Second read file (R2)</label>
+        }
+        pairNumber = '-' + type;
+      }
+
+      var md5 = null;
+
+      var ind = '-' + self.props.groupIndex + pairNumber;
+
+
+      if (MD5S) {
+        md5 = (
+          <div>
+            <br/>
+            <label>MD5</label>
+            <span>The digital "fingerprint" of your file. Should be in the documents that you got from your sequencing provider.</span>
+            <input type="text" id={MD5ID + ind} name={MD5ID + ind} key={MD5ID + ind} required/>
+            <br/>
+          </div>
+        )
+      }
+      return (
+        <div>
+          <label>{label}</label>
+          <span>{toolTip}</span>
+          <input type="file" id={fileID + ind} accept={self.props.acceptedTypes}
+                 onChange={self.socketUpload.bind(self, this)}
+                 data-input-name={fileID + ind} required/>
+          <input type="hidden" id={fileID + ind} key={fileID + ind} name={fileID + ind}/>
+          <br/>
+          {md5}
+          <div className="meter hidden">
+            <span>0%</span>
+          </div>
+          <br/>
+        </div>
+      )
+    }
+  });
+
+
+///SOCKET STUFF
 
   socket.on('Complete', function (data) {
     console.log('complete');
@@ -106,7 +232,6 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
     UpdateBar(Files[data.UUID].meter, 100);
 
     var input = $(Files[data.UUID].input);
-
     var nmval = input.data('input-name');
     var name = 'file' + nmval.substring(nmval.indexOf('-'));
 
@@ -114,10 +239,6 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
     var hiddenInput = input.parent().find('input[type=hidden]');
 
     hiddenInput.val(data.UUID);
-
-    //TODO check if all uploads are complete and unlock the submit button
-
-    console.log('files', Files);
 
     var incompleteUploads = Files.filter(function (f) {
       return f.percent < 100;
@@ -130,7 +251,6 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
   });
 
   socket.on('MoreData', function (data) {
-    //console.log('more');
     var File = Files[data.UUID];
     Files[data.UUID].percent = data.Percent;
     UpdateBar(File.meter, Files[data.UUID].percent);
@@ -147,7 +267,6 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
     } else {
       alert('Sorry but your browser does not support this');
     }
-    console.log('going to start', File.reader, File);
     File.reader.readAsBinaryString(NewFile);
   });
 
@@ -166,6 +285,6 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
 
   var out = ReactDOM.render(React.createElement(App, null), mountNode);
 
-  //out.reachMinItems();
+  out.reachMinItems();
   return out;
 }

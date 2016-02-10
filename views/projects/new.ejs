@@ -24,7 +24,7 @@
             <label for="secondaryContact">Secondary contact's TSL email address</label>
             <span>This should be your closest collaborator on the project. Alternatively, name the RA/lab manager of your group.</span>
 
-            <input type="email" id="secondaryContact" name="secondaryContact">
+            <input type="email" id="secondaryContact" name="secondaryContact" required>
         </fieldset>
 
         <fieldset>
@@ -51,8 +51,10 @@
 </div>
 
 <script>
-    var additional = document.getElementById('additionalData');
-    var addtionalLoader = fileUploader(additional, false, 'additional').setMin(0);
+    $(function () {
+        var additional = document.getElementById('additionalData');
+        var addtionalLoader = fileUploader(additional, false, 'additional').setMin(0);
+    });
 
 </script>
 
