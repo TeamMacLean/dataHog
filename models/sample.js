@@ -16,7 +16,9 @@ var Sample = thinky.createModel('Sample', {
   conditions: type.string().required(),
   sampleGroup: type.string().required(),
   path: type.string().required(),
-  safeName: type.string().required()
+  safeName: type.string().required(),
+  accession: type.string(),
+  alias: type.string()
 });
 
 Sample.pre('save', function (next) {

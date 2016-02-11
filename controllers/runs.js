@@ -17,6 +17,7 @@ var util = require('../lib/util');
 var thinky = require('../lib/thinky');
 var async = require('async');
 var email = require('../lib/email');
+var Submission = require('../models/submission');
 
 
 var Runs = {};
@@ -434,7 +435,7 @@ Runs.newPost = function (req, res) {
 
       if (submissionToGalaxy) {
 
-        var project = savedRun.sample.project;
+        //var project = savedRun.sample.project;
 
         //var p1 = project.responsiblePerson;
         //var p2 = project.secondaryContact;
@@ -467,6 +468,12 @@ Runs.newPost = function (req, res) {
 
 
           //TODO new submission
+          var submission = new Submission({
+            runID: result.id
+          });
+          submission.save();
+
+          submission.submit();
 
           var url = path.join('/', result.sample.project.group.safeName, result.sample.project.safeName, result.sample.safeName, result.safeName);
           return res.redirect(url);

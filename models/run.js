@@ -19,7 +19,9 @@ var Run = thinky.createModel('Run', {
   insertSize: type.string().required(),
   submissionToGalaxy: type.boolean().required(), //TODO send email
   path: type.string().required(),
-  safeName: type.string().required()
+  safeName: type.string().required(),
+  accession: type.string(),
+  alias: type.string()
 });
 
 Run.define("hpcPath", function () {
