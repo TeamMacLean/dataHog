@@ -101,7 +101,7 @@ Reads.download = function (req, res) {
     var read = results[0];
     var absPath = path.resolve(path.join(config.dataDir, read.path));
 
-    fs.access(path, fs.F_OK, function (err) {
+    fs.access(absPath, fs.F_OK, function (err) {
       if (!err) {
         // Do something
         return res.download(absPath, read.fileName, function (err) {
@@ -114,7 +114,7 @@ Reads.download = function (req, res) {
         //TODO check for legacy path
 
         if (read.legacyPath) {
-          fs.access(path, fs.F_OK, function (err) {
+          fs.access(read.legacyPath, fs.F_OK, function (err) {
             if (!err) {
               // Do something
               return res.download(read.legacyPath, read.fileName, function (err) {
