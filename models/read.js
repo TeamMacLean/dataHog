@@ -30,8 +30,12 @@ Read.define("hpcPath", function () {
 });
 
 Read.define("areReports", function () {
-  var files = fs.readdirSync(path.join(config.dataDir,this.fastQCLocation));
-  return !!(files && files.length > 0);
+  try {
+    var files = fs.readdirSync(path.join(config.dataDir, this.fastQCLocation));
+    return !!(files && files.length > 0);
+  } catch (e) {
+    return null;
+  }
 });
 
 Read.pre('save', function (next) {
