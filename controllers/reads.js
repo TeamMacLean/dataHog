@@ -6,6 +6,7 @@ var Read = require('../models/read.js');
 var fs = require('fs');
 var path = require('path');
 var config = require('../config.json');
+var errorLib = require('../lib/error');
 
 
 /**
@@ -70,8 +71,6 @@ Reads.fastQC = function (req, res) {
 
     fs.stat(htmlPath, function (err) {
       if (!err) {
-
-
         return res.sendFile(htmlPath);
       } else {
         return error('could not find fast qc report', req, res);
@@ -102,11 +101,40 @@ Reads.download = function (req, res) {
     var read = results[0];
     var absPath = path.resolve(path.join(config.dataDir, read.path));
 
-    return res.download(absPath, read.fileName, function (err) {
-      if (err) {
-        console.error(err);
+    fs.access(path, fs.F_OK, function (err) {
+      if (!err) {
+        // Do something
+        return res.download(absPath, read.fileName, function (err) {
+          if (err) {
+            console.error(err);
+          }
+        });
+      } else {
+        // It isn't accessible
+        //TODO check for legacy path
+
+        if (read.legacyPath) {
+          fs.access(path, fs.F_OK, function (err) {
+            if (!err) {
+              // Do something
+              return res.download(read.legacyPath, read.fileName, function (err) {
+                if (err) {
+                  console.error(err);
+                }
+              });
+
+            } else {
+              // It isn't accessible
+              return errorLib('Could not find file ' + read.path, req, res);
+            }
+          });
+        } else {
+          return errorLib('Could not find file ' + read.path, req, res);
+        }
       }
     });
+
+
   });
 };
 

@@ -18,7 +18,8 @@ var Read = thinky.createModel('Read', {
   safeName: type.string().required(),
   fileName: type.string().required(),
   path: type.string().required(),
-  siblingID: type.string()
+  siblingID: type.string(),
+  legacyPath: type.string()
 });
 
 Read.define("hpcPath", function () {
