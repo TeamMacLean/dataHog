@@ -24,14 +24,17 @@
         <fieldset>
             <label for="scientificName">Scientific Name</label>
             <!--<span>This should automatically update upon entering the taxonomy id. You may modify this to add line/accession information.</span>-->
-            <input type="text" id="scientificName" name="scientificName" required>
+            <input type="text" id="scientificName" name="scientificName" required readonly>
             <ul id="listByText" class="no-margin no-decoration"></ul>
         </fieldset>
 
         <fieldset>
-            <label for="commonName">Common Name</label>
+            <!--<label for="commonName">Common Name</label>-->
             <!--<span>This should automatically update upon entering the taxonomy id. You may modify this to add line/accession information.</span>-->
-            <input type="text" id="commonName" name="commonName" required>
+
+            <select id="commonName" name="commonName" required>
+            </select>
+            <!--<input type="text" id="commonName" name="commonName" required disabled>-->
             <ul id="listByText" class="no-margin no-decoration"></ul>
         </fieldset>
 

@@ -314,7 +314,6 @@ function addReadToRun(req, processed, savedRun, pathToNewRunFolder, cb) {
 
             ensureCompressed(fileAndMD5, function (err, md5AndPath) {
 
-              console.log('PRE ERROR', pathToNewRunFolder, md5AndPath, md5AndPath.name);
 
               var newFullPath = path.join(pathToNewRunFolder, md5AndPath.name);
 
@@ -385,7 +384,6 @@ function addReadToRun(req, processed, savedRun, pathToNewRunFolder, cb) {
  * @param res {response}
  */
 Runs.newPost = function (req, res) {
-  console.log('new post', req.body);
 
   var projectSN = req.params.project;
   var sampleSN = req.params.sample;
@@ -533,6 +531,8 @@ Runs.show = function (req, res) {
         return r.processed === true;
       });
 
+      console.log('processed', processedPRE);
+
 
       var alreadyGrouped = [];
 
@@ -551,10 +551,10 @@ Runs.show = function (req, res) {
               var group = [];
               group.push(r);
               group.push(r.sibling);
-              raw.push(group);
+              processed.push(group);
             }
           } else {
-            raw.push(r);
+            processed.push(r);
           }
         }
       });

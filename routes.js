@@ -99,7 +99,7 @@ router.route('/:group/:project/:sample/:run')
   .get(Runs.show);
 
 //new read
-router.post('/:group/:project/:sample/:run/add')
+router.route('/:group/:project/:sample/:run/add')
   .all(isAuthenticated)
   .all(isPartOfGroup)
   .post(Runs.addPost);

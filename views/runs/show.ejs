@@ -61,17 +61,17 @@
                 <a class="tile"
                    href="/<%- run.sample.project.group.safeName %>/<%- run.sample.project.safeName %>/<%- run.sample.safeName %>/<%- run.safeName %>/<%- read[0].safeName %>">
                     <%- read[0].name %>
-                    <div class="sub-title">
-                        File
-                    </div>
+                    <!--<div class="sub-title">-->
+                        <!--File-->
+                    <!--</div>-->
                 </a>
 
                 <a class="tile"
                    href="/<%- run.sample.project.group.safeName %>/<%- run.sample.project.safeName %>/<%- run.sample.safeName %>/<%- run.safeName %>/<%- read[1].safeName %>">
                     <%- read[1].name %>
-                    <div class="sub-title">
-                        File
-                    </div>
+                    <!--<div class="sub-title">-->
+                        <!--File-->
+                    <!--</div>-->
                 </a>
             </div>
         </div>
@@ -83,9 +83,9 @@
                         <%- read.name %>
                     </div>
 
-                    <div class="sub-title">
-                        File
-                    </div>
+                    <!--<div class="sub-title">-->
+                        <!--File-->
+                    <!--</div>-->
                 </div>
             </a>
         </div>
@@ -133,34 +133,37 @@
     <% } %>
 
     <hr>
-    <!--<form action="/<%- run.sample.project.group.safeName %>/<%- run.sample.project.safeName %>/<%- run.sample.safeName %>/<%- run.safeName %>/add"-->
-          <!--method="POST"-->
-          <!--enctype="multipart/form-data">-->
-        <!--<h2>Add processed data</h2>-->
+    <form action="/<%- run.sample.project.group.safeName %>/<%- run.sample.project.safeName %>/<%- run.sample.safeName %>/<%- run.safeName %>/add"
+          method="POST"
+          enctype="multipart/form-data">
+        <h2>Add processed data</h2>
 
-        <!--<input type="hidden" value="<%- run.libraryType %>" id="typePasser">-->
+        <input type="hidden" value="<%- run.libraryType %>" id="typePasser">
 
-        <!--<fieldset id="md5Inputs" class="file-group">-->
-            <!--<label>Read data</label>-->
+        <fieldset id="md5Inputs" class="file-group">
+            <label>Read data</label>
 
-            <!--<div id="filesRoot">-->
-            <!--</div>-->
-        <!--</fieldset>-->
-        <!--<button type="submit" class="button success">Submit</button>-->
-    <!--</form>-->
+            <div id="filesRoot">
+            </div>
+        </fieldset>
+        <button type="submit" class="button success">Submit</button>
+    </form>
 
 
     <script>
 
-        var md5files = document.getElementById('filesRoot');
-        var md5Loader = fileUploader(md5files, true, 'file', 'md5').setMin(1).setAcceptedTypes(['.fastq', '.fq']);
+        $(function () {
 
-        var type = $('#typePasser').val();
-        console.log('type', type);
+            var md5files = document.getElementById('filesRoot');
+            var md5Loader = fileUploader(md5files, true, 'file', 'md5').setMin(1).setAcceptedTypes(['.fastq', '.fq']);
 
-        if (type !== 'unpaired') {
-            md5Loader.setPaired(true);
-        }
+            var type = $('#typePasser').val();
+            console.log('type', type);
+
+            if (type !== 'unpaired') {
+                md5Loader.setPaired(true);
+            }
+        })
 
     </script>
 

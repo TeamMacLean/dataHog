@@ -154,7 +154,7 @@ Submission.define('submit', function () {
                 var submissionAccession = RECEIPT['SUBMISSION'];
 
                 if (runAccession && runAccession['$']) {
-
+                  console.log('updating run');
                   Run.get(run.id).update({
                     accession: runAccession['$'].accession,
                     alias: runAccession['$'].alias
@@ -163,6 +163,7 @@ Submission.define('submit', function () {
                   })
                 }
                 if (sampleAccession && sampleAccession['$']) {
+                  console.log('updating sample');
                   Sample.get(run.id).update({
                     accession: sampleAccession['$'].accession,
                     alias: sampleAccession['$'].alias
@@ -171,6 +172,7 @@ Submission.define('submit', function () {
                   })
                 }
                 if (studyAccession && studyAccession['$']) {
+                  console.log('updating study');
                   Project.get(run.id).update({
                     accession: studyAccession['$'].accession,
                     alias: studyAccession['$'].alias
@@ -179,6 +181,7 @@ Submission.define('submit', function () {
                   })
                 }
                 if (submissionAccession && submissionAccession['$']) {
+                  console.log('updating submission');
                   Submission.get(self.id).update({
                     accession: submissionAccession['$'].accession,
                     alias: submissionAccession['$'].alias
@@ -235,7 +238,7 @@ function genExperiment(run, project) {
       "IDENTIFIERS": {
         "SUBMITTER_ID": {
           "-namespace": "JIC",
-          "#text": "thisisatest"
+          "#text": project.safeName
         }
       },
       "STUDY_REF": {
@@ -244,22 +247,22 @@ function genExperiment(run, project) {
         "IDENTIFIERS": {
           "SUBMITTER_ID": {
             "-namespace": "JIC",
-            "#text": "thisisatest"
+            "#text": project.safeName
           }
         }
       },
       "DESIGN": {
-        "DESIGN_DESCRIPTION": "Solexa sequencing of Pseudomonas syringae pathovar syringae B728a",
-        "SAMPLE_DESCRIPTOR": {
-          "-refname": "thisisatest",
-          "-refcenter": "JIC",
-          "IDENTIFIERS": {
-            "SUBMITTER_ID": {
-              "-namespace": "JIC",
-              "#text": "thisisatest"
-            }
-          }
-        },
+        //"DESIGN_DESCRIPTION": "Solexa sequencing of Pseudomonas syringae pathovar syringae B728a",
+        //"SAMPLE_DESCRIPTOR": {
+        //  "-refname": "thisisatest",
+        //  "-refcenter": "JIC",
+        //  "IDENTIFIERS": {
+        //    "SUBMITTER_ID": {
+        //      "-namespace": "JIC",
+        //      "#text": "thisisatest"
+        //    }
+        //  }
+        //},
         "LIBRARY_DESCRIPTOR": {
           "LIBRARY_NAME": "PssB728a",
           "LIBRARY_STRATEGY": run.libraryStrategy,
@@ -270,32 +273,32 @@ function genExperiment(run, project) {
               "-NOMINAL_LENGTH": "500",
               "-NOMINAL_SDEV": "0.0"
             }
-          },
-          "LIBRARY_CONSTRUCTION_PROTOCOL": "Standard Solexa protocol"
-        },
-        "SPOT_DESCRIPTOR": {
-          "SPOT_DECODE_SPEC": {
-            "SPOT_LENGTH": "72",
-            "READ_SPEC": [
-              {
-                "READ_INDEX": "0",
-                "READ_CLASS": "Application Read",
-                "READ_TYPE": "Forward",
-                "BASE_COORD": "1"
-              },
-              {
-                "READ_INDEX": "1",
-                "READ_CLASS": "Application Read",
-                "READ_TYPE": "Reverse",
-                "BASE_COORD": "37"
-              }
-            ]
           }
+          //"LIBRARY_CONSTRUCTION_PROTOCOL": "Standard Solexa protocol"
         }
-      },
-      "PLATFORM": {
-        "ILLUMINA": {"INSTRUMENT_MODEL": "Illumina Genome Analyzer"}
+        //"SPOT_DESCRIPTOR": {
+        //  "SPOT_DECODE_SPEC": {
+        //    "SPOT_LENGTH": "72",
+        //    "READ_SPEC": [
+        //      {
+        //        "READ_INDEX": "0",
+        //        "READ_CLASS": "Application Read",
+        //        "READ_TYPE": "Forward",
+        //        "BASE_COORD": "1"
+        //      },
+        //      {
+        //        "READ_INDEX": "1",
+        //        "READ_CLASS": "Application Read",
+        //        "READ_TYPE": "Reverse",
+        //        "BASE_COORD": "37"
+        //      }
+        //    ]
+        //  }
+        //}
       }
+      //"PLATFORM": {
+      //  "ILLUMINA": {"INSTRUMENT_MODEL": "Illumina Genome Analyzer"}
+      //}
       //"EXPERIMENT_ATTRIBUTES": {
       //  "EXPERIMENT_ATTRIBUTE": [
       //    {
