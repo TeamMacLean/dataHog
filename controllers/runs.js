@@ -551,10 +551,10 @@ Runs.show = function (req, res) {
               var group = [];
               group.push(r);
               group.push(r.sibling);
-              processed.push(group);
+              raw.push(group);
             }
           } else {
-            processed.push(r);
+            raw.push(r);
           }
         }
       });
@@ -574,10 +574,10 @@ Runs.show = function (req, res) {
               var group = [];
               group.push(p);
               group.push(p.sibling);
-              raw.push(group);
+              processed.push(group);
             }
           } else {
-            raw.push(p);
+            processed.push(p);
           }
         }
       });
