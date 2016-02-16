@@ -95,7 +95,9 @@ app.use(function (err, req, res, next) {
 Submission.getJoin({
   run: {
     sample: {
-      project: true
+      project: {
+        group: true
+      }
     }
   }
 }).run().then(function (subs) {
@@ -111,7 +113,22 @@ Submission.getJoin({
     var TwoDays = holdTill.subtract(2, 'days');
     var OneDay = holdTill.subtract(1, 'days');
 
+
     var contacts = [s.run.sample.project.responsiblePerson, s.run.sample.project.secondaryContact];
+
+
+    config.groups.map(function (g) {
+
+      var ConfigGroupName = g["name"];
+
+      var GroupName = s.run.sample.project.group.name;
+
+      if (ConfigGroupName && GroupName && g["email"]) {
+        if (ConfigGroupName.toLowerCase() == GroupName.toLowerCase()) {
+          contacts.push(g["email"])
+        }
+      }
+    });
 
     schedule.scheduleJob(FourWeeks.toDate(), function () {
       email.emailSomeone('Your data will be published on ENA soon', 'Your data will be made public on ENA in 4 weeks, the data being published can be found at ' + s.run.path, contacts)
