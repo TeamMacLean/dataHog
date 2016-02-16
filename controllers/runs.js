@@ -443,7 +443,7 @@ Runs.newPost = function (req, res) {
 
         var subject = "Request for data to be added to Galaxy";
         var text = "Please add " + hpcPath + " to Galaxy.\n\n" + siteURL + "\n\nThanks :D\nDataHog";
-        email.send(subject, text);
+        email.emailAdmin(subject, text);
       }
 
       var processed = false;

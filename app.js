@@ -11,8 +11,9 @@ var util = require('./lib/util');
 var socketUploader = require('./lib/socketUploader');
 var rethinkSession = require('session-rethinkdb')(session);
 var Submission = require('./models/submission');
-
+var schedule = require('node-schedule');
 var moment = require('moment');
+var email = require('./lib/email');
 
 
 if (!config.appName || !config.port || !config.dataDir || !config.tmpDir) {
@@ -91,24 +92,46 @@ app.use(function (err, req, res, next) {
 });
 
 
-//TODO notify about release date!
-
-Submission.run().then(function (subs) {
-
+Submission.getJoin({
+  run: {
+    sample: {
+      project: true
+    }
+  }
+}).run().then(function (subs) {
   subs.map(function (s) {
-
     var now = moment();
     var holdTill = moment(s.holdDate);
-
     var diffInDays = holdTill.diff(now, 'days');
+    console.log(diffInDays, 'days until', s.id, 'is public in ENA');
+    var FourWeeks = holdTill.subtract(4, 'weeks');
+    var ThreeWeeks = holdTill.subtract(3, 'weeks');
+    var TwoWeeks = holdTill.subtract(2, 'weeks');
+    var OneWeek = holdTill.subtract(1, 'weeks');
+    var TwoDays = holdTill.subtract(2, 'days');
+    var OneDay = holdTill.subtract(1, 'days');
 
-    console.log(diffInDays, 'until', s.id, 'is public in ENA');
+    var contacts = [s.run.sample.project.responsiblePerson, s.run.sample.project.secondaryContact];
 
-
-    //TODO add cron to email user
-
+    schedule.scheduleJob(FourWeeks, function () {
+      email.emailSomeone('Your data will be published on ENA soon', 'Your data will be made public on ENA in 4 weeks, the data being published can be found at ' + s.run.path, contacts)
+    });
+    schedule.scheduleJob(ThreeWeeks, function () {
+      email.emailSomeone('Your data will be published on ENA soon', 'Your data will be made public on ENA in 3 weeks, the data being published can be found at ' + s.run.path, contacts)
+    });
+    schedule.scheduleJob(TwoWeeks, function () {
+      email.emailSomeone('Your data will be published on ENA soon', 'Your data will be made public on ENA in 2 weeks, the data being published can be found at ' + s.run.path, contacts)
+    });
+    schedule.scheduleJob(OneWeek, function () {
+      email.emailSomeone('Your data will be published on ENA soon', 'Your data will be made public on ENA in 1 weeks, the data being published can be found at ' + s.run.path, contacts)
+    });
+    schedule.scheduleJob(TwoDays, function () {
+      email.emailSomeone('Your data will be published on ENA soon', 'Your data will be made public on ENA in 2 days, the data being published can be found at ' + s.run.path, contacts)
+    });
+    schedule.scheduleJob(OneDay, function () {
+      email.emailSomeone('Your data will be published on ENA soon', 'Your data will be made public on ENA TOMORROW, the data being published can be found at ' + s.run.path, contacts)
+    });
   })
-
 });
 
 

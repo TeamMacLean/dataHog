@@ -213,7 +213,7 @@ Submission.define('submit', function () {
               self.receipt = receiptString;
               self.save();
 
-              Email.send('ENA SUBMISSION SENT ' + self.id, receiptString);
+              Email.emailAdmin('ENA SUBMISSION SENT ' + self.id, receiptString);
             }
           });
         }
@@ -319,3 +319,7 @@ function genExperiment(run, project) {
 }
 
 module.exports = Submission;
+
+var Run = require('./run');
+
+Submission.belongsTo(Run, 'run', 'runID', 'id');

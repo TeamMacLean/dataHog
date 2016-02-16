@@ -163,8 +163,8 @@ Run.define('toENA', function () {
 
 module.exports = Run;
 
-var Sample = require('./sample.js');
-var Read = require('./read.js');
+var Sample = require('./sample');
+var Read = require('./read');
 var AdditionalFile = require('./additionalFile');
 Run.hasMany(Read, 'reads', 'id', 'runID');
 Run.belongsTo(Sample, 'sample', 'sampleID', 'id');
