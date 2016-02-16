@@ -113,22 +113,22 @@ Submission.getJoin({
 
     var contacts = [s.run.sample.project.responsiblePerson, s.run.sample.project.secondaryContact];
 
-    schedule.scheduleJob(FourWeeks, function () {
+    schedule.scheduleJob(FourWeeks.toDate(), function () {
       email.emailSomeone('Your data will be published on ENA soon', 'Your data will be made public on ENA in 4 weeks, the data being published can be found at ' + s.run.path, contacts)
     });
-    schedule.scheduleJob(ThreeWeeks, function () {
+    schedule.scheduleJob(ThreeWeeks.toDate(), function () {
       email.emailSomeone('Your data will be published on ENA soon', 'Your data will be made public on ENA in 3 weeks, the data being published can be found at ' + s.run.path, contacts)
     });
-    schedule.scheduleJob(TwoWeeks, function () {
+    schedule.scheduleJob(TwoWeeks.toDate(), function () {
       email.emailSomeone('Your data will be published on ENA soon', 'Your data will be made public on ENA in 2 weeks, the data being published can be found at ' + s.run.path, contacts)
     });
-    schedule.scheduleJob(OneWeek, function () {
+    schedule.scheduleJob(OneWeek.toDate(), function () {
       email.emailSomeone('Your data will be published on ENA soon', 'Your data will be made public on ENA in 1 weeks, the data being published can be found at ' + s.run.path, contacts)
     });
-    schedule.scheduleJob(TwoDays, function () {
+    schedule.scheduleJob(TwoDays.toDate(), function () {
       email.emailSomeone('Your data will be published on ENA soon', 'Your data will be made public on ENA in 2 days, the data being published can be found at ' + s.run.path, contacts)
     });
-    schedule.scheduleJob(OneDay, function () {
+    schedule.scheduleJob(OneDay.toDate(), function () {
       email.emailSomeone('Your data will be published on ENA soon', 'Your data will be made public on ENA TOMORROW, the data being published can be found at ' + s.run.path, contacts)
     });
   })

@@ -320,6 +320,5 @@ function genExperiment(run, project) {
 
 module.exports = Submission;
 
-var Run = require('./run');
-
+//var Run = require('./run');
 Submission.belongsTo(Run, 'run', 'runID', 'id');
