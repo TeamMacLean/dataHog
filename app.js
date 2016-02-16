@@ -4,14 +4,15 @@ var bodyParser = require('body-parser');
 var routes = require('./routes');
 var config = require('./config.json');
 var fs = require('fs');
-//var init = require('./lib/init');
 var session = require('express-session');
 var passport = require('passport');
 var cookieParser = require('cookie-parser');
 var util = require('./lib/util');
-var crons = require('./lib/cron');
 var socketUploader = require('./lib/socketUploader');
 var rethinkSession = require('session-rethinkdb')(session);
+var Submission = require('./models/submission');
+
+var moment = require('moment');
 
 
 if (!config.appName || !config.port || !config.dataDir || !config.tmpDir) {
@@ -29,12 +30,10 @@ if (!fs.existsSync(config.tmpDir)) {
   console.error('tmpDir', config.tmpDir, 'does not exist');
 }
 
-
 var express = require('express');
 var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
-
 
 app.locals.title = config.appName;
 app.use(express.static(__dirname + '/public'));
@@ -91,11 +90,29 @@ app.use(function (err, req, res, next) {
   }
 });
 
+
+//TODO notify about release date!
+
+Submission.run().then(function (subs) {
+
+  subs.map(function (s) {
+
+    var now = moment();
+    var holdTill = moment(s.holdDate);
+
+    var diffInDays = holdTill.diff(now);
+
+    console.log(diffInDays, 'until', s.id, 'is public in ENA');
+
+
+    //TODO add cron to email user
+
+  })
+
+});
+
+
 socketUploader(io);
-
-
-//kick off all existing schedules jobs
-crons.loadFromDB();
 
 
 module.exports = server;
