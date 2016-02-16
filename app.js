@@ -100,7 +100,7 @@ Submission.run().then(function (subs) {
     var now = moment();
     var holdTill = moment(s.holdDate);
 
-    var diffInDays = holdTill.diff(now);
+    var diffInDays = holdTill.diff(now, 'days');
 
     console.log(diffInDays, 'until', s.id, 'is public in ENA');
 
