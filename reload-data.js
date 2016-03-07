@@ -3,14 +3,14 @@ const fs = require('fs-extra');
 const path = require('path');
 const util = require('./lib/util');
 const async = require('async');
-const Group = require('models/group');
-const Project = require('models/project');
-const Sample = require('models/sample');
-const Run = require('models/run');
-const Read = require('models/read');
-const AdditionalFile = require('models/additionalFile');
-const fastqc = require('lib/fastqc');
-const config = require('config.json');
+const Group = require('./models/group');
+const Project = require('./models/project');
+const Sample = require('./models/sample');
+const Run = require('./models/run');
+const Read = require('./models/read');
+const AdditionalFile = require('./models/additionalFile');
+const fastqc = require('./lib/fastqc');
+const config = require('./config.json');
 
 var root;
 
