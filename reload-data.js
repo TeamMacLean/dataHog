@@ -37,15 +37,16 @@ let run = function (rootImportFolder, cb) {
 
 
 function eachGroup(group, nextGroup) {
-
+  var current;
+  GROUP = group;
 
   Group.filter({name: group}).run().then(function (results) {
     if (results.length > 0) {
-      GROUP = results[0];
+      current = results[0];
       resume();
     } else {
       new Group({name: group}).save().then(function (rGroup) {
-          GROUP = rGroup;
+          current = rGroup;
           resume();
         }
       ).error(function (err) {
@@ -68,6 +69,8 @@ function eachGroup(group, nextGroup) {
 }
 
 function eachProject(project, nextProject) {
+  var current;
+  PROJECT = project;
 
   if (project === 'additional') {
     addAdditional(rGroup, nextProject);
@@ -79,7 +82,7 @@ function eachProject(project, nextProject) {
     }).run().then(function (results) {
 
       if (results.length > 0) {
-        PROJECT = results[0];
+        current = results[0];
         resume();
       } else {
         new Project({
@@ -90,7 +93,7 @@ function eachProject(project, nextProject) {
           shortDescription: 'none',
           longDescription: 'none'
         }).save().then(function (rProject) {
-          PROJECT = rProject;
+          current = rProject;
           resume();
         }).error(function (err) {
           nextProject(err);
@@ -101,7 +104,7 @@ function eachProject(project, nextProject) {
   }
 
   function resume() {
-    let fullPath = path.join(root, group, project);
+    let fullPath = path.join(root, GROUP, PROJECT);
     let samples = getDirectories(fullPath);
 
     async.eachSeries(samples, eachSample, function done(err) {
@@ -114,7 +117,8 @@ function eachProject(project, nextProject) {
 }
 
 function eachSample(sample, nextSample) {
-
+  var current;
+  SAMPLE = sample;
 
   if (sample === 'additional') {
     addAdditional(PROJECT, nextSample);
@@ -126,7 +130,7 @@ function eachSample(sample, nextSample) {
     }).run().then(function (results) {
 
       if (results.length > 0) {
-        SAMPLE = results[0];
+        current = results[0];
         resume();
       } else {
         new Sample({
@@ -138,7 +142,7 @@ function eachSample(sample, nextSample) {
           conditions: 'unknown',
           sampleGroup: 'unknown'
         }).save().then(function (rSample) {
-          SAMPLE = rSample;
+          current = rSample;
           resume();
         });
       }
@@ -161,7 +165,8 @@ function eachSample(sample, nextSample) {
 }
 
 function eachRun(run, nextRun) {
-
+  var current;
+  RUN = run;
 
   if (run === 'additional') {
     addAdditional(SAMPLE, nextSample);
@@ -173,7 +178,7 @@ function eachRun(run, nextRun) {
     }).run().then(function (results) {
 
       if (results.length > 0) {
-        RUN = results[0];
+        current = results[0];
         resume();
       } else {
         new Run({
@@ -188,7 +193,7 @@ function eachRun(run, nextRun) {
           insertSize: 'unknown',
           submissionToGalaxy: false
         }).save().then(function (rRun) {
-          RUN = rRun;
+          current = rRun;
           resume();
         })
       }
