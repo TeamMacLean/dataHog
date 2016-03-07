@@ -230,19 +230,12 @@ function eachRun(run, nextRun) {
             });
             async.eachSeries(raws, function (raw, nextRaw) {
 
-              //console.log(GROUP, PROJECT, SAMPLE, RUN, raw);
-              //let fullPath = path.join(rawPath, raw);
-              //util.md5Stream(fullPath, function (md5) {
-              //  if (err) {
-              //    throw err;
-              //  }
               getSibling(pairs, raw, function (sibling) {
                 Read.filter({processed: false, runID: r_obj.id, name: raw}).run().then(function (results) {
                   if (results.length > 0) {
                     dot();
                     nextRaw();
                   } else {
-                    console.log('need to add raw!!!!!!!');
                     new Read({
                       processed: false,
                       runID: r_obj.id,
@@ -253,8 +246,7 @@ function eachRun(run, nextRun) {
                       fastQCLocation: fastqcPath(rawPath),
                       legacyPath: path.join(rawPath, raw)
                     }).save(function (error) {
-                      console.log('added raw!!!!!!!');
-                      if (err) {
+                      if (error) {
                         return nextRaw(error);
                       } else {
                         current(raw);
@@ -287,18 +279,14 @@ function eachRun(run, nextRun) {
             //console.log(pairs.length, 'pairs');
 
             async.eachSeries(processeds, function (processed, nextProcessed) {
-              //let fullPath = path.join(processedPath, processed);
-              //console.log(GROUP, PROJECT, SAMPLE, run, processed);
-              //util.md5Stream(fullPath, function (md5) {
               getSibling(pairs, processed, function (sibling) {
-                //console.log('sibling is', sibling);
 
                 Read.filter({processed: true, runID: r_obj.id, name: processed}).run().then(function (results) {
                   if (results.length > 0) {
                     dot();
                     nextProcessed();
                   } else {
-                    console.log('need to add raw!!!!!!!');
+                    console.log('need to add processed!!!!!!!');
                     new Read({
                       processed: true,
                       runID: r_obj.id,
@@ -309,7 +297,7 @@ function eachRun(run, nextRun) {
                       fastQCLocation: fastqcPath(processedPath),
                       legacyPath: path.join(processedPath, processed)
                     }).save(function (error) {
-                      console.log('added raw!!!!!!!');
+                      console.log('added processed!!!!!!!');
                       if (err) {
                         return nextProcessed(error);
                       } else {
@@ -319,10 +307,7 @@ function eachRun(run, nextRun) {
                     });
                   }
                 })
-
-
               });
-              //});
             }, function (err) {
               if (err) {
                 throw err;
