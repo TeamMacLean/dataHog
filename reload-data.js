@@ -14,7 +14,9 @@ const config = require('./config.json');
 
 var root;
 
-var GROUP, PROJECT, SAMPLE, RUN, READ;
+var GROUP, PROJECT, SAMPLE, RUN;
+
+var g_obj, p_obj, s_obj, r_obj;
 
 let run = function (rootImportFolder, cb) {
   let groups = getDirectories(rootImportFolder);
@@ -37,16 +39,15 @@ let run = function (rootImportFolder, cb) {
 
 
 function eachGroup(group, nextGroup) {
-  var current;
   GROUP = group;
 
   Group.filter({name: group}).run().then(function (results) {
     if (results.length > 0) {
-      current = results[0];
+      g_obj = results[0];
       resume();
     } else {
       new Group({name: group}).save().then(function (rGroup) {
-          current = rGroup;
+        g_obj = rGroup;
           resume();
         }
       ).error(function (err) {
@@ -69,11 +70,10 @@ function eachGroup(group, nextGroup) {
 }
 
 function eachProject(project, nextProject) {
-  var current;
   PROJECT = project;
 
   if (project === 'additional') {
-    addAdditional(rGroup, nextProject);
+    addAdditional(g_obj, nextProject);
   } else {
 
     Project.filter({
@@ -82,7 +82,7 @@ function eachProject(project, nextProject) {
     }).run().then(function (results) {
 
       if (results.length > 0) {
-        current = results[0];
+        p_obj = results[0];
         resume();
       } else {
         new Project({
@@ -93,7 +93,7 @@ function eachProject(project, nextProject) {
           shortDescription: 'none',
           longDescription: 'none'
         }).save().then(function (rProject) {
-          current = rProject;
+          p_obj = rProject;
           resume();
         }).error(function (err) {
           nextProject(err);
@@ -117,11 +117,10 @@ function eachProject(project, nextProject) {
 }
 
 function eachSample(sample, nextSample) {
-  var current;
   SAMPLE = sample;
 
   if (sample === 'additional') {
-    addAdditional(PROJECT, nextSample);
+    addAdditional(p_obj, nextSample);
   } else {
 
     Sample.filter({
@@ -130,7 +129,7 @@ function eachSample(sample, nextSample) {
     }).run().then(function (results) {
 
       if (results.length > 0) {
-        current = results[0];
+        s_obj = results[0];
         resume();
       } else {
         new Sample({
@@ -142,7 +141,7 @@ function eachSample(sample, nextSample) {
           conditions: 'unknown',
           sampleGroup: 'unknown'
         }).save().then(function (rSample) {
-          current = rSample;
+          s_obj = rSample;
           resume();
         });
       }
@@ -165,11 +164,10 @@ function eachSample(sample, nextSample) {
 }
 
 function eachRun(run, nextRun) {
-  var current;
   RUN = run;
 
   if (run === 'additional') {
-    addAdditional(SAMPLE, nextSample);
+    addAdditional(s_obj, nextRun);
   } else {
 
     Run.filter({
@@ -178,7 +176,7 @@ function eachRun(run, nextRun) {
     }).run().then(function (results) {
 
       if (results.length > 0) {
-        current = results[0];
+        r_obj = results[0];
         resume();
       } else {
         new Run({
@@ -193,7 +191,7 @@ function eachRun(run, nextRun) {
           insertSize: 'unknown',
           submissionToGalaxy: false
         }).save().then(function (rRun) {
-          current = rRun;
+          r_obj = rRun;
           resume();
         })
       }
@@ -211,7 +209,7 @@ function eachRun(run, nextRun) {
 
     async.series([
       function (callback) {
-        addAdditional(RUN, callback);
+        addAdditional(r_obj, callback);
       },
       function (callback) {
         //RAW
@@ -227,7 +225,7 @@ function eachRun(run, nextRun) {
             });
             async.eachSeries(raws, function (raw, nextRaw) {
 
-              console.log(group, project, sample, run, raw);
+              console.log(GROUP, PROJECT, SAMPLE, RUN, raw);
               //let fullPath = path.join(rawPath, raw);
               //util.md5Stream(fullPath, function (md5) {
               //  if (err) {
