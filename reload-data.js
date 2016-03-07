@@ -298,6 +298,7 @@ function eachRun(run, nextRun) {
                     dot();
                     nextProcessed();
                   } else {
+                    console.log('need to add raw!!!!!!!');
                     new Read({
                       processed: true,
                       runID: r_obj.id,
@@ -308,10 +309,11 @@ function eachRun(run, nextRun) {
                       fastQCLocation: fastqcPath(processedPath),
                       legacyPath: path.join(processedPath, processed)
                     }).save(function (error) {
+                      console.log('added raw!!!!!!!');
                       if (err) {
                         return nextProcessed(error);
                       } else {
-                        current(processed)
+                        current(processed);
                         nextProcessed();
                       }
                     });
