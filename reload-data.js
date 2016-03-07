@@ -145,7 +145,7 @@ function eachSample(sample, nextSample) {
   }
 
   function resume() {
-    let fullPath = path.join(root, group, project, sample);
+    let fullPath = path.join(root, GROUP, PROJECT, SAMPLE);
     let runs = getDirectories(fullPath);
 
     async.eachSeries(runs, eachRun, function done(err) {
@@ -194,7 +194,7 @@ function eachRun(run, nextRun) {
   }
 
   function resume() {
-    let fullPath = path.join(root, GROUP, PROJECT, SAMPLE, run);
+    let fullPath = path.join(root, GROUP, PROJECT, SAMPLE, RUN);
     let rawPath = path.join(fullPath, 'raw');
     let processedPath = path.join(fullPath, 'processed');
 
