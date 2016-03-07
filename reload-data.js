@@ -133,7 +133,7 @@ function eachSample(sample, nextSample) {
         resume();
       } else {
         new Sample({
-          projectID: PROJECT.id,
+          projectID: p_obj.id,
           name: sample,
           scientificName: 'unknown',
           commonName: 'unknown',
@@ -181,7 +181,7 @@ function eachRun(run, nextRun) {
         resume();
       } else {
         new Run({
-          sampleID: SAMPLE.id,
+          sampleID: s_obj.id,
           name: run,
           libraryType: 'unknown',
           sequencingProvider: 'unknown',
