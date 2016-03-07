@@ -78,9 +78,7 @@ function eachProject(project, nextProject) {
   if (project === 'additional') {
     addAdditional(g_obj, nextProject);
   } else {
-    console.log('pre');
     Project.filter({name: project, groupID: g_obj.id}).run().then(function (results) {
-      console.log('post');
       if (results.length > 0) {
         p_obj = results[0];
         dot();
@@ -404,6 +402,8 @@ function addAdditional(parentModelInstance, cb) {
           }).error(function (err) {
             next(err); //TODO
           });
+        } else {
+          next();
         }
       }).error(function (err) {
         next(err); //TODO
