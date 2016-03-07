@@ -77,10 +77,7 @@ function eachProject(project, nextProject) {
   } else {
 
 
-    Project.filter({
-      name: project,
-      groupID: GROUP.id
-    }).run().then(function (results) {
+    Project.filter({name: project, groupID: GROUP.id}).run().then(function (results) {
       console.log('post filter project');
 
       if (results.length > 0) {
@@ -125,10 +122,7 @@ function eachSample(sample, nextSample) {
     addAdditional(p_obj, nextSample);
   } else {
 
-    Sample.filter({
-      projectID: PROJECT.id,
-      name: sample
-    }).run().then(function (results) {
+    Sample.filter({projectID: PROJECT.id, name: sample}).run().then(function (results) {
 
       if (results.length > 0) {
         s_obj = results[0];
@@ -174,10 +168,7 @@ function eachRun(run, nextRun) {
     addAdditional(s_obj, nextRun);
   } else {
 
-    Run.filter({
-      sampleID: SAMPLE.id,
-      name: run
-    }).run().then(function (results) {
+    Run.filter({sampleID: SAMPLE.id, name: run}).run().then(function (results) {
 
       if (results.length > 0) {
         r_obj = results[0];
