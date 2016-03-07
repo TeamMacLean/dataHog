@@ -44,13 +44,14 @@ function eachGroup(group, nextGroup) {
   Group.filter({name: group}).run().then(function (results) {
     if (results.length > 0) {
       g_obj = results[0];
-      resume();
+      //resume();
+      nextGroup();//TODO
     } else {
       new Group({name: group}).save().then(function (rGroup) {
-          g_obj = rGroup;
-          resume();
-        }
-      ).error(function (err) {
+        g_obj = rGroup;
+        //resume();
+        nextGroup();//TODO
+      }).error(function (err) {
         nextGroup(err);
       });
     }
