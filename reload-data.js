@@ -18,6 +18,11 @@ var GROUP, PROJECT, SAMPLE, RUN;
 
 var g_obj, p_obj, s_obj, r_obj;
 
+
+function current(extra) {
+  console.log(GROUP || '', PROJECT || '', SAMPLE || '', RUN || '', extra || '');
+}
+
 function dot() {
   process.stdout.write(".");
 }
@@ -51,7 +56,7 @@ function eachGroup(group, nextGroup) {
     } else {
       new Group({name: group}).save().then(function (rGroup) {
         g_obj = rGroup;
-        console.log(GROUP);
+        current();
         resume();
       }).error(function (err) {
         nextGroup(err);
@@ -93,7 +98,7 @@ function eachProject(project, nextProject) {
           longDescription: 'none'
         }).save().then(function (rProject) {
           p_obj = rProject;
-          console.log(GROUP, PROJECT);
+          current();
           resume();
         }).error(function (err) {
           nextProject(err);
@@ -140,7 +145,7 @@ function eachSample(sample, nextSample) {
           sampleGroup: 'unknown'
         }).save().then(function (rSample) {
           s_obj = rSample;
-          console.log(GROUP, PROJECT, SAMPLE);
+          current()
           resume();
         }).error(function (err) {
           nextSample(err);
@@ -191,7 +196,7 @@ function eachRun(run, nextRun) {
           submissionToGalaxy: false
         }).save().then(function (rRun) {
           r_obj = rRun;
-          console.log(GROUP, PROJECT, SAMPLE, RUN);
+          current()
           resume();
         }).error(function (err) {
           nextRun(err);
@@ -219,8 +224,6 @@ function eachRun(run, nextRun) {
           if (err) {
             throw err;
           } else {
-
-            //console.log(pairs.length, 'pairs');
 
             let raws = rawFiles.filter(function (r) {
               return r !== 'pairs.txt';
@@ -252,7 +255,7 @@ function eachRun(run, nextRun) {
                       if (err) {
                         return nextRaw(error);
                       } else {
-                        console.log(GROUP, PROJECT, SAMPLE, RUN, raw);
+                        current(raw);
                         nextRaw();
                       }
                     });
@@ -288,9 +291,7 @@ function eachRun(run, nextRun) {
               getSibling(pairs, processed, function (sibling) {
                 //console.log('sibling is', sibling);
 
-                Read.filter({
-                  processed: true, runID: r_obj.id, name: processed
-                }).run().then(function (results) {
+                Read.filter({processed: true, runID: r_obj.id, name: raw}).run().then(function (results) {
                   if (results.length > 0) {
                     dot();
                     nextProcessed();
@@ -308,7 +309,7 @@ function eachRun(run, nextRun) {
                       if (err) {
                         return nextProcessed(error);
                       } else {
-                        console.log(GROUP, PROJECT, SAMPLE, RUN, processed);
+                        current(processed)
                         nextProcessed();
                       }
                     });
