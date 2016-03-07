@@ -296,7 +296,7 @@ function eachRun(run, nextRun) {
                       fastQCLocation: fastqcPath(processedPath),
                       legacyPath: path.join(processedPath, processed)
                     }).save(function () {
-                      current(raw);
+                      current(processed);
                       nextProcessed();
                     }).error(function (err) {
                       return nextProcessed(err);
