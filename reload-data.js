@@ -361,7 +361,7 @@ function addAdditional(parentModelInstance, cb) {
 
       console.log('parent is', parentModelInstance.path, 'want to save to', rel);
 
-      AdditionalFile.filter({path: path}).run().then(function (results) {
+      AdditionalFile.filter({name: af, path: rel}).run().then(function (results) {
         if (results.length > 0) {
           new AdditionalFile({
             parentID: parentModelInstance.id,
