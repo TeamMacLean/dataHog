@@ -47,7 +47,7 @@ function eachGroup(group, nextGroup) {
       resume();
     } else {
       new Group({name: group}).save().then(function (rGroup) {
-        g_obj = rGroup;
+          g_obj = rGroup;
           resume();
         }
       ).error(function (err) {
@@ -75,6 +75,8 @@ function eachProject(project, nextProject) {
   if (project === 'additional') {
     addAdditional(g_obj, nextProject);
   } else {
+
+    console.log(project, GROUP);
 
     Project.filter({
       name: project,
@@ -143,6 +145,8 @@ function eachSample(sample, nextSample) {
         }).save().then(function (rSample) {
           s_obj = rSample;
           resume();
+        }).error(function (err) {
+          nextSample(err);
         });
       }
 
@@ -193,7 +197,9 @@ function eachRun(run, nextRun) {
         }).save().then(function (rRun) {
           r_obj = rRun;
           resume();
-        })
+        }).error(function (err) {
+          nextRun(err);
+        });
       }
 
     });
