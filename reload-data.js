@@ -291,7 +291,7 @@ function eachRun(run, nextRun) {
               getSibling(pairs, processed, function (sibling) {
                 //console.log('sibling is', sibling);
 
-                Read.filter({processed: true, runID: r_obj.id, name: raw}).run().then(function (results) {
+                Read.filter({processed: true, runID: r_obj.id, name: processed}).run().then(function (results) {
                   if (results.length > 0) {
                     dot();
                     nextProcessed();
