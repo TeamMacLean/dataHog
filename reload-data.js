@@ -48,6 +48,7 @@ function eachGroup(group, nextGroup) {
     } else {
       new Group({name: group}).save().then(function (rGroup) {
         g_obj = rGroup;
+        console.log(GROUP);
         resume();
       }).error(function (err) {
         nextGroup(err);
@@ -74,9 +75,7 @@ function eachProject(project, nextProject) {
   if (project === 'additional') {
     addAdditional(g_obj, nextProject);
   } else {
-    console.log('pre');
     Project.filter({name: project, groupID: g_obj.id}).run().then(function (results) {
-      console.log('post');
       if (results.length > 0) {
         p_obj = results[0];
         resume();
@@ -90,6 +89,7 @@ function eachProject(project, nextProject) {
           longDescription: 'none'
         }).save().then(function (rProject) {
           p_obj = rProject;
+          console.log(GROUP,PROJECT);
           resume();
         }).error(function (err) {
           nextProject(err);
@@ -135,6 +135,7 @@ function eachSample(sample, nextSample) {
           sampleGroup: 'unknown'
         }).save().then(function (rSample) {
           s_obj = rSample;
+          console.log(GROUP,PROJECT, SAMPLE);
           resume();
         }).error(function (err) {
           nextSample(err);
@@ -184,6 +185,7 @@ function eachRun(run, nextRun) {
           submissionToGalaxy: false
         }).save().then(function (rRun) {
           r_obj = rRun;
+          console.log(GROUP,PROJECT, SAMPLE, RUN);
           resume();
         }).error(function (err) {
           nextRun(err);
@@ -212,14 +214,14 @@ function eachRun(run, nextRun) {
             throw err;
           } else {
 
-            console.log(pairs.length, 'pairs');
+            //console.log(pairs.length, 'pairs');
 
             let raws = rawFiles.filter(function (r) {
               return r !== 'pairs.txt';
             });
             async.eachSeries(raws, function (raw, nextRaw) {
 
-              console.log(GROUP, PROJECT, SAMPLE, RUN, raw);
+              //console.log(GROUP, PROJECT, SAMPLE, RUN, raw);
               //let fullPath = path.join(rawPath, raw);
               //util.md5Stream(fullPath, function (md5) {
               //  if (err) {
@@ -265,14 +267,14 @@ function eachRun(run, nextRun) {
               return p !== 'pairs.txt';
             });
 
-            console.log(pairs.length, 'pairs');
+            //console.log(pairs.length, 'pairs');
 
             async.eachSeries(processeds, function (processed, nextProcessed) {
               //let fullPath = path.join(processedPath, processed);
-              console.log(GROUP, PROJECT, SAMPLE, run, processed);
+              //console.log(GROUP, PROJECT, SAMPLE, run, processed);
               //util.md5Stream(fullPath, function (md5) {
               getSibling(pairs, processed, function (sibling) {
-                console.log('sibling is', sibling);
+                //console.log('sibling is', sibling);
                 //TODO check if exists
                 new Read({
                   processed: true,
@@ -309,7 +311,7 @@ function eachRun(run, nextRun) {
 function fastqcPath(filePath) {
   let qcPath = path.join(filePath, '.fastqc');
   if (exists(qcPath)) {
-    console.log('has fqc report');
+    //console.log('has fqc report');
     return qcPath;
   } else {
     return null;
@@ -353,13 +355,13 @@ function addAdditional(parentModelInstance, cb) {
 
   let additionalFiles = getFiles(additionalPath);
   async.eachSeries(additionalFiles, function (af, next) {
-      console.log('additional:', af, 'for', parentModelInstance.name);
+      //console.log('additional:', af, 'for', parentModelInstance.name);
       //let afPath = path.join(pathToFolder, af);
 
 
       let rel = path.join(parentModelInstance.path, 'additional', af);
 
-      console.log('parent is', parentModelInstance.path, 'want to save to', rel);
+      //console.log('parent is', parentModelInstance.path, 'want to save to', rel);
 
       AdditionalFile.filter({name: af, path: rel}).run().then(function (results) {
         if (results.length > 0) {
