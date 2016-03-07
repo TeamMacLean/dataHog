@@ -90,7 +90,7 @@ function eachProject(project, nextProject) {
           name: project,
           responsiblePerson: 'unknown@tsl.ac.uk',
           secondaryContact: 'unknown@tsl.ac.uk',
-          groupID: GROUP.id,
+          groupID: g_obj.id,
           shortDescription: 'none',
           longDescription: 'none'
         }).save().then(function (rProject) {
@@ -129,7 +129,7 @@ function eachSample(sample, nextSample) {
 
       if (results.length > 0) {
         s_obj = results[0];
-        dot()
+        dot();
         resume();
       } else {
         new Sample({
@@ -177,7 +177,7 @@ function eachRun(run, nextRun) {
 
       if (results.length > 0) {
         r_obj = results[0];
-        dot()
+        dot();
         resume();
       } else {
         new Run({
