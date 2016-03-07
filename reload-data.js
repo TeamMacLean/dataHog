@@ -76,12 +76,12 @@ function eachProject(project, nextProject) {
     addAdditional(g_obj, nextProject);
   } else {
 
-    console.log(project, GROUP);
 
     Project.filter({
       name: project,
       groupID: GROUP.id
     }).run().then(function (results) {
+      console.log('post filter project');
 
       if (results.length > 0) {
         p_obj = results[0];
