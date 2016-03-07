@@ -75,7 +75,7 @@ function eachProject(project, nextProject) {
     addAdditional(g_obj, nextProject);
   } else {
     console.log('pre');
-    Project.filter({name: project, groupID: GROUP.id}).run().then(function (results) {
+    Project.filter({name: project, groupID: g_obj.id}).run().then(function (results) {
       console.log('post');
       if (results.length > 0) {
         p_obj = results[0];
@@ -119,7 +119,7 @@ function eachSample(sample, nextSample) {
     addAdditional(p_obj, nextSample);
   } else {
 
-    Sample.filter({projectID: PROJECT.id, name: sample}).run().then(function (results) {
+    Sample.filter({projectID: p_obj.id, name: sample}).run().then(function (results) {
 
       if (results.length > 0) {
         s_obj = results[0];
@@ -165,7 +165,7 @@ function eachRun(run, nextRun) {
     addAdditional(s_obj, nextRun);
   } else {
 
-    Run.filter({sampleID: SAMPLE.id, name: run}).run().then(function (results) {
+    Run.filter({sampleID: s_obj.id, name: run}).run().then(function (results) {
 
       if (results.length > 0) {
         r_obj = results[0];
@@ -229,7 +229,7 @@ function eachRun(run, nextRun) {
                 //TODO check if exists
                 new Read({
                   processed: false,
-                  runID: RUN.id,
+                  runID: r_obj.id,
                   name: raw,
                   MD5: 'unknown',
                   fileName: raw,
@@ -276,7 +276,7 @@ function eachRun(run, nextRun) {
                 //TODO check if exists
                 new Read({
                   processed: true,
-                  runID: rRun.id,
+                  runID: r_obj.id,
                   name: processed,
                   MD5: 'unknown',
                   fileName: processed,
