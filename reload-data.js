@@ -44,13 +44,11 @@ function eachGroup(group, nextGroup) {
   Group.filter({name: group}).run().then(function (results) {
     if (results.length > 0) {
       g_obj = results[0];
-      //resume();
-      nextGroup();//TODO
+      resume();
     } else {
       new Group({name: group}).save().then(function (rGroup) {
         g_obj = rGroup;
-        //resume();
-        nextGroup();//TODO
+        resume();
       }).error(function (err) {
         nextGroup(err);
       });
@@ -76,11 +74,9 @@ function eachProject(project, nextProject) {
   if (project === 'additional') {
     addAdditional(g_obj, nextProject);
   } else {
-
-
+    console.log('pre');
     Project.filter({name: project, groupID: GROUP.id}).run().then(function (results) {
-      console.log('post filter project');
-
+      console.log('post');
       if (results.length > 0) {
         p_obj = results[0];
         resume();
