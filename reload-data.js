@@ -46,7 +46,7 @@ function eachGroup(group, nextGroup) {
   Group.filter({name: group}).run().then(function (results) {
     if (results.length > 0) {
       g_obj = results[0];
-      dot()
+      dot();
       resume();
     } else {
       new Group({name: group}).save().then(function (rGroup) {
@@ -78,10 +78,12 @@ function eachProject(project, nextProject) {
   if (project === 'additional') {
     addAdditional(g_obj, nextProject);
   } else {
+    console.log('pre');
     Project.filter({name: project, groupID: g_obj.id}).run().then(function (results) {
+      console.log('post');
       if (results.length > 0) {
         p_obj = results[0];
-        dot()
+        dot();
         resume();
       } else {
         new Project({
@@ -236,7 +238,7 @@ function eachRun(run, nextRun) {
               getSibling(pairs, raw, function (sibling) {
                 Read.filter({processed: false, runID: r_obj.id, name: raw}).run().then(function (results) {
                   if (results.length > 0) {
-                    dot()
+                    dot();
                     nextRaw();
                   } else {
                     new Read({
