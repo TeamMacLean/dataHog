@@ -245,14 +245,12 @@ function eachRun(run, nextRun) {
                       siblingID: sibling,
                       fastQCLocation: fastqcPath(rawPath),
                       legacyPath: path.join(rawPath, raw)
-                    }).save(function (error) {
-                      if (error) {
-                        return nextRaw(error);
-                      } else {
-                        current(raw);
-                        nextRaw();
-                      }
-                    });
+                    }).save(function () {
+                      current(raw);
+                      nextRaw();
+                    }).error(function (err) {
+                      return nextRaw(err);
+                    })
                   }
                 })
               });
@@ -280,6 +278,7 @@ function eachRun(run, nextRun) {
 
             async.eachSeries(processeds, function (processed, nextProcessed) {
               getSibling(pairs, processed, function (sibling) {
+                //console.log('sibling is', sibling);
 
                 Read.filter({processed: true, runID: r_obj.id, name: processed}).run().then(function (results) {
                   if (results.length > 0) {
@@ -296,15 +295,12 @@ function eachRun(run, nextRun) {
                       siblingID: sibling,
                       fastQCLocation: fastqcPath(processedPath),
                       legacyPath: path.join(processedPath, processed)
-                    }).save(function (error) {
-                      console.log('added processed!!!!!!!');
-                      if (err) {
-                        return nextProcessed(error);
-                      } else {
-                        current(processed);
-                        nextProcessed();
-                      }
-                    });
+                    }).save(function () {
+                      current(raw);
+                      nextProcessed();
+                    }).error(function (err) {
+                      return nextProcessed(err);
+                    })
                   }
                 })
               });
