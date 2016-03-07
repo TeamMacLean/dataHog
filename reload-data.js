@@ -344,7 +344,7 @@ function getFiles(srcpath) {
       return fs.statSync(path.join(srcpath, file)).isFile();
     });
   } else {
-    console.error(srcpath, 'does not exist');
+    //console.error(srcpath, 'does not exist');
     return [];
   }
 }
