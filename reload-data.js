@@ -18,15 +18,17 @@ var GROUP, PROJECT, SAMPLE, RUN;
 
 var g_obj, p_obj, s_obj, r_obj;
 
+function dot() {
+  process.stdout.write(".");
+}
+
 let run = function (rootImportFolder, cb) {
   let groups = getDirectories(rootImportFolder);
 
   if (groups.length < 1) {
     return cb('no group folders found, "' + rootImportFolder + '" is empty or does not exist');
   }
-
   root = rootImportFolder;
-
 
   async.eachSeries(groups, eachGroup, function done(err) {
     if (err) {
@@ -44,6 +46,7 @@ function eachGroup(group, nextGroup) {
   Group.filter({name: group}).run().then(function (results) {
     if (results.length > 0) {
       g_obj = results[0];
+      dot()
       resume();
     } else {
       new Group({name: group}).save().then(function (rGroup) {
@@ -78,6 +81,7 @@ function eachProject(project, nextProject) {
     Project.filter({name: project, groupID: g_obj.id}).run().then(function (results) {
       if (results.length > 0) {
         p_obj = results[0];
+        dot()
         resume();
       } else {
         new Project({
@@ -89,7 +93,7 @@ function eachProject(project, nextProject) {
           longDescription: 'none'
         }).save().then(function (rProject) {
           p_obj = rProject;
-          console.log(GROUP,PROJECT);
+          console.log(GROUP, PROJECT);
           resume();
         }).error(function (err) {
           nextProject(err);
@@ -123,6 +127,7 @@ function eachSample(sample, nextSample) {
 
       if (results.length > 0) {
         s_obj = results[0];
+        dot()
         resume();
       } else {
         new Sample({
@@ -135,7 +140,7 @@ function eachSample(sample, nextSample) {
           sampleGroup: 'unknown'
         }).save().then(function (rSample) {
           s_obj = rSample;
-          console.log(GROUP,PROJECT, SAMPLE);
+          console.log(GROUP, PROJECT, SAMPLE);
           resume();
         }).error(function (err) {
           nextSample(err);
@@ -170,6 +175,7 @@ function eachRun(run, nextRun) {
 
       if (results.length > 0) {
         r_obj = results[0];
+        dot()
         resume();
       } else {
         new Run({
@@ -185,7 +191,7 @@ function eachRun(run, nextRun) {
           submissionToGalaxy: false
         }).save().then(function (rRun) {
           r_obj = rRun;
-          console.log(GROUP,PROJECT, SAMPLE, RUN);
+          console.log(GROUP, PROJECT, SAMPLE, RUN);
           resume();
         }).error(function (err) {
           nextRun(err);
@@ -228,24 +234,30 @@ function eachRun(run, nextRun) {
               //    throw err;
               //  }
               getSibling(pairs, raw, function (sibling) {
-                //TODO check if exists
-                new Read({
-                  processed: false,
-                  runID: r_obj.id,
-                  name: raw,
-                  MD5: 'unknown',
-                  fileName: raw,
-                  siblingID: sibling,
-                  fastQCLocation: fastqcPath(rawPath),
-                  legacyPath: path.join(rawPath, raw)
-                }).save(function (error) {
-
-                  if (err) {
-                    return nextRaw(error);
-                  } else {
+                Read.filter({processed: false, runID: r_obj.id, name: raw}).run().then(function (results) {
+                  if (results.length > 0) {
+                    dot()
                     nextRaw();
+                  } else {
+                    new Read({
+                      processed: false,
+                      runID: r_obj.id,
+                      name: raw,
+                      MD5: 'unknown',
+                      fileName: raw,
+                      siblingID: sibling,
+                      fastQCLocation: fastqcPath(rawPath),
+                      legacyPath: path.join(rawPath, raw)
+                    }).save(function (error) {
+                      if (err) {
+                        return nextRaw(error);
+                      } else {
+                        console.log(GROUP, PROJECT, SAMPLE, RUN, raw);
+                        nextRaw();
+                      }
+                    });
                   }
-                });
+                })
               });
               //});
             }, function (err) {
@@ -275,19 +287,35 @@ function eachRun(run, nextRun) {
               //util.md5Stream(fullPath, function (md5) {
               getSibling(pairs, processed, function (sibling) {
                 //console.log('sibling is', sibling);
-                //TODO check if exists
-                new Read({
-                  processed: true,
-                  runID: r_obj.id,
-                  name: processed,
-                  MD5: 'unknown',
-                  fileName: processed,
-                  siblingID: sibling,
-                  fastQCLocation: fastqcPath(processedPath),
-                  legacyPath: path.join(processedPath, processed)
-                }).save(function (error) {
-                  return nextProcessed(error);
-                });
+
+                Read.filter({
+                  processed: true, runID: r_obj.id, name: processed
+                }).run().then(function (results) {
+                  if (results.length > 0) {
+                    dot();
+                    nextProcessed();
+                  } else {
+                    new Read({
+                      processed: true,
+                      runID: r_obj.id,
+                      name: processed,
+                      MD5: 'unknown',
+                      fileName: processed,
+                      siblingID: sibling,
+                      fastQCLocation: fastqcPath(processedPath),
+                      legacyPath: path.join(processedPath, processed)
+                    }).save(function (error) {
+                      if (err) {
+                        return nextProcessed(error);
+                      } else {
+                        console.log(GROUP, PROJECT, SAMPLE, RUN, processed);
+                        nextProcessed();
+                      }
+                    });
+                  }
+                })
+
+
               });
               //});
             }, function (err) {
