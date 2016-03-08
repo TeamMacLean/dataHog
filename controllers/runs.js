@@ -465,13 +465,20 @@ Runs.newPost = function (req, res) {
         Run.get(savedRun.id).getJoin({sample: {project: {group: true}}, reads: true}).then(function (result) {
 
 
-          //TODO new submission
-          var submission = new Submission({
-            runID: result.id
+          var thisGroupConfig = config.groups.filter(function (g) {
+            return g.name == result.sample.project.group.name;
           });
-          submission.save();
 
-          submission.submit();
+          if (thisGroupConfig.length > 0) {
+            if (thisGroupConfig[0].sendToENA) {
+              var submission = new Submission({
+                runID: result.id
+              });
+              submission.save();
+
+              submission.submit();
+            }
+          }
 
           var url = path.join('/', result.sample.project.group.safeName, result.sample.project.safeName, result.sample.safeName, result.safeName);
           return res.redirect(url);
@@ -571,11 +578,7 @@ Runs.show = function (req, res) {
           }
         }
       });
-
     }
-
-    console.log('processed pre', processedPRE.length);
-    console.log('processed', processed.length);
 
     return res.render('runs/show', {run: run, raw: raw, processed: processed});
   }).error(function () {
