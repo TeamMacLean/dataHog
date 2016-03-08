@@ -531,7 +531,7 @@ Runs.show = function (req, res) {
         return r.processed === true;
       });
 
-      console.log('processed', processedPRE);
+      //console.log('processed', processedPRE);
 
 
       var alreadyGrouped = [];
@@ -582,6 +582,9 @@ Runs.show = function (req, res) {
         }
       });
     }
+
+    console.log('processed pre', processedPRE.length);
+    console.log('processed', processed.length);
 
     return res.render('runs/show', {run: run, raw: raw, processed: processed});
   }).error(function () {
