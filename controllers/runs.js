@@ -560,16 +560,12 @@ Runs.show = function (req, res) {
       var disposed = [];
       processedPRE.map(function (r) {
         if (disposed.filter(function (d) {
-            return d != r && d != r.sibling;
-          }).length > 0) {
+            return d == r || d == r.sibling;
+          }).length < 1) {
           if (r.sibling) {
-            //if (disposed.filter(function (d) {
-            //    return d == r || d == r.sibling;
-            //  }).length > 0) {
             disposed.push(r);
             disposed.push(r.sibling);
             processed.push([r, r.sibling]);
-            //}
           } else {
             disposed.push(r);
             processed.push(r);
