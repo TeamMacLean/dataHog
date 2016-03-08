@@ -534,21 +534,21 @@ Runs.show = function (req, res) {
       //console.log('processed', processedPRE);
 
 
-      let alreadyGrouped = [];
+      var rawAlreadyGrouped = [];
 
       rawPRE.map(function (r) {
-        var inGroup = alreadyGrouped.filter(function (ig) {
-            return r.id === ig.id;
+        var inGroup = rawAlreadyGrouped.filter(function (ig) {
+            return r.id == ig.id;
           }).length > 0;
         if (!inGroup) {
           if (r.sibling) {
-            let processedAlready = alreadyGrouped.filter(function (ag) {
-                return ag.id === r.sibling.id;
+            var processedAlready = rawAlreadyGrouped.filter(function (ag) {
+                return ag.id == r.sibling.id;
               }).length > 0;
             if (!processedAlready) {
-              alreadyGrouped.push(r);
-              alreadyGrouped.push(r.sibling);
-              let group = [];
+              rawAlreadyGrouped.push(r);
+              rawAlreadyGrouped.push(r.sibling);
+              var group = [];
               group.push(r);
               group.push(r.sibling);
               raw.push(group);
@@ -559,43 +559,20 @@ Runs.show = function (req, res) {
         }
       });
 
-      //processedPRE.map(function (p) {
-      //  var inGroup = alreadyGrouped.filter(function (ig) {
-      //      return p.id === ig.id;
-      //    }).length > 0;
-      //  if (!inGroup) {
-      //    if (p.sibling) {
-      //      var processedAlready = alreadyGrouped.filter(function (ag) {
-      //          return ag.id === p.sibling.id;
-      //        }).length > 0;
-      //      if (!processedAlready) {
-      //        alreadyGrouped.push(p);
-      //        alreadyGrouped.push(p.sibling);
-      //        var group = [];
-      //        group.push(p);
-      //        group.push(p.sibling);
-      //        processed.push(group);
-      //      }
-      //    } else {
-      //      processed.push(p);
-      //    }
-      //  }
-      //});
-
-      alreadyGrouped = [];
+      var processedAlreadyGrouped = [];
       processedPRE.map(function (r) {
-        let inGroup = alreadyGrouped.filter(function (ig) {
-            return r.id === ig.id;
+        var inGroup = processedAlreadyGrouped.filter(function (ig) {
+            return r.id == ig.id;
           }).length > 0;
         if (!inGroup) {
           if (r.sibling) {
-            let processedAlready = alreadyGrouped.filter(function (ag) {
-                return ag.id === r.sibling.id;
+            var processedAlready = processedAlreadyGrouped.filter(function (ag) {
+                return ag.id == r.sibling.id;
               }).length > 0;
             if (!processedAlready) {
-              alreadyGrouped.push(r);
-              alreadyGrouped.push(r.sibling);
-              let group = [];
+              processedAlreadyGrouped.push(r);
+              processedAlreadyGrouped.push(r.sibling);
+              var group = [];
               group.push(r);
               group.push(r.sibling);
               processed.push(group);
