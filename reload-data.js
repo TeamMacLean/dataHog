@@ -254,7 +254,6 @@ function eachRun(run, nextRun) {
                   }
                 })
               });
-              //});
             }, function (err) {
               if (err) {
                 throw err;
@@ -285,7 +284,6 @@ function eachRun(run, nextRun) {
                     dot();
                     nextProcessed();
                   } else {
-                    console.log('need to add processed!!!!!!!');
                     new Read({
                       processed: true,
                       runID: r_obj.id,
@@ -295,30 +293,8 @@ function eachRun(run, nextRun) {
                       siblingID: sibling,
                       fastQCLocation: fastqcPath(processedPath),
                       legacyPath: path.join(processedPath, processed)
-                    }).save().then(function (pp) {
+                    }).save().then(function () {
                       current(processed);
-                      console.log(pp); //TODO!!!!!!!!!!! THIS IS BEING SAVED BUT NOT BEING SKIPPED NEXT TIME AND NOW SHOWING IN THE APP
-                      //TODO!!!!!!!!!!! THIS IS BEING SAVED BUT NOT BEING SKIPPED NEXT TIME AND NOW SHOWING IN THE APP
-                      //TODO!!!!!!!!!!! THIS IS BEING SAVED BUT NOT BEING SKIPPED NEXT TIME AND NOW SHOWING IN THE APP //TODO!!!!!!!!!!! THIS IS BEING SAVED BUT NOT BEING SKIPPED NEXT TIME AND NOW SHOWING IN THE APP
-                      //TODO!!!!!!!!!!! THIS IS BEING SAVED BUT NOT BEING SKIPPED NEXT TIME AND NOW SHOWING IN THE APP //TODO!!!!!!!!!!! THIS IS BEING SAVED BUT NOT BEING SKIPPED NEXT TIME AND NOW SHOWING IN THE APP
-                      //TODO!!!!!!!!!!! THIS IS BEING SAVED BUT NOT BEING SKIPPED NEXT TIME AND NOW SHOWING IN THE APP
-                      //TODO!!!!!!!!!!! THIS IS BEING SAVED BUT NOT BEING SKIPPED NEXT TIME AND NOW SHOWING IN THE APP //TODO!!!!!!!!!!! THIS IS BEING SAVED BUT NOT BEING SKIPPED NEXT TIME AND NOW SHOWING IN THE APP //TODO!!!!!!!!!!! THIS IS BEING SAVED BUT NOT BEING SKIPPED NEXT TIME AND NOW SHOWING IN THE APP //TODO!!!!!!!!!!! THIS IS BEING SAVED BUT NOT BEING SKIPPED NEXT TIME AND NOW SHOWING IN THE APP //TODO!!!!!!!!!!! THIS IS BEING SAVED BUT NOT BEING SKIPPED NEXT TIME AND NOW SHOWING IN THE APP //TODO!!!!!!!!!!! THIS IS BEING SAVED BUT NOT BEING SKIPPED NEXT TIME AND NOW SHOWING IN THE APP
-
-                      //TODO!!!!!!!!!!! THIS IS BEING SAVED BUT NOT BEING SKIPPED NEXT TIME AND NOW SHOWING IN THE APP
-                      //TODO!!!!!!!!!!! THIS IS BEING SAVED BUT NOT BEING SKIPPED NEXT TIME AND NOW SHOWING IN THE APP
-                      //TODO!!!!!!!!!!! THIS IS BEING SAVED BUT NOT BEING SKIPPED NEXT TIME AND NOW SHOWING IN THE APP
-                      //TODO!!!!!!!!!!! THIS IS BEING SAVED BUT NOT BEING SKIPPED NEXT TIME AND NOW SHOWING IN THE APP
-                      //TODO!!!!!!!!!!! THIS IS BEING SAVED BUT NOT BEING SKIPPED NEXT TIME AND NOW SHOWING IN THE APP
-                      //TODO!!!!!!!!!!! THIS IS BEING SAVED BUT NOT BEING SKIPPED NEXT TIME AND NOW SHOWING IN THE APP
-                      //TODO!!!!!!!!!!! THIS IS BEING SAVED BUT NOT BEING SKIPPED NEXT TIME AND NOW SHOWING IN THE APP
-                      //TODO!!!!!!!!!!! THIS IS BEING SAVED BUT NOT BEING SKIPPED NEXT TIME AND NOW SHOWING IN THE APP
-                      //TODO!!!!!!!!!!! THIS IS BEING SAVED BUT NOT BEING SKIPPED NEXT TIME AND NOW SHOWING IN THE APP
-
-
-
-
-
-
                       nextProcessed();
                     }).error(function (err) {
                       return nextProcessed(err);
