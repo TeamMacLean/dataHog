@@ -534,7 +534,7 @@ Runs.show = function (req, res) {
       //console.log('processed', processedPRE);
 
 
-      var alreadyGrouped = [];
+      let alreadyGrouped = [];
 
       rawPRE.map(function (r) {
         var inGroup = alreadyGrouped.filter(function (ig) {
@@ -542,13 +542,13 @@ Runs.show = function (req, res) {
           }).length > 0;
         if (!inGroup) {
           if (r.sibling) {
-            var processedAlready = alreadyGrouped.filter(function (ag) {
+            let processedAlready = alreadyGrouped.filter(function (ag) {
                 return ag.id === r.sibling.id;
               }).length > 0;
             if (!processedAlready) {
               alreadyGrouped.push(r);
               alreadyGrouped.push(r.sibling);
-              var group = [];
+              let group = [];
               group.push(r);
               group.push(r.sibling);
               raw.push(group);
@@ -559,25 +559,48 @@ Runs.show = function (req, res) {
         }
       });
 
-      processedPRE.map(function (p) {
-        var inGroup = alreadyGrouped.filter(function (ig) {
-            return p.id === ig.id;
+      //processedPRE.map(function (p) {
+      //  var inGroup = alreadyGrouped.filter(function (ig) {
+      //      return p.id === ig.id;
+      //    }).length > 0;
+      //  if (!inGroup) {
+      //    if (p.sibling) {
+      //      var processedAlready = alreadyGrouped.filter(function (ag) {
+      //          return ag.id === p.sibling.id;
+      //        }).length > 0;
+      //      if (!processedAlready) {
+      //        alreadyGrouped.push(p);
+      //        alreadyGrouped.push(p.sibling);
+      //        var group = [];
+      //        group.push(p);
+      //        group.push(p.sibling);
+      //        processed.push(group);
+      //      }
+      //    } else {
+      //      processed.push(p);
+      //    }
+      //  }
+      //});
+
+      processedPRE.map(function (r) {
+        let inGroup = alreadyGrouped.filter(function (ig) {
+            return r.id === ig.id;
           }).length > 0;
         if (!inGroup) {
-          if (p.sibling) {
-            var processedAlready = alreadyGrouped.filter(function (ag) {
-                return ag.id === p.sibling.id;
+          if (r.sibling) {
+            let processedAlready = alreadyGrouped.filter(function (ag) {
+                return ag.id === r.sibling.id;
               }).length > 0;
             if (!processedAlready) {
-              alreadyGrouped.push(p);
-              alreadyGrouped.push(p.sibling);
-              var group = [];
-              group.push(p);
-              group.push(p.sibling);
+              alreadyGrouped.push(r);
+              alreadyGrouped.push(r.sibling);
+              let group = [];
+              group.push(r);
+              group.push(r.sibling);
               processed.push(group);
             }
           } else {
-            processed.push(p);
+            processed.push(r);
           }
         }
       });
