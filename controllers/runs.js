@@ -582,6 +582,7 @@ Runs.show = function (req, res) {
       //  }
       //});
 
+      alreadyGrouped = [];
       processedPRE.map(function (r) {
         let inGroup = alreadyGrouped.filter(function (ig) {
             return r.id === ig.id;
