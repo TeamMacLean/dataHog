@@ -558,11 +558,9 @@ Runs.show = function (req, res) {
 
 
       var disposed = [];
-
       processedPRE.map(function (r) {
-
         if (disposed.filter(function (d) {
-            return d == r || d == r.sibling;
+            return d != r && d != r.sibling;
           }).length > 0) {
           if (r.sibling) {
             //if (disposed.filter(function (d) {
@@ -573,6 +571,7 @@ Runs.show = function (req, res) {
             processed.push([r, r.sibling]);
             //}
           } else {
+            disposed.push(r);
             processed.push(r);
           }
         }
