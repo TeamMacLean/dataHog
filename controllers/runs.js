@@ -540,7 +540,7 @@ Runs.show = function (req, res) {
         if (!inGroup) {
           if (r.sibling) {
             var processedAlready = rawAlreadyGrouped.filter(function (ag) {
-                return ag.id == r.sibling.id;
+                return r.sibling.id == ag.id;
               }).length > 0;
             if (!processedAlready) {
               rawAlreadyGrouped.push(r);
@@ -560,14 +560,14 @@ Runs.show = function (req, res) {
       var processedAlreadyGrouped = [];
       processedPRE.map(function (r) {
         var inGroup = processedAlreadyGrouped.filter(function (ig) {
-            console.log('ingroup', r.id, ig.id, r.id == ig.id);
+            //console.log('ingroup', r.id, ig.id, r.id == ig.id);
             return r.id == ig.id;
           }).length > 0;
         if (!inGroup) {
           if (r.sibling) {
             var processedAlready = processedAlreadyGrouped.filter(function (ag) {
-                console.log('processed already', ag.id, r.sibling.id, ag.id == r.sibling.id);
-                return ag.id == r.sibling.id;
+                //console.log('processed already', ag.id, r.sibling.id, ag.id == r.sibling.id);
+                return r.sibling.id == ag.id || r.id == ag.id;
               }).length > 0;
             if (!processedAlready) {
               processedAlreadyGrouped.push(r);
