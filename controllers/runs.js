@@ -561,18 +561,20 @@ Runs.show = function (req, res) {
 
       processedPRE.map(function (r) {
 
-        if (r.sibling) {
-          //TODO has the sibling already been added?
-
-          if (disposed.filter(function (d) {
-              return d == r || d == r.sibling;
-            }).length > 0) {
+        if (disposed.filter(function (d) {
+            return d == r || d == r.sibling;
+          }).length > 0) {
+          if (r.sibling) {
+            //if (disposed.filter(function (d) {
+            //    return d == r || d == r.sibling;
+            //  }).length > 0) {
             disposed.push(r);
             disposed.push(r.sibling);
             processed.push([r, r.sibling]);
+            //}
+          } else {
+            processed.push(r);
           }
-        } else {
-          processed.push(r);
         }
 
       });
