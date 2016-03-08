@@ -62,7 +62,7 @@
                    href="/<%- run.sample.project.group.safeName %>/<%- run.sample.project.safeName %>/<%- run.sample.safeName %>/<%- run.safeName %>/<%- read[0].safeName %>">
                     <%- read[0].name %>
                     <!--<div class="sub-title">-->
-                        <!--File-->
+                    <!--File-->
                     <!--</div>-->
                 </a>
 
@@ -70,7 +70,7 @@
                    href="/<%- run.sample.project.group.safeName %>/<%- run.sample.project.safeName %>/<%- run.sample.safeName %>/<%- run.safeName %>/<%- read[1].safeName %>">
                     <%- read[1].name %>
                     <!--<div class="sub-title">-->
-                        <!--File-->
+                    <!--File-->
                     <!--</div>-->
                 </a>
             </div>
@@ -84,7 +84,7 @@
                     </div>
 
                     <!--<div class="sub-title">-->
-                        <!--File-->
+                    <!--File-->
                     <!--</div>-->
                 </div>
             </a>
@@ -102,6 +102,9 @@
 
     <div class="row">
         <% processed.map(function(read){ %>
+
+        <%- processed %>
+
         <% if(read.length === 2){ %>
         <div class="col6">
             <div class="tile-group">
