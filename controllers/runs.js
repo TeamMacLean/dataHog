@@ -531,11 +531,8 @@ Runs.show = function (req, res) {
         return r.processed === true;
       });
 
-      //console.log('processed', processedPRE);
-
 
       var rawAlreadyGrouped = [];
-
       rawPRE.map(function (r) {
         var inGroup = rawAlreadyGrouped.filter(function (ig) {
             return r.id == ig.id;
@@ -558,6 +555,7 @@ Runs.show = function (req, res) {
           }
         }
       });
+
 
       var processedAlreadyGrouped = [];
       processedPRE.map(function (r) {

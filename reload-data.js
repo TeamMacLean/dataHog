@@ -226,7 +226,7 @@ function eachRun(run, nextRun) {
           } else {
 
             let raws = rawFiles.filter(function (r) {
-              return r !== 'pairs.txt';
+              return r !== 'pairs.txt' && r !== '.pairs.txt';
             });
             async.eachSeries(raws, function (raw, nextRaw) {
 
@@ -270,7 +270,7 @@ function eachRun(run, nextRun) {
             throw err;
           } else {
             let processeds = processedFiles.filter(function (p) {
-              return p !== 'pairs.txt';
+              return p !== 'pairs.txt' && p !== '.pairs.txt';
             });
 
             async.eachSeries(processeds, function (processed, nextProcessed) {
