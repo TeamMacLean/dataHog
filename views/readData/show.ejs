@@ -8,6 +8,10 @@
 
     <h2><%- read.name %></h2>
 
+    <% if(read.siblingID){ %>
+    <p>Sibling ID: <%- read.siblingID %></p>
+    <% } %>
+
     <label>MD5</label>
 
     <p><%- read.MD5 %></p>
