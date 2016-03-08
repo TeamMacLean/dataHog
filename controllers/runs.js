@@ -535,7 +535,11 @@ Runs.show = function (req, res) {
       var disposedRaw = [];
       rawPRE.map(function (r) {
         if (disposedRaw.filter(function (d) {
-            return d == r || d == r.sibling;
+            if (r.sibling) {
+              return d.id == r.sibling.id
+            } else {
+              return d.id == r.id
+            }
           }).length < 1) {
           if (r.sibling) {
             disposedRaw.push(r);
@@ -551,7 +555,11 @@ Runs.show = function (req, res) {
       var disposedProcessed = [];
       processedPRE.map(function (r) {
         if (disposedProcessed.filter(function (d) {
-            return d == r || d == r.sibling;
+            if (r.sibling) {
+              return d.id == r.sibling.id
+            } else {
+              return d.id == r.id
+            }
           }).length < 1) {
           if (r.sibling) {
             disposedProcessed.push(r);
