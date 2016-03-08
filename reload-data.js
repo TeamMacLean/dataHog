@@ -231,7 +231,7 @@ function eachRun(run, nextRun) {
             async.eachSeries(raws, function (raw, nextRaw) {
 
               getSibling(pairs, raw, function (sibling) {
-                Read.filter({processed: false, runID: r_obj.id, name: raw}).run().then(function (results) {
+                Read.filter({processed: false, runID: r_obj.id, fileName: raw}).run().then(function (results) {
                   if (results.length > 0) {
                     dot();
                     nextRaw();
@@ -279,7 +279,7 @@ function eachRun(run, nextRun) {
               getSibling(pairs, processed, function (sibling) {
                 //console.log('sibling is', sibling);
 
-                Read.filter({processed: true, runID: r_obj.id, name: processed}).run().then(function (results) {
+                Read.filter({processed: true, runID: r_obj.id, fileName: processed}).run().then(function (results) {
                   console.log('looking for', {processed: true, runID: r_obj.id, name: processed});
                   if (results.length > 0) {
                     dot();
