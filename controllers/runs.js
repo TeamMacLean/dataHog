@@ -532,74 +532,38 @@ Runs.show = function (req, res) {
       });
 
 
-      var rawAlreadyGrouped = [];
+      var disposedRaw = [];
       rawPRE.map(function (r) {
-        var inGroup = rawAlreadyGrouped.filter(function (ig) {
-            return r.id == ig.id;
-          }).length > 0;
-        if (!inGroup) {
+        if (disposedRaw.filter(function (d) {
+            return d == r || d == r.sibling;
+          }).length < 1) {
           if (r.sibling) {
-            var processedAlready = rawAlreadyGrouped.filter(function (ag) {
-                return r.sibling.id == ag.id;
-              }).length > 0;
-            if (!processedAlready) {
-              rawAlreadyGrouped.push(r);
-              rawAlreadyGrouped.push(r.sibling);
-              var group = [];
-              group.push(r);
-              group.push(r.sibling);
-              raw.push(group);
-            }
+            disposedRaw.push(r);
+            disposedRaw.push(r.sibling);
+            raw.push([r, r.sibling]);
           } else {
+            disposedRaw.push(r);
             raw.push(r);
           }
         }
       });
 
-
-      var disposed = [];
+      var disposedProcessed = [];
       processedPRE.map(function (r) {
-        if (disposed.filter(function (d) {
+        if (disposedProcessed.filter(function (d) {
             return d == r || d == r.sibling;
           }).length < 1) {
           if (r.sibling) {
-            disposed.push(r);
-            disposed.push(r.sibling);
+            disposedProcessed.push(r);
+            disposedProcessed.push(r.sibling);
             processed.push([r, r.sibling]);
           } else {
-            disposed.push(r);
+            disposedProcessed.push(r);
             processed.push(r);
           }
         }
-
       });
 
-
-      //var processedAlreadyGrouped = [];
-      //processedPRE.map(function (r) {
-      //  var inGroup = processedAlreadyGrouped.filter(function (ig) {
-      //      //console.log('ingroup', r.id, ig.id, r.id == ig.id);
-      //      return r.id == ig.id;
-      //    }).length > 0;
-      //  if (!inGroup) {
-      //    if (r.sibling) {
-      //      var processedAlready = processedAlreadyGrouped.filter(function (ag) {
-      //          //console.log('processed already', ag.id, r.sibling.id, ag.id == r.sibling.id);
-      //          return r.sibling.id == ag.id;
-      //        }).length > 0;
-      //      if (!processedAlready) {
-      //        processedAlreadyGrouped.push(r);
-      //        processedAlreadyGrouped.push(r.sibling);
-      //        var group = [];
-      //        group.push(r);
-      //        group.push(r.sibling);
-      //        processed.push(group);
-      //      }
-      //    } else {
-      //      processed.push(r);
-      //    }
-      //  }
-      //});
     }
 
     console.log('processed pre', processedPRE.length);
