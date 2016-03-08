@@ -560,6 +560,9 @@ Runs.show = function (req, res) {
       var processedAlreadyGrouped = [];
       processedPRE.map(function (r) {
         var inGroup = processedAlreadyGrouped.filter(function (ig) {
+            console.log(ig);
+            console.log(r);
+            console.log(r.id == ig.id);
             return r.id == ig.id;
           }).length > 0;
         if (!inGroup) {
