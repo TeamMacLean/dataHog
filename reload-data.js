@@ -196,7 +196,7 @@ function eachRun(run, nextRun) {
           submissionToGalaxy: false
         }).save().then(function (rRun) {
           r_obj = rRun;
-          current()
+          current();
           resume();
         }).error(function (err) {
           nextRun(err);
@@ -229,8 +229,7 @@ function eachRun(run, nextRun) {
               return r !== 'pairs.txt' && r !== '.pairs.txt';
             });
             async.eachSeries(raws, function (raw, nextRaw) {
-
-              getSibling(pairs, raw, function (sibling) {
+              getSibling(pairs, raw, false, function (sibling) {
                 Read.filter({processed: false, runID: r_obj.id, fileName: raw}).run().then(function (results) {
                   if (results.length > 0) {
                     dot();
@@ -274,7 +273,7 @@ function eachRun(run, nextRun) {
             });
 
             async.eachSeries(processeds, function (processed, nextProcessed) {
-              getSibling(pairs, processed, function (sibling) {
+              getSibling(pairs, processed, true, function (sibling) {
                 //console.log('sibling is', sibling);
 
                 Read.filter({processed: true, runID: r_obj.id, fileName: processed}).run().then(function (results) {
@@ -432,7 +431,7 @@ function getPairs(path, cb) {
   });
 }
 
-function getSibling(pairs, myFileName, cb) {
+function getSibling(pairs, myFileName, processed, cb) {
 
   var matchedPair;
 
@@ -446,7 +445,7 @@ function getSibling(pairs, myFileName, cb) {
     });
 
     if (matchedPair) {
-      Read.filter({name: matchedPair.sib}).run().then(function (reads) {
+      Read.filter({name: matchedPair.sib, processed: processed}).run().then(function (reads) {
         if (reads.length > 0) {
           return cb(reads[0].id);
         } else {
