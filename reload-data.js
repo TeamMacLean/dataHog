@@ -280,6 +280,7 @@ function eachRun(run, nextRun) {
                 //console.log('sibling is', sibling);
 
                 Read.filter({processed: true, runID: r_obj.id, name: processed}).run().then(function (results) {
+                  console.log('looking for', {processed: true, runID: r_obj.id, name: processed});
                   if (results.length > 0) {
                     dot();
                     nextProcessed();
@@ -293,7 +294,9 @@ function eachRun(run, nextRun) {
                       siblingID: sibling,
                       fastQCLocation: fastqcPath(processedPath),
                       legacyPath: path.join(processedPath, processed)
-                    }).save().then(function () {
+                    }).save().then(function (tmp) {
+                      console.log('makde', tmp);
+                      process.exit();
                       current(processed);
                       nextProcessed();
                     }).error(function (err) {
