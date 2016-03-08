@@ -273,8 +273,6 @@ function eachRun(run, nextRun) {
               return p !== 'pairs.txt';
             });
 
-            //console.log(pairs.length, 'pairs');
-
             async.eachSeries(processeds, function (processed, nextProcessed) {
               getSibling(pairs, processed, function (sibling) {
                 //console.log('sibling is', sibling);
@@ -294,8 +292,6 @@ function eachRun(run, nextRun) {
                       fastQCLocation: fastqcPath(processedPath),
                       legacyPath: path.join(processedPath, processed)
                     }).save().then(function (tmp) {
-                      console.log('make', tmp);
-                      process.exit();
                       current(processed);
                       nextProcessed();
                     }).error(function (err) {
