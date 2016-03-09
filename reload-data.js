@@ -83,7 +83,7 @@ function eachProject(project, nextProject) {
   if (project === 'additional') {
     addAdditional(g_obj, nextProject);
   } else {
-    Project.filter({name: project, groupID: g_obj.id}).run().then(function (results) {
+    Project.filter({safeName: project, groupID: g_obj.id}).run().then(function (results) {
       if (results.length > 0) {
         p_obj = results[0];
         dot();
@@ -128,7 +128,7 @@ function eachSample(sample, nextSample) {
     addAdditional(p_obj, nextSample);
   } else {
 
-    Sample.filter({projectID: p_obj.id, name: sample}).run().then(function (results) {
+    Sample.filter({projectID: p_obj.id, safeName: sample}).run().then(function (results) {
 
       if (results.length > 0) {
         s_obj = results[0];
@@ -176,7 +176,7 @@ function eachRun(run, nextRun) {
     addAdditional(s_obj, nextRun);
   } else {
 
-    Run.filter({sampleID: s_obj.id, name: run}).run().then(function (results) {
+    Run.filter({sampleID: s_obj.id, safeName: run}).run().then(function (results) {
 
       if (results.length > 0) {
         r_obj = results[0];
