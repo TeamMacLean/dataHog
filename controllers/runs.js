@@ -449,20 +449,20 @@ Runs.newPost = function (req, res) {
       var processed = false;
       //TODO disabled for now
 
-      //addReadToRun(req, processed, savedRun, pathToNewRunFolder, function (err) {
-      //
-      //  if (err) {
-      //    console.error(err);
-      //    deleteRun(savedRun, function () {
-      //      return res.render('error', {error: err});
-      //    });
-      //  } else {
-      //    return renderOK();
-      //  }
-      //
-      //});
+      addReadToRun(req, processed, savedRun, pathToNewRunFolder, function (err) {
 
-      renderOK();
+        if (err) {
+          console.error(err);
+          deleteRun(savedRun, function () {
+            return res.render('error', {error: err});
+          });
+        } else {
+          return renderOK();
+        }
+
+      });
+
+      //renderOK();
 
       function renderOK() {
         Run.get(savedRun.id).getJoin({sample: {project: {group: true}}, reads: true}).then(function (result) {
