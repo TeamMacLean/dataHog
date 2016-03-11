@@ -279,7 +279,8 @@ function addReadToRun(req, processed, savedRun, pathToNewRunFolder, cb) {
           }
 
           if (happyFiles.length < 1) {
-            return cb(new Error('no read files attached'));
+            //TODO
+            //return cb(new Error('no read files attached'));
           }
 
           var usedFileNames = [];
