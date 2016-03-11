@@ -447,23 +447,25 @@ Runs.newPost = function (req, res) {
       }
 
       var processed = false;
+      //TODO disabled for now
 
-      addReadToRun(req, processed, savedRun, pathToNewRunFolder, function (err) {
+      //addReadToRun(req, processed, savedRun, pathToNewRunFolder, function (err) {
+      //
+      //  if (err) {
+      //    console.error(err);
+      //    deleteRun(savedRun, function () {
+      //      return res.render('error', {error: err});
+      //    });
+      //  } else {
+      //    return renderOK();
+      //  }
+      //
+      //});
 
-        if (err) {
-          console.error(err);
-          deleteRun(savedRun, function () {
-            return res.render('error', {error: err});
-          });
-        } else {
-          return renderOK();
-        }
-
-      });
+      renderOK();
 
       function renderOK() {
         Run.get(savedRun.id).getJoin({sample: {project: {group: true}}, reads: true}).then(function (result) {
-
 
           var thisGroupConfig = config.groups.filter(function (g) {
             return g.name == result.sample.project.group.name;

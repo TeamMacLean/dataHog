@@ -290,7 +290,7 @@ function eachRun(run, nextRun) {
                       siblingID: sibling,
                       fastQCLocation: fastqcPath(processedPath),
                       legacyPath: path.join(processedPath, processed)
-                    }).save().then(function (tmp) {
+                    }).save().then(function () {
                       current(processed);
                       nextProcessed();
                     }).error(function (err) {
