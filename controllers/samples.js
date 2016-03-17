@@ -9,6 +9,7 @@ var util = require('../lib/util');
 var path = require('path');
 var config = require('../config.json');
 var async = require('async');
+var error = require('../lib/error');
 
 /**
  * render new sample form

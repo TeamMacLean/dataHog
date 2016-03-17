@@ -225,7 +225,6 @@ function processAllFiles(req, cb) {
  * @param cb {function}
  */
 function addReadToRun(req, processed, savedRun, pathToNewRunFolder, cb) {
-
   var rootPath = pathToNewRunFolder;
 
   if (processed) {
