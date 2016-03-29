@@ -130,11 +130,15 @@ function eachSample(sample, nextSample) {
 
     Sample.filter({projectID: p_obj.id, safeName: sample}).run().then(function (results) {
 
+
+      console.log('searching for sample with', {projectID: p_obj.id, safeName: sample});
+
       if (results.length > 0) {
         s_obj = results[0];
         dot();
         resume();
       } else {
+        console.log('DID NOT FIND SAMPLE')
         new Sample({
           projectID: p_obj.id,
           name: sample,
@@ -177,7 +181,7 @@ function eachRun(run, nextRun) {
   } else {
 
     Run.filter({sampleID: s_obj.id, safeName: run}).run().then(function (results) {
-      console.log('searching for run with', {sampleID: s_obj.id, safeName: run});
+
 
       if (results.length > 0) {
         r_obj = results[0];
