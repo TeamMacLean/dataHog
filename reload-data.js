@@ -80,35 +80,32 @@ function eachGroup(group, nextGroup) {
 function eachProject(project, nextProject) {
   PROJECT = project;
 
-
   if (project === 'additional') {
     addAdditional(g_obj, nextProject);
   } else {
-    util.generateSafeName(project, [], function(sn) {
-      Project.filter({safeName: sn, groupID: g_obj.id}).run().then(function (results) {
-        if (results.length > 0) {
-          p_obj = results[0];
-          dot();
+    Project.filter({safeName: project, groupID: g_obj.id}).run().then(function (results) {
+      if (results.length > 0) {
+        p_obj = results[0];
+        dot();
+        resume();
+      } else {
+        new Project({
+          name: project,
+          responsiblePerson: 'unknown@tsl.ac.uk',
+          secondaryContact: 'unknown@tsl.ac.uk',
+          groupID: g_obj.id,
+          shortDescription: 'none',
+          longDescription: 'none'
+        }).save().then(function (rProject) {
+          p_obj = rProject;
+          current();
           resume();
-        } else {
-          new Project({
-            name: sn,
-            responsiblePerson: 'unknown@tsl.ac.uk',
-            secondaryContact: 'unknown@tsl.ac.uk',
-            groupID: g_obj.id,
-            shortDescription: 'none',
-            longDescription: 'none'
-          }).save().then(function (rProject) {
-            p_obj = rProject;
-            current();
-            resume();
-          }).error(function (err) {
-            nextProject(err);
-          });
-        }
+        }).error(function (err) {
+          nextProject(err);
+        });
+      }
 
-      });
-    })
+    });
   }
 
   function resume() {
@@ -130,33 +127,32 @@ function eachSample(sample, nextSample) {
   if (sample === 'additional') {
     addAdditional(p_obj, nextSample);
   } else {
-    util.generateSafeName(sample, [], function(sn) {
-      Sample.filter({projectID: p_obj.id, safeName: sn}).run().then(function (results) {
 
-        if (results.length > 0) {
-          s_obj = results[0];
-          dot();
+    Sample.filter({projectID: p_obj.id, safeName: sample}).run().then(function (results) {
+
+      if (results.length > 0) {
+        s_obj = results[0];
+        dot();
+        resume();
+      } else {
+        new Sample({
+          projectID: p_obj.id,
+          name: sample,
+          scientificName: 'unknown',
+          commonName: 'unknown',
+          ncbi: 'unknown',
+          conditions: 'unknown',
+          sampleGroup: 'unknown'
+        }).save().then(function (rSample) {
+          s_obj = rSample;
+          current()
           resume();
-        } else {
-          new Sample({
-            projectID: p_obj.id,
-            name: sn,
-            scientificName: 'unknown',
-            commonName: 'unknown',
-            ncbi: 'unknown',
-            conditions: 'unknown',
-            sampleGroup: 'unknown'
-          }).save().then(function (rSample) {
-            s_obj = rSample;
-            current()
-            resume();
-          }).error(function (err) {
-            nextSample(err);
-          });
-        }
+        }).error(function (err) {
+          nextSample(err);
+        });
+      }
 
-      });
-    })
+    });
   }
 
   function resume() {
@@ -180,37 +176,34 @@ function eachRun(run, nextRun) {
     addAdditional(s_obj, nextRun);
   } else {
 
-    util.generateSafeName(run, [], function(sn) {
+    Run.filter({sampleID: s_obj.id, safeName: run}).run().then(function (results) {
 
-      Run.filter({sampleID: s_obj.id, safeName: sn}).run().then(function (results) {
-
-        if (results.length > 0) {
-          r_obj = results[0];
-          dot();
+      if (results.length > 0) {
+        r_obj = results[0];
+        dot();
+        resume();
+      } else {
+        new Run({
+          sampleID: s_obj.id,
+          name: run,
+          libraryType: 'unknown',
+          sequencingProvider: 'unknown',
+          sequencingTechnology: 'unknown',
+          librarySource: 'unknown',
+          librarySelection: 'unknown',
+          libraryStrategy: 'unknown',
+          insertSize: 'unknown',
+          submissionToGalaxy: false
+        }).save().then(function (rRun) {
+          r_obj = rRun;
+          current();
           resume();
-        } else {
-          new Run({
-            sampleID: s_obj.id,
-            name: sn,
-            libraryType: 'unknown',
-            sequencingProvider: 'unknown',
-            sequencingTechnology: 'unknown',
-            librarySource: 'unknown',
-            librarySelection: 'unknown',
-            libraryStrategy: 'unknown',
-            insertSize: 'unknown',
-            submissionToGalaxy: false
-          }).save().then(function (rRun) {
-            r_obj = rRun;
-            current();
-            resume();
-          }).error(function (err) {
-            nextRun(err);
-          });
-        }
+        }).error(function (err) {
+          nextRun(err);
+        });
+      }
 
-      });
-    })
+    });
   }
 
   function resume() {
@@ -237,29 +230,27 @@ function eachRun(run, nextRun) {
             });
             async.eachSeries(raws, function (raw, nextRaw) {
               getSibling(pairs, raw, false, function (sibling) {
-                util.generateSafeName(raw, [], function(sn) {
-                  Read.filter({processed: false, runID: r_obj.id, fileName: sn}).run().then(function (results) {
-                    if (results.length > 0) {
-                      dot();
+                Read.filter({processed: false, runID: r_obj.id, fileName: raw}).run().then(function (results) {
+                  if (results.length > 0) {
+                    dot();
+                    nextRaw();
+                  } else {
+                    new Read({
+                      processed: false,
+                      runID: r_obj.id,
+                      name: raw,
+                      MD5: 'unknown',
+                      fileName: raw,
+                      siblingID: sibling,
+                      fastQCLocation: fastqcPath(rawPath),
+                      legacyPath: path.join(rawPath, raw)
+                    }).save().then(function () {
+                      current(raw);
                       nextRaw();
-                    } else {
-                      new Read({
-                        processed: false,
-                        runID: r_obj.id,
-                        name: sn,
-                        MD5: 'unknown',
-                        fileName: raw,
-                        siblingID: sibling,
-                        fastQCLocation: fastqcPath(rawPath),
-                        legacyPath: path.join(rawPath, raw)
-                      }).save().then(function () {
-                        current(raw);
-                        nextRaw();
-                      }).error(function (err) {
-                        return nextRaw(err);
-                      })
-                    }
-                  })
+                    }).error(function (err) {
+                      return nextRaw(err);
+                    })
+                  }
                 })
               });
             }, function (err) {
@@ -284,29 +275,28 @@ function eachRun(run, nextRun) {
             async.eachSeries(processeds, function (processed, nextProcessed) {
               getSibling(pairs, processed, true, function (sibling) {
                 //console.log('sibling is', sibling);
-                util.generateSafeName(processed, [], function(sn) {
-                  Read.filter({processed: true, runID: r_obj.id, fileName: sn}).run().then(function (results) {
-                    if (results.length > 0) {
-                      dot();
+
+                Read.filter({processed: true, runID: r_obj.id, fileName: processed}).run().then(function (results) {
+                  if (results.length > 0) {
+                    dot();
+                    nextProcessed();
+                  } else {
+                    new Read({
+                      processed: true,
+                      runID: r_obj.id,
+                      name: processed,
+                      MD5: 'unknown',
+                      fileName: processed,
+                      siblingID: sibling,
+                      fastQCLocation: fastqcPath(processedPath),
+                      legacyPath: path.join(processedPath, processed)
+                    }).save().then(function () {
+                      current(processed);
                       nextProcessed();
-                    } else {
-                      new Read({
-                        processed: true,
-                        runID: r_obj.id,
-                        name: sn,
-                        MD5: 'unknown',
-                        fileName: processed,
-                        siblingID: sibling,
-                        fastQCLocation: fastqcPath(processedPath),
-                        legacyPath: path.join(processedPath, processed)
-                      }).save().then(function () {
-                        current(processed);
-                        nextProcessed();
-                      }).error(function (err) {
-                        return nextProcessed(err);
-                      })
-                    }
-                  })
+                    }).error(function (err) {
+                      return nextProcessed(err);
+                    })
+                  }
                 })
               });
             }, function (err) {
