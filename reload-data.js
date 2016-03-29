@@ -362,6 +362,8 @@ function addAdditional(parentModelInstance, cb) {
 
   let additionalPath = path.join(config.dataDir, parentModelInstance.path, 'additional');
 
+  console.log('path to a.f', additionalPath);
+
   let additionalFiles = getFiles(additionalPath);
   async.eachSeries(additionalFiles, function (af, next) {
       //console.log('additional:', af, 'for', parentModelInstance.name);
