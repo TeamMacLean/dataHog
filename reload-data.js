@@ -80,32 +80,35 @@ function eachGroup(group, nextGroup) {
 function eachProject(project, nextProject) {
   PROJECT = project;
 
+
   if (project === 'additional') {
     addAdditional(g_obj, nextProject);
   } else {
-    Project.filter({safeName: project, groupID: g_obj.id}).run().then(function (results) {
-      if (results.length > 0) {
-        p_obj = results[0];
-        dot();
-        resume();
-      } else {
-        new Project({
-          name: project,
-          responsiblePerson: 'unknown@tsl.ac.uk',
-          secondaryContact: 'unknown@tsl.ac.uk',
-          groupID: g_obj.id,
-          shortDescription: 'none',
-          longDescription: 'none'
-        }).save().then(function (rProject) {
-          p_obj = rProject;
-          current();
+    util.generateSafeName(project, [], function(sn) {
+      Project.filter({safeName: sn, groupID: g_obj.id}).run().then(function (results) {
+        if (results.length > 0) {
+          p_obj = results[0];
+          dot();
           resume();
-        }).error(function (err) {
-          nextProject(err);
-        });
-      }
+        } else {
+          new Project({
+            name: sn,
+            responsiblePerson: 'unknown@tsl.ac.uk',
+            secondaryContact: 'unknown@tsl.ac.uk',
+            groupID: g_obj.id,
+            shortDescription: 'none',
+            longDescription: 'none'
+          }).save().then(function (rProject) {
+            p_obj = rProject;
+            current();
+            resume();
+          }).error(function (err) {
+            nextProject(err);
+          });
+        }
 
-    });
+      });
+    })
   }
 
   function resume() {
@@ -362,7 +365,7 @@ function addAdditional(parentModelInstance, cb) {
 
   let additionalPath = path.join(config.dataDir, parentModelInstance.path, 'additional');
 
-  console.log('path to a.f', additionalPath);
+  //console.log('path to a.f', additionalPath);
 
   let additionalFiles = getFiles(additionalPath);
   async.eachSeries(additionalFiles, function (af, next) {
