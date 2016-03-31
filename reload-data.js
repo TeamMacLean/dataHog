@@ -131,14 +131,14 @@ function eachSample(sample, nextSample) {
     Sample.filter({projectID: p_obj.id, safeName: sample}).run().then(function (results) {
 
 
-      console.log('searching for sample with', {projectID: p_obj.id, safeName: sample});
+      //console.log('searching for sample with', {projectID: p_obj.id, safeName: sample});
 
       if (results.length > 0) {
         s_obj = results[0];
         dot();
         resume();
       } else {
-        console.log('DID NOT FIND SAMPLE')
+        //console.log('DID NOT FIND SAMPLE')
         new Sample({
           projectID: p_obj.id,
           name: sample,
