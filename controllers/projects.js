@@ -141,6 +141,17 @@ Projects.show = function (req, res, next) {
 
     var project = projects[0];
 
+    //TODO order samples
+
+    project.samples.sort(function (a, b) {
+      var nameA = a.safeName.toLowerCase(), nameB = b.safeName.toLowerCase();
+      if (nameA < nameB) //sort string ascending
+        return -1;
+      if (nameA > nameB)
+        return 1;
+      return 0; //default return value (no sorting)
+    });
+
     return res.render('projects/show', {project: project});
     //});
   }).error(function () {
