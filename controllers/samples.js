@@ -147,6 +147,14 @@ Samples.show = function (req, res) {
 
       }
       var sample = results[0];
+      sample.runs.sort(function (a, b) {
+        var nameA = a.safeName.toLowerCase(), nameB = b.safeName.toLowerCase();
+        if (nameA < nameB) //sort string ascending
+          return -1;
+        if (nameA > nameB)
+          return 1;
+        return 0; //default return value (no sorting)
+      });
 
       res.render('samples/show', {sample: sample});
     })

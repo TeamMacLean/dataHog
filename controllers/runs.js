@@ -528,6 +528,15 @@ Runs.show = function (req, res) {
 
     var run = results[0];
 
+    run.reads.sort(function (a, b) {
+      var nameA = a.safeName.toLowerCase(), nameB = b.safeName.toLowerCase();
+      if (nameA < nameB) //sort string ascending
+        return -1;
+      if (nameA > nameB)
+        return 1;
+      return 0; //default return value (no sorting)
+    });
+
     var raw = [];
     var processed = [];
 
