@@ -350,7 +350,7 @@ function addReadToRun(req, processed, savedRun, pathToNewRunFolder, cb) {
                     });
 
 
-                    fastqc.run(newFullPath, fqcPath, function () {
+                    //TODO FIXME fastqc.run(newFullPath, fqcPath, function () {
                       console.log('created fastqc report');
                       //read.fastQCLocation = fqcPath;
                       read.save().then(function (savedRead) {
@@ -363,7 +363,7 @@ function addReadToRun(req, processed, savedRun, pathToNewRunFolder, cb) {
                           return cb(err);
                         }
                       });
-                    });
+                    //});
                   }
                 });
               });
