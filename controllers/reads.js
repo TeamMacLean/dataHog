@@ -30,13 +30,13 @@ Reads.show = function (req, res, next) {
   }).run().then(function (results) {
 
     if (results.length < 1) {
-      return error('could not find read ' + readSN, req, res);
+      return errorLib('could not find read ' + readSN, req, res);
     }
 
     var read = results[0];
     return res.render('readData/show', {read: read});
   }).error(function (err) {
-    return error(err, req, res);
+    return errorLib(err, req, res);
   });
 
 };
@@ -73,13 +73,13 @@ Reads.fastQC = function (req, res) {
       if (!err) {
         return res.sendFile(htmlPath);
       } else {
-        return error('could not find fast qc report', req, res);
+        return errorLib('could not find fast qc report', req, res);
       }
     });
 
 
   }).error(function () {
-    return error('could not find run', req, res);
+    return errorLib('could not find run', req, res);
   });
 };
 
