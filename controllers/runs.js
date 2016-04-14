@@ -10,7 +10,7 @@ var fastqc = require('../lib/fastqc');
 var zlib = require('zlib');
 var isGzip = require('is-gzip');
 var isBzip2 = require('is-bzip2');
-var read = require('fs').readFileSync;
+var readFileSync = require('fs').readFileSync;
 var rimraf = require('rimraf');
 var config = require('../config.json');
 var util = require('../lib/util');
@@ -119,7 +119,7 @@ function ensureCompressed(fileAndMD5, cb) {
   //var file = fileAndMD5.file;
   var md5er = fileAndMD5.md5;
 
-  var fileBuff = read(fileAndMD5.path);
+  var fileBuff = readFileSync(fileAndMD5.path);
 
   var compressed = isBzip2(fileBuff) || isGzip(fileBuff);
   var fileExtention = path.extname(fileAndMD5.name);

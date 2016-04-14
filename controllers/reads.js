@@ -6,7 +6,7 @@ var Read = require('../models/read.js');
 var fs = require('fs');
 var path = require('path');
 var config = require('../config.json');
-var errorLib = require('../lib/error');
+var renderError = require('../lib/error');
 
 
 /**
@@ -30,13 +30,13 @@ Reads.show = function (req, res, next) {
   }).run().then(function (results) {
 
     if (results.length < 1) {
-      return errorLib('could not find read ' + readSN, req, res);
+      return renderError('could not find read ' + readSN, req, res);
     }
 
     var read = results[0];
     return res.render('readData/show', {read: read});
   }).error(function (err) {
-    return errorLib(err, req, res);
+    return renderError(err, req, res);
   });
 
 };
@@ -73,13 +73,13 @@ Reads.fastQC = function (req, res) {
       if (!err) {
         return res.sendFile(htmlPath);
       } else {
-        return errorLib('could not find fast qc report', req, res);
+        return renderError('could not find fast qc report', req, res);
       }
     });
 
 
   }).error(function () {
-    return errorLib('could not find run', req, res);
+    return renderError('could not find run', req, res);
   });
 };
 
@@ -125,11 +125,11 @@ Reads.download = function (req, res) {
 
             } else {
               // It isn't accessible
-              return errorLib('Could not find file ' + read.path, req, res);
+              return renderError('Could not find file ' + read.path, req, res);
             }
           });
         } else {
-          return errorLib('Could not find file ' + read.path, req, res);
+          return renderError('Could not find file ' + read.path, req, res);
         }
       }
     });
@@ -139,3 +139,7 @@ Reads.download = function (req, res) {
 };
 
 module.exports = Reads;
+
+
+
+
