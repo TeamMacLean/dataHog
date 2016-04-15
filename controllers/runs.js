@@ -611,7 +611,7 @@ Runs.show = function (req, res) {
           }
         });
       });
-    } catch () {
+    } catch (err) {
 
     }
 
@@ -629,7 +629,7 @@ Runs.show = function (req, res) {
           }
         });
       });
-    } catch () {
+    } catch (err) {
 
     }
 
