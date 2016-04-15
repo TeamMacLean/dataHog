@@ -598,15 +598,24 @@ Runs.show = function (req, res) {
     var rawPath = path.join(config.dataDir, run.path, 'raw');
     var processedPath = path.join(config.dataDir, run.path, 'processed');
 
-    fs.access(rawPath, fs.F_OK, function () {
-      var rawFiles = fs.readdirSync(rawPath);
-      console.log('raw files', rawFiles);
-    });
+    try {
+      fs.access(rawPath, fs.F_OK, function () {
+        var rawFiles = fs.readdirSync(rawPath);
+        console.log('raw files', rawFiles);
+      });
+    } catch (err) {
 
-    fs.access(processedPath, fs.F_OK, function () {
-      var processedFiles = fs.readdirSync(processedPath);
-      console.log('processed files', processedFiles);
-    });
+    }
+
+
+    try {
+      fs.access(processedPath, fs.F_OK, function () {
+        var processedFiles = fs.readdirSync(processedPath);
+        console.log('processed files', processedFiles);
+      });
+    } catch (err) {
+
+    }
 
 
     return res.render('runs/show', {run: run, raw: raw, processed: processed});
