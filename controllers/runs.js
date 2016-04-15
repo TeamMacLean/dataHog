@@ -595,7 +595,8 @@ Runs.show = function (req, res) {
     //TODO
     var unknownReads = [];
 
-    var files = fs.readdirSync(run.path);
+    var fullPath = path.join(config.dataDir, run.path);
+    var files = fs.readdirSync(fullPath);
 
     console.log(files);
 
