@@ -606,10 +606,10 @@ Runs.show = function (req, res) {
           if (raw.filter(function (r) {
               if (r.length === 2) {
                 r.map(function (rrm) {
-                  return rrm.name == rf;
+                  return rrm.name.toUpperCase() == rf.toUpperCase();
                 })
               } else {
-                return r.name == rf;
+                return r.name.toUpperCase() == rf.toUpperCase();
               }
             }).length < 1) {
             unknownRaw.push(rf);
