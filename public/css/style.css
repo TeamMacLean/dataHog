@@ -202,7 +202,7 @@ ul.no-decoration, li.no-decoration {
     line-height: 2rem;
 }
 
-.tile .unknown {
+.tile.unknown {
     border: 4px dashed black;
 }
 
