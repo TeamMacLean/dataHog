@@ -602,15 +602,11 @@ Runs.show = function (req, res) {
       fs.accessSync(rawPath, fs.F_OK);
       var rawFiles = fs.readdirSync(rawPath);
       rawFiles.map(function (rf) {
-        if (rf != '.fastqc') {
+        if (rf != '.fastqc' && rf.indexOf('.txt') < 0) {
           if (raw.filter(function (r) {
-              if (r.length === 2) {
-                r.map(function (rrm) {
-                  return rrm.name.toUpperCase() == rf.toUpperCase();
-                })
-              } else {
-                return r.name.toUpperCase() == rf.toUpperCase();
-              }
+              r.map(function (rrm) {
+                return rrm.name.toUpperCase() == rf.toUpperCase();
+              })
             }).length < 1) {
             unknownRaw.push(rf);
           }
@@ -623,15 +619,11 @@ Runs.show = function (req, res) {
       fs.accessSync(processedPath, fs.F_OK);
       var processedFiles = fs.readdirSync(processedPath);
       processedFiles.map(function (pf) {
-        if (pf != '.fastqc') {
+        if (pf != '.fastqc' && pf.indexOf('.txt') < 0) {
           if (processed.filter(function (p) {
-              if (p.length === 2) {
-                p.map(function (rrm) {
-                  return rrm.name == pf;
-                })
-              } else {
-                return r.name == pf;
-              }
+              p.map(function (rrm) {
+                return rrm.name == pf;
+              })
             }).length < 1) {
             unknownProcessed.push(pf);
           }
