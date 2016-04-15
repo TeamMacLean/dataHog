@@ -599,6 +599,9 @@ Runs.show = function (req, res) {
     var processedPath = path.join(config.dataDir, run.path, 'processed');
 
     try {
+
+      console.log('looking in', rawPath);
+
       fs.accessSync(rawPath, fs.F_OK, function () {
         var rawFiles = fs.readdirSync(rawPath);
 
