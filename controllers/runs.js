@@ -611,6 +611,8 @@ Runs.show = function (req, res) {
           }
         });
       });
+    } catch () {
+
     }
 
 
@@ -627,6 +629,8 @@ Runs.show = function (req, res) {
           }
         });
       });
+    } catch () {
+
     }
 
 
