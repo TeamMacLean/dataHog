@@ -599,22 +599,16 @@ Runs.show = function (req, res) {
     var processedPath = path.join(config.dataDir, run.path, 'processed');
 
     try {
-
-
-
-      fs.accessSync(rawPath, fs.F_OK, function () {
-        var rawFiles = fs.readdirSync(rawPath);
-
-        console.log('looking in', rawPath);
-
-        rawFiles.map(function (rf) {
-          console.log(rf);
-          if (raw.filter(function (r) {
-              return r.fileName == rf;
-            }).length < 1) {
-            unknownRaw.push(rf);
-          }
-        });
+      fs.accessSync(rawPath, fs.F_OK);
+      var rawFiles = fs.readdirSync(rawPath);
+      console.log('looking in', rawPath);
+      rawFiles.map(function (rf) {
+        console.log(rf);
+        if (raw.filter(function (r) {
+            return r.fileName == rf;
+          }).length < 1) {
+          unknownRaw.push(rf);
+        }
       });
     } catch (err) {
 
@@ -622,17 +616,16 @@ Runs.show = function (req, res) {
 
 
     try {
-      fs.accessSync(processedPath, fs.F_OK, function () {
-        var processedFiles = fs.readdirSync(processedPath);
+      fs.accessSync(processedPath, fs.F_OK);
+      var processedFiles = fs.readdirSync(processedPath);
 
-        processedFiles.map(function (pf) {
-          console.log(pf);
-          if (processed.filter(function (r) {
-              return r.fileName == pf;
-            }).length < 1) {
-            unknownProcessed.push(pf);
-          }
-        });
+      processedFiles.map(function (pf) {
+        console.log(pf);
+        if (processed.filter(function (r) {
+            return r.fileName == pf;
+          }).length < 1) {
+          unknownProcessed.push(pf);
+        }
       });
     } catch (err) {
 
