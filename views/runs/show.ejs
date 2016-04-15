@@ -51,6 +51,7 @@
     <p><%- run.submissionToGalaxy %></p>
 
     <h2>Raw:</h2>
+    <%- unknownRaw %>
     <% if(raw && raw.length > 0){ %>
 
     <div class="row">
@@ -82,17 +83,13 @@
         <% } %>
         <% }); %>
     </div>
-    <% } else { %>
-    <p>None</p>
     <% } %>
 
     <h2>Processed</h2>
-
+    <%- unknownProcessed %>
     <% if(processed && processed.length > 0){ %>
-
     <div class="row">
         <% processed.map(function(read){ %>
-
         <% if(read.length === 2){ %>
         <div class="col6">
             <div class="tile-group">
