@@ -84,9 +84,16 @@
     </div>
     <% } %>
 
-    <% unknownRaw.map(function(ur){ %>
-    <%- ur %>
-    <% }) %>
+    <div class="row">
+        <% if(unknownRaw && unknownRaw.length > 0){ %>
+        <% unknownRaw.map(function(ur){ %>
+        <div class="col6">
+            <a class="tile unknown" href="#"><%- ur %></a>
+        </div>
+        <% }) %>
+        <% } %>
+    </div>
+
 
     <h2>Processed</h2>
     <% if(processed && processed.length > 0){ %>
@@ -110,7 +117,6 @@
         <div class="col6">
             <a href="/<%- run.sample.project.group.safeName %>/<%- run.sample.project.safeName %>/<%- run.sample.safeName %>/<%- run.safeName %>/<%- read[0].safeName %>">
                 <div class="tile">
-                    File:
                     <%- read[0].name %>
                 </div>
             </a>
@@ -120,9 +126,15 @@
     </div>
     <% } %>
 
-    <% unknownProcessed.map(function(up){ %>
-    <%- up %>
-    <% }) %>
+    <div class="row">
+        <% if(unknownProcessed && unknownProcessed.length > 0){ %>
+        <% unknownProcessed.map(function(up){ %>
+        <div class="col6">
+            <a class="tile unknown" href="#"><%- up %></a>
+        </div>
+        <% }) %>
+        <% } %>
+    </div>
 
     <hr>
     <form action="/<%- run.sample.project.group.safeName %>/<%- run.sample.project.safeName %>/<%- run.sample.safeName %>/<%- run.safeName %>/add"
