@@ -565,7 +565,7 @@ Runs.show = function (req, res) {
             raw.push([r, r.sibling]);
           } else {
             disposedRaw.push(r);
-            raw.push(r);
+            raw.push([r]);
           }
         }
       });
@@ -585,7 +585,7 @@ Runs.show = function (req, res) {
             processed.push([r, r.sibling]);
           } else {
             disposedProcessed.push(r);
-            processed.push(r);
+            processed.push([r]);
           }
         }
       });
