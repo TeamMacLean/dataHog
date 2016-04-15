@@ -601,34 +601,33 @@ Runs.show = function (req, res) {
     try {
       fs.accessSync(rawPath, fs.F_OK);
       var rawFiles = fs.readdirSync(rawPath);
-      console.log('looking in', rawPath);
       rawFiles.map(function (rf) {
-        console.log(rf);
-        if (raw.filter(function (r) {
-            return r.fileName == rf;
-          }).length < 1) {
-          unknownRaw.push(rf);
+        if (rf != '.fastqc') {
+          if (raw.filter(function (r) {
+              console.log(r.fileName, rf, r.fileName == rf);
+              return r.fileName == rf;
+            }).length < 1) {
+            unknownRaw.push(rf);
+          }
         }
       });
     } catch (err) {
-
     }
-
 
     try {
       fs.accessSync(processedPath, fs.F_OK);
       var processedFiles = fs.readdirSync(processedPath);
-
       processedFiles.map(function (pf) {
-        console.log(pf);
-        if (processed.filter(function (r) {
-            return r.fileName == pf;
-          }).length < 1) {
-          unknownProcessed.push(pf);
+        if (pf != '.fastqc') {
+          if (processed.filter(function (r) {
+              console.log(r.fileName, pf, r.fileName == pf);
+              return r.fileName == pf;
+            }).length < 1) {
+            unknownProcessed.push(pf);
+          }
         }
       });
     } catch (err) {
-
     }
 
 
