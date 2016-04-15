@@ -600,10 +600,12 @@ Runs.show = function (req, res) {
 
     try {
 
-      console.log('looking in', rawPath);
+
 
       fs.accessSync(rawPath, fs.F_OK, function () {
         var rawFiles = fs.readdirSync(rawPath);
+
+        console.log('looking in', rawPath);
 
         rawFiles.map(function (rf) {
           console.log(rf);
