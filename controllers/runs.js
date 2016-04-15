@@ -603,16 +603,14 @@ Runs.show = function (req, res) {
         var rawFiles = fs.readdirSync(rawPath);
 
         rawFiles.map(function (rf) {
+          console.log(rf);
           if (raw.filter(function (r) {
               return r.fileName == rf;
             }).length < 1) {
             unknownRaw.push(rf);
           }
         });
-
       });
-    } catch (err) {
-
     }
 
 
@@ -620,17 +618,15 @@ Runs.show = function (req, res) {
       fs.accessSync(processedPath, fs.F_OK, function () {
         var processedFiles = fs.readdirSync(processedPath);
 
-        processedFiles.map(function (rf) {
+        processedFiles.map(function (pf) {
+          console.log(pf);
           if (processed.filter(function (r) {
-              return r.fileName == rf;
+              return r.fileName == pf;
             }).length < 1) {
-            unknownProcessed.push(rf);
+            unknownProcessed.push(pf);
           }
         });
-
       });
-    } catch (err) {
-
     }
 
 
