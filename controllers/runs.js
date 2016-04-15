@@ -604,9 +604,13 @@ Runs.show = function (req, res) {
       rawFiles.map(function (rf) {
         if (rf != '.fastqc') {
           if (raw.filter(function (r) {
-              console.log(r);
-              console.log(r.name, rf, r.fileName == rf);
-              return r.name == rf;
+              if (r.length === 2) {
+                r.map(function (rrm) {
+                  return rrm.name == rf;
+                })
+              } else {
+                return r.name == rf;
+              }
             }).length < 1) {
             unknownRaw.push(rf);
           }
@@ -621,8 +625,13 @@ Runs.show = function (req, res) {
       processedFiles.map(function (pf) {
         if (pf != '.fastqc') {
           if (processed.filter(function (p) {
-              console.log(p.name, pf, p.fileName == pf);
-              return p.name == pf;
+              if (p.length === 2) {
+                p.map(function (rrm) {
+                  return rrm.name == pf;
+                })
+              } else {
+                return r.name == pf;
+              }
             }).length < 1) {
             unknownProcessed.push(pf);
           }
