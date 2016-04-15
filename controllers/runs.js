@@ -599,7 +599,7 @@ Runs.show = function (req, res) {
     var processedPath = path.join(config.dataDir, run.path, 'processed');
 
     try {
-      fs.access(rawPath, fs.F_OK, function () {
+      fs.accessSync(rawPath, fs.F_OK, function () {
         var rawFiles = fs.readdirSync(rawPath);
         console.log('raw files', rawFiles);
       });
@@ -609,7 +609,7 @@ Runs.show = function (req, res) {
 
 
     try {
-      fs.access(processedPath, fs.F_OK, function () {
+      fs.accessSync(processedPath, fs.F_OK, function () {
         var processedFiles = fs.readdirSync(processedPath);
         console.log('processed files', processedFiles);
       });
