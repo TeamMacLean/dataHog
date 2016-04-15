@@ -351,18 +351,18 @@ function addReadToRun(req, processed, savedRun, pathToNewRunFolder, cb) {
 
 
                     //TODO FIXME fastqc.run(newFullPath, fqcPath, function () {
-                      console.log('created fastqc report');
-                      //read.fastQCLocation = fqcPath;
-                      read.save().then(function (savedRead) {
-                        previousID = read.id;
-                        savedReads.push(savedRead);
-                        return nextHappyFile(); //IMPORTANT!!
+                    console.log('created fastqc report');
+                    //read.fastQCLocation = fqcPath;
+                    read.save().then(function (savedRead) {
+                      previousID = read.id;
+                      savedReads.push(savedRead);
+                      return nextHappyFile(); //IMPORTANT!!
 
-                      }).error(function (err) {
-                        if (err) {
-                          return cb(err);
-                        }
-                      });
+                    }).error(function (err) {
+                      if (err) {
+                        return cb(err);
+                      }
+                    });
                     //});
                   }
                 });
@@ -590,6 +590,15 @@ Runs.show = function (req, res) {
         }
       });
     }
+
+
+    //TODO
+    var unknownReads = [];
+
+    var files = fs.readdirSync(run.path);
+
+    console.log(files);
+
 
     return res.render('runs/show', {run: run, raw: raw, processed: processed});
   }).error(function () {
