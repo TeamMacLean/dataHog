@@ -51,7 +51,6 @@
     <p><%- run.submissionToGalaxy %></p>
 
     <h2>Raw:</h2>
-    <%- unknownRaw %>
     <% if(raw && raw.length > 0){ %>
 
     <div class="row">
@@ -85,8 +84,11 @@
     </div>
     <% } %>
 
+    <% unknownRaw.map(function(ur){ %>
+    <%- ur %>
+    <% }) %>
+
     <h2>Processed</h2>
-    <%- unknownProcessed %>
     <% if(processed && processed.length > 0){ %>
     <div class="row">
         <% processed.map(function(read){ %>
@@ -116,9 +118,11 @@
         <% } %>
         <% }); %>
     </div>
-    <% } else { %>
-    <p>None</p>
     <% } %>
+
+    <% unknownProcessed.map(function(up){ %>
+    <%- up %>
+    <% }) %>
 
     <hr>
     <form action="/<%- run.sample.project.group.safeName %>/<%- run.sample.project.safeName %>/<%- run.sample.safeName %>/<%- run.safeName %>/add"
