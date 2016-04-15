@@ -593,12 +593,16 @@ Runs.show = function (req, res) {
 
 
     //TODO
-    var unknownReads = [];
+    //var unknownReads = [];
 
-    var fullPath = path.join(config.dataDir, run.path);
-    var files = fs.readdirSync(fullPath);
+    var rawPath = path.join(config.dataDir, run.path, 'raw');
+    var processedPath = path.join(config.dataDir, run.path, 'processed');
 
-    console.log(files);
+    var rawFiles = fs.readdirSync(rawPath);
+    var processedFiles = fs.readdirSync(processedPath);
+
+    console.log('raw files', rawFiles);
+    console.log('processed files', processedFiles);
 
 
     return res.render('runs/show', {run: run, raw: raw, processed: processed});
