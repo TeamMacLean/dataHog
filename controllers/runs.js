@@ -592,8 +592,8 @@ Runs.show = function (req, res) {
     }
 
 
-    //TODO
-    //var unknownReads = [];
+    var unknownRaw = [];
+    var unknownProcessed = [];
 
     var rawPath = path.join(config.dataDir, run.path, 'raw');
     var processedPath = path.join(config.dataDir, run.path, 'processed');
@@ -601,7 +601,15 @@ Runs.show = function (req, res) {
     try {
       fs.accessSync(rawPath, fs.F_OK, function () {
         var rawFiles = fs.readdirSync(rawPath);
-        console.log('raw files', rawFiles);
+
+        rawFiles.map(function (rf) {
+          if (raw.filter(function (r) {
+              return r.fileName == rf;
+            }).length < 1) {
+            unknownRaw.push(rf);
+          }
+        });
+
       });
     } catch (err) {
 
@@ -611,14 +619,28 @@ Runs.show = function (req, res) {
     try {
       fs.accessSync(processedPath, fs.F_OK, function () {
         var processedFiles = fs.readdirSync(processedPath);
-        console.log('processed files', processedFiles);
+
+        processedFiles.map(function (rf) {
+          if (processed.filter(function (r) {
+              return r.fileName == rf;
+            }).length < 1) {
+            unknownProcessed.push(rf);
+          }
+        });
+
       });
     } catch (err) {
 
     }
 
 
-    return res.render('runs/show', {run: run, raw: raw, processed: processed});
+    return res.render('runs/show', {
+      run: run,
+      raw: raw,
+      processed: processed,
+      unknownRaw: unknownRaw,
+      unknownProcessed: unknownProcessed
+    });
   }).error(function () {
     return res.render('error', {error: 'could not find run'});
   });
