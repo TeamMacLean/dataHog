@@ -203,7 +203,8 @@ ul.no-decoration, li.no-decoration {
 }
 
 .tile.unknown {
-    border: 4px dashed black;
+    border: 4px dashed #949494;
+    background-color: #B9B9B9;
 }
 
 b {
