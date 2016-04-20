@@ -603,10 +603,16 @@ Runs.show = function (req, res) {
       var rawFiles = fs.readdirSync(rawPath);
 
       raw.map(function (r) {
-        if (rawFiles.indexOf(r.name) < 0) {
+        var ri = rawFiles.indexOf(r.name);
+        if (ri == -1) {
           unknownRaw.push(r.name);
         }
       });
+
+      //if ( < 0) {
+      //  unknownRaw.push(r.name);
+      //}
+      //});
 
       //rawFiles.map(function (rf) {
       //  if (raw.indexOf(rf) < 0) {
@@ -633,8 +639,15 @@ Runs.show = function (req, res) {
       fs.accessSync(processedPath, fs.F_OK);
       var processedFiles = fs.readdirSync(processedPath);
 
+      //processed.map(function (p) {
+      //  if (processedFiles.indexOf(p.name) < 0) {
+      //    unknownRaw.push(p.name);
+      //  }
+      //});
+
       processed.map(function (p) {
-        if (processedFiles.indexOf(p.name) < 0) {
+        var pi = processedFiles.indexOf(p.name);
+        if (pi == -1) {
           unknownRaw.push(p.name);
         }
       });
