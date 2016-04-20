@@ -606,7 +606,7 @@ Runs.show = function (req, res) {
           if (raw.filter(function (r) {
               r.map(function (rrm) {
                 console.log(rrm.name.toUpperCase(), rf.toUpperCase());
-                return rrm.name.toUpperCase() == rf.toUpperCase();
+                return rrm.name.toUpperCase() === rf.toUpperCase();
               })
             }).length < 1) {
             unknownRaw.push(rf);
@@ -624,7 +624,7 @@ Runs.show = function (req, res) {
           if (processed.filter(function (p) {
               p.map(function (rrm) {
                 console.log(rrm.name.toUpperCase(), p.toUpperCase());
-                return rrm.name == pf;
+                return rrm.name === pf;
               })
             }).length < 1) {
             unknownProcessed.push(pf);
