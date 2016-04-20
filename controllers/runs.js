@@ -601,11 +601,12 @@ Runs.show = function (req, res) {
     try {
       fs.accessSync(rawPath, fs.F_OK);
       var rawFiles = fs.readdirSync(rawPath);
+      rawFiles = rawFiles.filter(function (rfilter) {
+        return rfilter != '.fastqc' && rfilter.indexOf('.txt') < 0;
+      });
 
       rawFiles.map(function (rf) {
-
         var found = false;
-
         raw.map(function (r) {
           if (r.filter(function (rr) {
               return rf.name == rr;
@@ -613,37 +614,32 @@ Runs.show = function (req, res) {
             found = true;
           }
         });
-
         if (!found) {
           unknownRaw.push(rf);
         }
-
       });
-
-      //raw.map(function (r) {
-      //  console.log('r', r);
-      //  r.map(function (re) {
-      //    console.log('re', re, rawFiles);
-      //    var ri = rawFiles.indexOf(re.name);
-      //    if (ri < 0) {
-      //      unknownRaw.push(re.name);
-      //    }
-      //  })
-      //});
     } catch (err) {
     }
 
     try {
       fs.accessSync(processedPath, fs.F_OK);
       var processedFiles = fs.readdirSync(processedPath);
+      processedFiles = processedFiles.filter(function (pfilter) {
+        return pfilter != '.fastqc' && pfilter.indexOf('.txt') < 0;
+      });
 
-      processed.map(function (p) {
-        p.map(function (pe) {
-          var pi = processedFiles.indexOf(pe.name);
-          if (pi < 0) {
-            unknownProcessed.push(pe.name);
+      processedFiles.map(function (pf) {
+        var found = false;
+        processed.map(function (p) {
+          if (p.filter(function (pp) {
+              return pf.name == pp;
+            }).length > 0) {
+            found = true;
           }
-        })
+        });
+        if (!found) {
+          unknownProcessed.push(pf);
+        }
       });
     } catch (err) {
     }
