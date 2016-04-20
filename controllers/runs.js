@@ -601,39 +601,15 @@ Runs.show = function (req, res) {
     try {
       fs.accessSync(rawPath, fs.F_OK);
       var rawFiles = fs.readdirSync(rawPath);
-
       raw.map(function (r) {
         r.map(function (re) {
+          console.log('re', re, rawFiles);
           var ri = rawFiles.indexOf(re.name);
-          if (ri == -1) {
+          if (ri < 0) {
             unknownRaw.push(re.name);
           }
         })
       });
-
-      //if ( < 0) {
-      //  unknownRaw.push(r.name);
-      //}
-      //});
-
-      //rawFiles.map(function (rf) {
-      //  if (raw.indexOf(rf) < 0) {
-      //    unknownRaw.push(rf);
-      //  }
-
-      //if (rf != '.fastqc' && rf.indexOf('.txt') < 0) {
-      //  if (raw.filter(function (r) {
-      //      r.map(function (rrm) {
-      //        var a = rrm.name;
-      //        console.log('raw', a.length, rf.length, a, rf);
-      //        return a == rf;
-      //        //return rrm.name.toString().toUpperCase().trim() === rf.toString().toUpperCase().trim();
-      //      })
-      //    }).length < 1) {
-      //    unknownRaw.push(rf);
-      //  }
-      //}
-      //});
     } catch (err) {
     }
 
@@ -641,47 +617,14 @@ Runs.show = function (req, res) {
       fs.accessSync(processedPath, fs.F_OK);
       var processedFiles = fs.readdirSync(processedPath);
 
-      //processed.map(function (p) {
-      //  if (processedFiles.indexOf(p.name) < 0) {
-      //    unknownRaw.push(p.name);
-      //  }
-      //});
-
       processed.map(function (p) {
         p.map(function (pe) {
           var pi = processedFiles.indexOf(pe.name);
-          if (pi == -1) {
+          if (pi < 0) {
             unknownProcessed.push(pe.name);
           }
         })
       });
-
-
-      //processed.map(function (p) {
-      //  var pi = processedFiles.indexOf(p.name);
-      //  if (pi == -1) {
-      //    unknownRaw.push(p.name);
-      //  }
-      //});
-
-      //processedFiles.map(function (pf) {
-      //  if (processed.indexOf(pf) < 0) {
-      //    unknownRaw.push(pf);
-      //  }
-
-      //if (pf != '.fastqc' && pf.indexOf('.txt') < 0) {
-      //  if (processed.filter(function (p) {
-      //      p.map(function (rrm) {
-      //        var a = rrm.name;
-      //        console.log('pro', a.length, p.length, a, p);
-      //        return a == p;
-      //        //return rrm.name.toString().toUpperCase().trim() === p.toString().toUpperCase().trim();
-      //      })
-      //    }).length < 1) {
-      //    unknownProcessed.push(pf);
-      //  }
-      //}
-      //});
     } catch (err) {
     }
 
