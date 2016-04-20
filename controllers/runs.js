@@ -602,6 +602,7 @@ Runs.show = function (req, res) {
       fs.accessSync(rawPath, fs.F_OK);
       var rawFiles = fs.readdirSync(rawPath);
       raw.map(function (r) {
+        console.log('r', r);
         r.map(function (re) {
           console.log('re', re, rawFiles);
           var ri = rawFiles.indexOf(re.name);
