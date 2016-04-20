@@ -603,6 +603,9 @@ Runs.show = function (req, res) {
       var rawFiles = fs.readdirSync(rawPath);
 
       raw.map(function (r) {
+
+        console.log(r.name, rawFiles);
+
         var ri = rawFiles.indexOf(r.name);
         if (ri == -1) {
           unknownRaw.push(r.name);
