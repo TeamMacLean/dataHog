@@ -601,48 +601,62 @@ Runs.show = function (req, res) {
     try {
       fs.accessSync(rawPath, fs.F_OK);
       var rawFiles = fs.readdirSync(rawPath);
-      rawFiles.map(function (rf) {
-        if (raw.indexOf(rf) < 0) {
-          unknownRaw.push(rf);
-        }
 
-        //if (rf != '.fastqc' && rf.indexOf('.txt') < 0) {
-        //  if (raw.filter(function (r) {
-        //      r.map(function (rrm) {
-        //        var a = rrm.name;
-        //        console.log('raw', a.length, rf.length, a, rf);
-        //        return a == rf;
-        //        //return rrm.name.toString().toUpperCase().trim() === rf.toString().toUpperCase().trim();
-        //      })
-        //    }).length < 1) {
-        //    unknownRaw.push(rf);
-        //  }
-        //}
+      raw.map(function (r) {
+        if (rawFiles.indexOf(r.name) < 0) {
+          unknownRaw.push(r.name);
+        }
       });
+
+      //rawFiles.map(function (rf) {
+      //  if (raw.indexOf(rf) < 0) {
+      //    unknownRaw.push(rf);
+      //  }
+
+      //if (rf != '.fastqc' && rf.indexOf('.txt') < 0) {
+      //  if (raw.filter(function (r) {
+      //      r.map(function (rrm) {
+      //        var a = rrm.name;
+      //        console.log('raw', a.length, rf.length, a, rf);
+      //        return a == rf;
+      //        //return rrm.name.toString().toUpperCase().trim() === rf.toString().toUpperCase().trim();
+      //      })
+      //    }).length < 1) {
+      //    unknownRaw.push(rf);
+      //  }
+      //}
+      //});
     } catch (err) {
     }
 
     try {
       fs.accessSync(processedPath, fs.F_OK);
       var processedFiles = fs.readdirSync(processedPath);
-      processedFiles.map(function (pf) {
-        if (processed.indexOf(pf) < 0) {
-          unknownRaw.push(pf);
-        }
 
-        //if (pf != '.fastqc' && pf.indexOf('.txt') < 0) {
-        //  if (processed.filter(function (p) {
-        //      p.map(function (rrm) {
-        //        var a = rrm.name;
-        //        console.log('pro', a.length, p.length, a, p);
-        //        return a == p;
-        //        //return rrm.name.toString().toUpperCase().trim() === p.toString().toUpperCase().trim();
-        //      })
-        //    }).length < 1) {
-        //    unknownProcessed.push(pf);
-        //  }
-        //}
+      processed.map(function (p) {
+        if (processedFiles.indexOf(p.name) < 0) {
+          unknownRaw.push(p.name);
+        }
       });
+
+      //processedFiles.map(function (pf) {
+      //  if (processed.indexOf(pf) < 0) {
+      //    unknownRaw.push(pf);
+      //  }
+
+      //if (pf != '.fastqc' && pf.indexOf('.txt') < 0) {
+      //  if (processed.filter(function (p) {
+      //      p.map(function (rrm) {
+      //        var a = rrm.name;
+      //        console.log('pro', a.length, p.length, a, p);
+      //        return a == p;
+      //        //return rrm.name.toString().toUpperCase().trim() === p.toString().toUpperCase().trim();
+      //      })
+      //    }).length < 1) {
+      //    unknownProcessed.push(pf);
+      //  }
+      //}
+      //});
     } catch (err) {
     }
 
