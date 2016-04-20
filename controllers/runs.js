@@ -604,7 +604,7 @@ Runs.show = function (req, res) {
 
       raw.map(function (r) {
 
-        console.log(r.name, rawFiles);
+        console.log(r, rawFiles);
 
         var ri = rawFiles.indexOf(r.name);
         if (ri == -1) {
