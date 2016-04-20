@@ -605,6 +605,7 @@ Runs.show = function (req, res) {
         if (rf != '.fastqc' && rf.indexOf('.txt') < 0) {
           if (raw.filter(function (r) {
               r.map(function (rrm) {
+                console.log(rrm.name.toUpperCase(), rf.toUpperCase());
                 return rrm.name.toUpperCase() == rf.toUpperCase();
               })
             }).length < 1) {
@@ -622,6 +623,7 @@ Runs.show = function (req, res) {
         if (pf != '.fastqc' && pf.indexOf('.txt') < 0) {
           if (processed.filter(function (p) {
               p.map(function (rrm) {
+                console.log(rrm.name.toUpperCase(), p.toUpperCase());
                 return rrm.name == pf;
               })
             }).length < 1) {
