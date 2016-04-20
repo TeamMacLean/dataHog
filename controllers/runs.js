@@ -601,16 +601,35 @@ Runs.show = function (req, res) {
     try {
       fs.accessSync(rawPath, fs.F_OK);
       var rawFiles = fs.readdirSync(rawPath);
-      raw.map(function (r) {
-        console.log('r', r);
-        r.map(function (re) {
-          console.log('re', re, rawFiles);
-          var ri = rawFiles.indexOf(re.name);
-          if (ri < 0) {
-            unknownRaw.push(re.name);
+
+      rawFiles.map(function (rf) {
+
+        var found = false;
+
+        raw.map(function (r) {
+          if (r.filter(function (rr) {
+              return rf.name == rr;
+            }).length > 0) {
+            found = true;
           }
-        })
+        });
+
+        if (!found) {
+          unknownRaw.push(rf);
+        }
+
       });
+
+      //raw.map(function (r) {
+      //  console.log('r', r);
+      //  r.map(function (re) {
+      //    console.log('re', re, rawFiles);
+      //    var ri = rawFiles.indexOf(re.name);
+      //    if (ri < 0) {
+      //      unknownRaw.push(re.name);
+      //    }
+      //  })
+      //});
     } catch (err) {
     }
 
