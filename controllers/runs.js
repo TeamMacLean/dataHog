@@ -603,13 +603,12 @@ Runs.show = function (req, res) {
       var rawFiles = fs.readdirSync(rawPath);
 
       raw.map(function (r) {
-
-        console.log(r, rawFiles);
-
-        var ri = rawFiles.indexOf(r.name);
-        if (ri == -1) {
-          unknownRaw.push(r.name);
-        }
+        r.map(function (re) {
+          var ri = rawFiles.indexOf(re.name);
+          if (ri == -1) {
+            unknownRaw.push(re.name);
+          }
+        })
       });
 
       //if ( < 0) {
@@ -649,11 +648,21 @@ Runs.show = function (req, res) {
       //});
 
       processed.map(function (p) {
-        var pi = processedFiles.indexOf(p.name);
-        if (pi == -1) {
-          unknownRaw.push(p.name);
-        }
+        p.map(function (pe) {
+          var pi = processedFiles.indexOf(pe.name);
+          if (pi == -1) {
+            unknownProcessed.push(pe.name);
+          }
+        })
       });
+
+
+      //processed.map(function (p) {
+      //  var pi = processedFiles.indexOf(p.name);
+      //  if (pi == -1) {
+      //    unknownRaw.push(p.name);
+      //  }
+      //});
 
       //processedFiles.map(function (pf) {
       //  if (processed.indexOf(pf) < 0) {
