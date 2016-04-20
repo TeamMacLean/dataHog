@@ -606,8 +606,8 @@ Runs.show = function (req, res) {
           if (raw.filter(function (r) {
               r.map(function (rrm) {
                 var a = rrm.name;
+                console.log(a.length, rf.length);
                 return a == rf;
-
                 //return rrm.name.toString().toUpperCase().trim() === rf.toString().toUpperCase().trim();
               })
             }).length < 1) {
@@ -625,10 +625,9 @@ Runs.show = function (req, res) {
         if (pf != '.fastqc' && pf.indexOf('.txt') < 0) {
           if (processed.filter(function (p) {
               p.map(function (rrm) {
-
                 var a = rrm.name;
+                console.log(a.length, p.length);
                 return a == p;
-
                 //return rrm.name.toString().toUpperCase().trim() === p.toString().toUpperCase().trim();
               })
             }).length < 1) {
