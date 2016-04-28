@@ -273,7 +273,14 @@ function addReadToRun(req, processed, savedRun, pathToNewRunFolder, cb) {
 
 
           if (sadFiles.length > 0) {
+
             console.warn('some bad md5 sums');
+
+            sadFiles.map(function (sdd) {
+              console.log(sdd);
+            });
+
+
             return cb(new Error('md5 sums do not match'));
           }
 
@@ -431,21 +438,6 @@ Runs.newPost = function (req, res) {
       var pathToNewRunFolder = path.join(config.dataDir, sample.project.group.safeName, sample.project.safeName, sample.safeName, savedRun.safeName);
 
 
-      if (submissionToGalaxy) {
-
-        //var project = savedRun.sample.project;
-
-        //var p1 = project.responsiblePerson;
-        //var p2 = project.secondaryContact;
-
-        var hpcPath = path.join(config.hpcRoot, savedRun.path);
-        var siteURL = req.protocol + '://' + req.headers.host + savedRun.path;
-
-        var subject = "Request for data to be added to Galaxy";
-        var text = "Please add " + hpcPath + " to Galaxy.\n\n" + siteURL + "\n\nThanks :D\nDataHog";
-        email.emailAdmin(subject, text);
-      }
-
       var processed = false;
       //TODO disabled for now
 
@@ -457,6 +449,22 @@ Runs.newPost = function (req, res) {
             return res.render('error', {error: err});
           });
         } else {
+
+          if (submissionToGalaxy) {
+
+            //var project = savedRun.sample.project;
+
+            //var p1 = project.responsiblePerson;
+            //var p2 = project.secondaryContact;
+
+            var hpcPath = path.join(config.hpcRoot, savedRun.path);
+            var siteURL = req.protocol + '://' + req.headers.host + savedRun.path;
+
+            var subject = "Request for data to be added to Galaxy";
+            var text = "Please add " + hpcPath + " to Galaxy.\n\n" + siteURL + "\n\nThanks :D\nDataHog";
+            email.emailAdmin(subject, text);
+          }
+
           return renderOK();
         }
 
