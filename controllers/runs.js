@@ -183,7 +183,7 @@ function processAllFiles(req, cb) {
           name: f.name,
           uuid: f.uuid,
           path: filePath,
-          md5: req.body[md5Lookup],
+          md5: req.body[md5Lookup].trim(),
           fieldname: key
         });
         theNextOne();
