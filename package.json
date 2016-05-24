@@ -2,6 +2,20 @@
   "name": "Hog",
   "version": "1.0.0",
   "private": false,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/teammaclean/datahog.git"
+  },
+  "keywords": [
+    "synbio",
+    "tsl"
+  ],
+  "author": "Martin Page",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/teammaclean/datahog/issues"
+  },
+  "homepage": "https://github.com/teammaclean/datahog#readme",
   "scripts": {
     "start": "node server",
     "test": "mocha"

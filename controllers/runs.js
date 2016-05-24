@@ -107,11 +107,17 @@ function compressFile(filename, callback) {
 
 
 function isBzip2(str) {
-    return !!(str.toLowerCase().indexOf('bzip2') > -1 || str.toLowerCase().indexOf('bz2') > -1);
 
+    if (str.toLowerCase().indexOf('.bzip2') > -1) {
+        return true;
+    }
+    else return str.toLowerCase().indexOf('.bz2') > -1;
 }
 function isGzip(str) {
-    return !!(str.toLowerCase().indexOf('gzip') > -1 || str.toLowerCase().indexOf('gz') > -1);
+    if (str.toLowerCase().indexOf('.gzip') > -1) {
+        return true;
+    }
+    else return str.toLowerCase().indexOf('.gz') > -1;
 }
 
 /**
