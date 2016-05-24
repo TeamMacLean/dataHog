@@ -15,6 +15,7 @@ var thinky = require('../lib/thinky');
 var async = require('async');
 var email = require('../lib/email');
 var Submission = require('../models/submission');
+var renderError = require('../lib/error')
 
 
 var Runs = {};
@@ -331,8 +332,11 @@ function addReadToRun(req, processed, savedRun, pathToNewRunFolder, cb) {
                         usedFileNames.push(testName);
                         fileAndMD5.name = fileName;
 
-                        ensureCompressed(fileAndMD5, function (err, md5AndPath) {
+                        ensureCompressed(fileAndMD5, function (topError, md5AndPath) {
 
+                            if (topError) {
+                                return cb(topError);
+                            }
 
                             var newFullPath = path.join(pathToNewRunFolder, md5AndPath.name);
 
