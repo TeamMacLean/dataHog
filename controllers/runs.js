@@ -107,16 +107,16 @@ function compressFile(filename, callback) {
 }
 
 
-function isBzip2(str) {
-    console.log(str, 'bzip2');
+function isCompressed(str) {
+
+    console.log('checking compression', str);
+
     if (str.toLowerCase().indexOf('.bzip2') > -1) {
         return true;
     }
-    else return str.toLowerCase().indexOf('.bz2') > -1;
-}
-function isGzip(str) {
-    console.log(str, 'gzip');
-    if (str.toLowerCase().indexOf('.gzip') > -1) {
+    else if (str.toLowerCase().indexOf('.bz2') > -1) {
+        return true
+    } else if (str.toLowerCase().indexOf('.gzip') > -1) {
         return true;
     }
     else return str.toLowerCase().indexOf('.gz') > -1;
@@ -135,7 +135,7 @@ function ensureCompressed(fileAndMD5, cb) {
 
     // var fileBuff = readFileSync(fileAndMD5.path); //TODO breaking point
 
-    var compressed = isBzip2(fileAndMD5.path) || isGzip(fileAndMD5.path);
+    var compressed = isCompressed(fileAndMD5.path);
     var fileExtention = path.extname(fileAndMD5.name);
 
     var name = fileAndMD5.name;
