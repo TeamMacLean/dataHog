@@ -135,14 +135,13 @@ function ensureCompressed(fileAndMD5, cb) {
 
     // var fileBuff = readFileSync(fileAndMD5.path); //TODO breaking point
 
-    var compressed = isCompressed(fileAndMD5.path);
+    var compressed = isCompressed(fileAndMD5.name);
     var fileExtention = path.extname(fileAndMD5.name);
 
     var name = fileAndMD5.name;
 
     if (!compressed && ['.fq', '.fastq'].indexOf(fileExtention) < 0) {
         var err = new Error('not compressed and not a fastq/fq file extention');
-        console.error(err);
         return cb(err);
 
     } else if (!compressed) { //not compressed
