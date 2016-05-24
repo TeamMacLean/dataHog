@@ -108,13 +108,14 @@ function compressFile(filename, callback) {
 
 
 function isBzip2(str) {
-
+    console.log(str, 'bzip2');
     if (str.toLowerCase().indexOf('.bzip2') > -1) {
         return true;
     }
     else return str.toLowerCase().indexOf('.bz2') > -1;
 }
 function isGzip(str) {
+    console.log(str, 'gzip');
     if (str.toLowerCase().indexOf('.gzip') > -1) {
         return true;
     }
@@ -141,7 +142,7 @@ function ensureCompressed(fileAndMD5, cb) {
 
     if (!compressed && ['.fq', '.fastq'].indexOf(fileExtention) < 0) {
         var err = new Error('not compressed and not a fastq/fq file extention');
-
+        console.error(err);
         return cb(err);
 
     } else if (!compressed) { //not compressed
