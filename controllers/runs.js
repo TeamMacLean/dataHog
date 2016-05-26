@@ -15,7 +15,7 @@ var thinky = require('../lib/thinky');
 var async = require('async');
 var email = require('../lib/email');
 var Submission = require('../models/submission');
-var renderError = require('../lib/error')
+var renderError = require('../lib/error');
 
 
 var Runs = {};
@@ -78,7 +78,7 @@ Runs.new = function (req, res) {
 
         return res.render('runs/new', {sample: results[0]});
     }).error(function (err) {
-        return res.render('error', {error: err});
+        return renderError(err, res)
     });
 };
 
@@ -284,6 +284,9 @@ function addReadToRun(req, processed, savedRun, pathToNewRunFolder, cb) {
                 }, function done(err) {
                     //cb(err); //IMPORTANT after all reads, run and fastaqc created!
 
+                    if (err) {
+                        cb(err);
+                    }
 
                     if (sadFiles.length > 0) {
 
@@ -341,6 +344,11 @@ function addReadToRun(req, processed, savedRun, pathToNewRunFolder, cb) {
                             var newFullPath = path.join(pathToNewRunFolder, md5AndPath.name);
 
                             util.safeMove(md5AndPath.path, newFullPath, function (err, newPath) {
+
+                                if (err) {
+                                    cb(err);
+                                }
+
                                 if (newPath) { //it may have found a new name!
                                     newFullPath = newPath;
                                 }
@@ -462,7 +470,7 @@ Runs.newPost = function (req, res) {
                 if (err) {
                     console.error(err);
                     deleteRun(savedRun, function () {
-                        return res.render('error', {error: err});
+                        return renderError(err, res)
                     });
                 } else {
 
@@ -546,7 +554,7 @@ Runs.show = function (req, res) {
 
 
         if (results.length === 0) {
-            return res.render('error', {error: 'could not find run ' + runSN});
+            return renderError(new Error('Count not find run ' + runSN), res);
         }
 
         if (results.length > 1) {
@@ -646,6 +654,7 @@ Runs.show = function (req, res) {
                 }
             });
         } catch (err) {
+            return renderError(err, res)
         }
 
         try {
@@ -669,6 +678,7 @@ Runs.show = function (req, res) {
                 }
             });
         } catch (err) {
+            return renderError(err, res)
         }
 
 
@@ -680,7 +690,7 @@ Runs.show = function (req, res) {
             unknownProcessed: unknownProcessed
         });
     }).error(function () {
-        return res.render('error', {error: 'could not find run'});
+        return renderError(new Error('cound not find run'), res);
     });
 };
 
@@ -714,7 +724,7 @@ Runs.addPost = function (req, res) {
         addReadToRun(req, processed, run, pathToRunProcessedFolder, function (err) {
             if (err) {
                 deleteRun(run, function () {
-                    return res.render('error', {error: 'had to delete the run + reads'});
+                    return renderError(new Error('had to delete the run + reads'), res)
                 });
             }
             var url = path.join('/', run.sample.project.group.safeName, run.sample.project.safeName, run.sample.safeName, run.safeName);
