@@ -275,7 +275,7 @@ function addReadToRun(req, processed, savedRun, pathToNewRunFolder, cb) {
                         if (sum === fsum.md5) {
                             happyFiles.push(fsum);
                         } else {
-                            console.error('MD5 ERROR', 'in:', fsum.md5, 'got:', sum);
+                            console.error('MD5 ERROR', 'in:', fsum.md5, 'got:', sum, 'length test:', fsum.md5.length, sum.length);
                             sadFiles.push(fsum);
                         }
                         hhnext();
