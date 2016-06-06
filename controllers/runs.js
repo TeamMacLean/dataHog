@@ -275,6 +275,7 @@ function addReadToRun(req, processed, savedRun, pathToNewRunFolder, cb) {
                         if (sum === fsum.md5) {
                             happyFiles.push(fsum);
                         } else {
+                            console.error('MD5 ERROR', 'in:', fsum.md5, 'got:', sum);
                             sadFiles.push(fsum);
                         }
                         hhnext();
@@ -289,8 +290,6 @@ function addReadToRun(req, processed, savedRun, pathToNewRunFolder, cb) {
                     }
 
                     if (sadFiles.length > 0) {
-
-                        console.warn('some bad md5 sums');
 
                         sadFiles.map(function (sdd) {
                             console.log(sdd);
