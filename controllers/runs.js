@@ -643,7 +643,7 @@ Runs.show = function (req, res) {
                 var found = false;
                 raw.map(function (r) {
                     if (r.filter(function (rr) {
-                            console.log(rf.name);
+                            console.log(rf;
                             return rf.name.trim().toUpperCase() == rr.trim().toUpperCase();
                         }).length > 0) {
                         found = true;
@@ -668,7 +668,7 @@ Runs.show = function (req, res) {
                 var found = false;
                 processed.map(function (p) {
                     if (p.filter(function (pp) {
-                            console.log(pp.name);
+                            console.log(pp);
                             return pf.name.trim().toUpperCase() == pp.trim().toUpperCase();
                         }).length > 0) {
                         found = true;
