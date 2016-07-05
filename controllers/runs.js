@@ -633,53 +633,62 @@ Runs.show = function (req, res) {
         var processedPath = path.join(config.dataDir, run.path, 'processed');
 
         try {
-            fs.accessSync(rawPath, fs.F_OK);
-            var rawFiles = fs.readdirSync(rawPath);
-            rawFiles = rawFiles.filter(function (rfilter) {
-                return rfilter != '.fastqc' && rfilter.indexOf('.txt') < 0;
-            });
+            // fs.accessSync(rawPath, fs.F_OK);
+            fs.ensureDir(rawPath, function (err) {
+                var rawFiles = fs.readdirSync(rawPath);
+                rawFiles = rawFiles.filter(function (rfilter) {
+                    return rfilter != '.fastqc' && rfilter.indexOf('.txt') < 0;
+                });
 
-            rawFiles.map(function (rf) {
-                var found = false;
-                raw.map(function (r) {
-                    if (r.filter(function (rr) {
-                            // console.log(rf, rr);
-                            return rf.trim().toUpperCase() == rr.name.trim().toUpperCase();
-                            // return rf.name.trim().toUpperCase() == rr.trim().toUpperCase();
-                        }).length > 0) {
-                        found = true;
+                rawFiles.map(function (rf) {
+                    var found = false;
+                    raw.map(function (r) {
+                        if (r.filter(function (rr) {
+                                // console.log(rf, rr);
+                                return rf.trim().toUpperCase() == rr.name.trim().toUpperCase();
+                                // return rf.name.trim().toUpperCase() == rr.trim().toUpperCase();
+                            }).length > 0) {
+                            found = true;
+                        }
+                    });
+                    if (!found) {
+                        unknownRaw.push(rf);
                     }
                 });
-                if (!found) {
-                    unknownRaw.push(rf);
-                }
             });
         } catch (err) {
             return renderError(err, res)
         }
 
         try {
-            fs.accessSync(processedPath, fs.F_OK);
-            var processedFiles = fs.readdirSync(processedPath);
-            processedFiles = processedFiles.filter(function (pfilter) {
-                return pfilter != '.fastqc' && pfilter.indexOf('.txt') < 0;
-            });
+            // fs.accessSync(processedPath, fs.F_OK);
 
-            processedFiles.map(function (pf) {
-                var found = false;
-                processed.map(function (p) {
-                    if (p.filter(function (pp) {
-                            // console.log(pf, pp);
-                            return pf.trim().toUpperCase() == pp.name.trim().toUpperCase();
-                            // return pf.name.trim().toUpperCase() == pp.trim().toUpperCase();
-                        }).length > 0) {
-                        found = true;
+            fs.ensureDir(processedPath, function (err) {
+                console.log(err) // => null
+                // dir has now been created, including the directory it is to be placed in
+
+
+                var processedFiles = fs.readdirSync(processedPath);
+                processedFiles = processedFiles.filter(function (pfilter) {
+                    return pfilter != '.fastqc' && pfilter.indexOf('.txt') < 0;
+                });
+
+                processedFiles.map(function (pf) {
+                    var found = false;
+                    processed.map(function (p) {
+                        if (p.filter(function (pp) {
+                                // console.log(pf, pp);
+                                return pf.trim().toUpperCase() == pp.name.trim().toUpperCase();
+                                // return pf.name.trim().toUpperCase() == pp.trim().toUpperCase();
+                            }).length > 0) {
+                            found = true;
+                        }
+                    });
+                    if (!found) {
+                        unknownProcessed.push(pf);
                     }
                 });
-                if (!found) {
-                    unknownProcessed.push(pf);
-                }
-            });
+            })
         } catch (err) {
             return renderError(err, res)
         }
