@@ -635,6 +635,10 @@ Runs.show = function (req, res) {
         try {
             // fs.accessSync(rawPath, fs.F_OK);
             fs.ensureDir(rawPath, function (err) {
+                if (err) {
+                    return renderError(err, res)
+                }
+                
                 var rawFiles = fs.readdirSync(rawPath);
                 rawFiles = rawFiles.filter(function (rfilter) {
                     return rfilter != '.fastqc' && rfilter.indexOf('.txt') < 0;
@@ -664,9 +668,10 @@ Runs.show = function (req, res) {
             // fs.accessSync(processedPath, fs.F_OK);
 
             fs.ensureDir(processedPath, function (err) {
-                console.log(err) // => null
-                // dir has now been created, including the directory it is to be placed in
 
+                if (err) {
+                    return renderError(err, res)
+                }
 
                 var processedFiles = fs.readdirSync(processedPath);
                 processedFiles = processedFiles.filter(function (pfilter) {
