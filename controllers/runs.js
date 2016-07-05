@@ -643,7 +643,7 @@ Runs.show = function (req, res) {
                 var found = false;
                 raw.map(function (r) {
                     if (r.filter(function (rr) {
-                            console.log(rf;
+                            console.log(rf);
                             return rf.name.trim().toUpperCase() == rr.trim().toUpperCase();
                         }).length > 0) {
                         found = true;
