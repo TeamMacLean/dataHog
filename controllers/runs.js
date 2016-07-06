@@ -460,37 +460,47 @@ Runs.newPost = function (req, res) {
 
             var pathToNewRunFolder = path.join(config.dataDir, sample.project.group.safeName, sample.project.safeName, sample.safeName, savedRun.safeName);
 
-
-            var processed = false;
-            //TODO disabled for now
-
-            addReadToRun(req, processed, savedRun, pathToNewRunFolder, function (err) {
-
+            fs.ensureDir(path.join(pathToNewRunFolder, 'processed'), function (err) { //make sure the processed folder exists
                 if (err) {
-                    console.error(err);
-                    deleteRun(savedRun, function () {
+                    return renderError(err, res)
+                }
+                fs.ensureDir(path.join(pathToNewRunFolder, 'raw'), function (err) { //make sure the raw folder exists
+                    if (err) {
                         return renderError(err, res)
-                    });
-                } else {
-
-                    if (submissionToGalaxy) {
-
-                        //var project = savedRun.sample.project;
-
-                        //var p1 = project.responsiblePerson;
-                        //var p2 = project.secondaryContact;
-
-                        var hpcPath = path.join(config.hpcRoot, savedRun.path);
-                        var siteURL = req.protocol + '://' + req.headers.host + savedRun.path;
-
-                        var subject = "Request for data to be added to Galaxy";
-                        var text = "Please add " + hpcPath + " to Galaxy.\n\n" + siteURL + "\n\nThanks :D\nDataHog";
-                        email.emailAdmin(subject, text);
                     }
 
-                    return renderOK();
-                }
+                    var processed = false;
+                    //TODO disabled for now
 
+                    addReadToRun(req, processed, savedRun, pathToNewRunFolder, function (err) {
+
+                        if (err) {
+                            console.error(err);
+                            deleteRun(savedRun, function () {
+                                return renderError(err, res)
+                            });
+                        } else {
+
+                            if (submissionToGalaxy) {
+
+                                //var project = savedRun.sample.project;
+
+                                //var p1 = project.responsiblePerson;
+                                //var p2 = project.secondaryContact;
+
+                                var hpcPath = path.join(config.hpcRoot, savedRun.path);
+                                var siteURL = req.protocol + '://' + req.headers.host + savedRun.path;
+
+                                var subject = "Request for data to be added to Galaxy";
+                                var text = "Please add " + hpcPath + " to Galaxy.\n\n" + siteURL + "\n\nThanks :D\nDataHog";
+                                email.emailAdmin(subject, text);
+                            }
+
+                            return renderOK();
+                        }
+
+                    });
+                });
             });
 
             //renderOK();
@@ -638,7 +648,7 @@ Runs.show = function (req, res) {
                 if (err) {
                     return renderError(err, res)
                 }
-                
+
                 var rawFiles = fs.readdirSync(rawPath);
                 rawFiles = rawFiles.filter(function (rfilter) {
                     return rfilter != '.fastqc' && rfilter.indexOf('.txt') < 0;
