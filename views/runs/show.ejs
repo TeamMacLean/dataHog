@@ -159,7 +159,7 @@
         $(function () {
 
             var md5files = document.getElementById('filesRoot');
-            var md5Loader = fileUploader(md5files, true, 'file', 'md5').setMin(1).setAcceptedTypes(['.fastq', '.fq']);
+            var md5Loader = fileUploader(md5files, true, 'file', 'md5').setMin(1).setAcceptedTypes(['.fastq', '.fq', '.fastq.gz', '.fq.gz', '.gz']);
 
             var type = $('#typePasser').val();
             console.log('type', type);
