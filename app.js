@@ -1,3 +1,4 @@
+var morgan = require('morgan');
 var path = require('path');
 var multer = require('multer');
 var bodyParser = require('body-parser');
@@ -48,6 +49,7 @@ app.use(multer({
   dest: config.tmpDir
 }));
 
+app.use(morgan('combined'))
 
 var options = {
   servers: [

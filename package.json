@@ -34,7 +34,7 @@
     "ftp": "^0.3.10",
     "js2xmlparser": "^1.0.0",
     "moment": "^2.11.2",
-    "morgan": "~1.5.1",
+    "morgan": "^1.5.3",
     "multer": "^0.1.8",
     "node-schedule": "^0.6.0",
     "nodemailer": "^1.10.0",
