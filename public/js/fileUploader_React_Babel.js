@@ -70,7 +70,7 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
 
             console.log('called, removeGroup');
 
-            console.log(Files);
+            console.log('files', Files);
 
             Files.map(function (f) {
                 console.log('file', f);
@@ -80,7 +80,7 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
             //     console.log('file', f);
             //     return f.guuid == group.props.guuid;
             // });
-            console.log('finished loop');
+            console.log('finished loop', Files);
 
             // filesToRemove.map(function (f) {
             //     console.log('remove', f);
