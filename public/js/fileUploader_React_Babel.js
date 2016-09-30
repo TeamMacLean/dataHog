@@ -71,10 +71,15 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
             console.log('called, removeGroup');
 
             console.log(Files);
-            var filesToRemove = Files.filter(function (f) {
+
+            Files.map(function (f) {
                 console.log('file', f);
-                return f.guuid == group.props.guuid;
             });
+
+            // var filesToRemove = Files.filter(function (f) {
+            //     console.log('file', f);
+            //     return f.guuid == group.props.guuid;
+            // });
             console.log('finished loop');
 
             // filesToRemove.map(function (f) {
