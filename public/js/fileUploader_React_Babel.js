@@ -2,6 +2,9 @@
 
 function fileUploader(mountNode, MD5S, fileID, MD5ID) {
 
+
+    var CHUNK_SIZE = 1024 * 100; //100kb
+
     var socket = io(window.location.host);
     var Files = [];
 
@@ -65,9 +68,14 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
 
             event.preventDefault();
 
+            console.log('removing group, stopping any uploads');
+
             Files = Files.filter(function (f) {
                 return f.guuid != group.props.guuid;
             });
+
+            //TODO stop that upload!!!
+            socket.emit('Stop', group.props.guuid);
 
             delete Files[group.props.guuid];
 
@@ -291,6 +299,10 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
 
     ///SOCKET STUFF
 
+    socket.on('FAIL', function (err) {
+        alert(err);
+    });
+
     socket.on('Complete', function (data) {
         console.log('complete');
         Files[data.UUID].percent = 100;
@@ -318,14 +330,14 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
         var File = Files[data.UUID];
         Files[data.UUID].percent = data.Percent;
         UpdateBar(File.meter, Files[data.UUID].percent);
-        var Place = data['Place'] * 524288; //The Next Blocks Starting Position
+        var Place = data['Place'] * CHUNK_SIZE; //The Next Blocks Starting Position
         var NewFile; //The Variable that will hold the new Block of Data
         if (File.slice) {
-            NewFile = File.slice(Place, Place + Math.min(524288, File.size - Place));
+            NewFile = File.slice(Place, Place + Math.min(CHUNK_SIZE, File.size - Place));
         } else if (File.webkitSlice) {
-            NewFile = File.webkitSlice(Place, Place + Math.min(524288, File.size - Place));
+            NewFile = File.webkitSlice(Place, Place + Math.min(CHUNK_SIZE, File.size - Place));
         } else if (File.mozSlice) {
-            NewFile = File.mozSlice(Place, Place + Math.min(524288, File.size - Place));
+            NewFile = File.mozSlice(Place, Place + Math.min(CHUNK_SIZE, File.size - Place));
         } else {
             alert('Sorry but your browser does not support this');
         }
