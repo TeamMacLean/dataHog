@@ -307,6 +307,10 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
 
     ///SOCKET STUFF
 
+    socket.on('STOPPED', function (info) {
+        alert(info);
+    });
+
     socket.on('FAIL', function (err) {
         alert(err);
     });
