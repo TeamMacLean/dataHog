@@ -1,6 +1,5 @@
 "use strict";
 var app = require('./app');
-var airdale = require('airdale');
 var config = require('./config.json');
 
 /**
