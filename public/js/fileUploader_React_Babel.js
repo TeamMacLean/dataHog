@@ -72,7 +72,7 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
 
             console.log('files', Files);
 
-            Files.map(function (f) {
+            Files.forEach(function (f) {
                 console.log('file', f);
             });
 
