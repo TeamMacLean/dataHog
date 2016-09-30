@@ -72,19 +72,16 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
 
             console.log(Files);
             var filesToRemove = Files.filter(function (f) {
-                console.log(f);
+                console.log('file', f);
                 return f.guuid == group.props.guuid;
             });
             console.log('finished loop');
 
-            filesToRemove.map(function (f) {
-
-                console.log('remove', f);
-
-
-                // socket.emit('Stop', group.props.guuid);
-                // delete Files[group.props.guuid];
-            });
+            // filesToRemove.map(function (f) {
+            //     console.log('remove', f);
+            // socket.emit('Stop', group.props.guuid);
+            // delete Files[group.props.guuid];
+            // });
 
 
             // console.log('removing group, stopping any uploads');
