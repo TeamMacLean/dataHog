@@ -337,20 +337,27 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
 
     socket.on('MoreData', function (data) {
         var File = Files[data.UUID];
-        Files[data.UUID].percent = data.Percent;
-        UpdateBar(File.meter, Files[data.UUID].percent);
-        var Place = data['Place'] * CHUNK_SIZE; //The Next Blocks Starting Position
-        var NewFile; //The Variable that will hold the new Block of Data
-        if (File.slice) {
-            NewFile = File.slice(Place, Place + Math.min(CHUNK_SIZE, File.size - Place));
-        } else if (File.webkitSlice) {
-            NewFile = File.webkitSlice(Place, Place + Math.min(CHUNK_SIZE, File.size - Place));
-        } else if (File.mozSlice) {
-            NewFile = File.mozSlice(Place, Place + Math.min(CHUNK_SIZE, File.size - Place));
+
+        if (File) {
+            Files[data.UUID].percent = data.Percent;
+            UpdateBar(File.meter, Files[data.UUID].percent);
+            var Place = data['Place'] * CHUNK_SIZE; //The Next Blocks Starting Position
+            var NewFile; //The Variable that will hold the new Block of Data
+            if (File.slice) {
+                NewFile = File.slice(Place, Place + Math.min(CHUNK_SIZE, File.size - Place));
+            } else if (File.webkitSlice) {
+                NewFile = File.webkitSlice(Place, Place + Math.min(CHUNK_SIZE, File.size - Place));
+            } else if (File.mozSlice) {
+                NewFile = File.mozSlice(Place, Place + Math.min(CHUNK_SIZE, File.size - Place));
+            } else {
+                alert('Sorry but your browser does not support this');
+            }
+            File.reader.readAsBinaryString(NewFile);
         } else {
-            alert('Sorry but your browser does not support this');
+            console.log('this file', data.UUID, 'no longer exists');
         }
-        File.reader.readAsBinaryString(NewFile);
+
+
     });
 
     function reset() {
