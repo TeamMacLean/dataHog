@@ -185,7 +185,14 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
                 Files[uuid].percent = 0;
 
                 Files[uuid].reader.onloadend = function (evnt) {
-                    socket.emit('Upload', {'Name': Files[uuid].name, Data: evnt.target.result, 'UUID': uuid});
+
+                    if (Files[uuid]) {
+                        socket.emit('Upload', {'Name': Files[uuid].name, Data: evnt.target.result, 'UUID': uuid});
+                    } else {
+                        console.log('looks like file', uuid, 'has been removed');
+                    }
+
+
                 };
 
                 //TODO lock the submit button
