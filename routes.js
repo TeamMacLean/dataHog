@@ -124,7 +124,7 @@ router.route('/:group/:project/:sample/:run/:read/download')
 
 
 //404 page
-router.get('*', Errors.show);
+// router.get('*', Errors.show);
 
 
 function isAuthenticated(req, res, next) {
