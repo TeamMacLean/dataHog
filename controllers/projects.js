@@ -42,7 +42,7 @@ Projects.newPost = function (req, res) {
   Group.filter({safeName: groupSafeName}).run().then(function (groups) {
 
     if (!groups) {
-      return error('group ' + groupSafeName + '  not found', req, res);
+      return error('group ' + groupSafeName + '  not found', res);
     }
 
     var group = groups[0];
@@ -135,7 +135,7 @@ Projects.show = function (req, res, next) {
   }).filter({group: {safeName: groupSN}}).run().then(function (projects) {
 
     if (projects.length < 1) {
-      return error('could not find project ' + projectSN, req, res);
+      return error('could not find project ' + projectSN, res);
       //return next();
     }
 
@@ -153,7 +153,7 @@ Projects.show = function (req, res, next) {
     return res.render('projects/show', {project: project});
     //});
   }).error(function () {
-    return error('could not find project ' + projectSN, req, res);
+    return error('could not find project ' + projectSN, res);
   });
 };
 

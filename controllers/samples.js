@@ -24,7 +24,7 @@ Samples.new = function (req, res) {
   Project.filter({safeName: projectSN}).getJoin({group: true}).filter({group: {safeName: groupSN}}).run().then(function (results) {
     res.render('samples/new', {project: results[0]});
   }).error(function () {
-    return error('could not find project', req, res);
+    return error('could not find project', res);
   });
 
 };
@@ -62,7 +62,7 @@ Samples.newPost = function (req, res) {
 
         fs.ensureDir(joinedPath, function (err) {
           if (err) {
-            return error(err, req, res);
+            return error(err, res);
           } else {
 
             var additionalFiles = [];
@@ -121,7 +121,7 @@ Samples.newPost = function (req, res) {
       });
     })
     .error(function () {
-      return error('could not find project', req, res);
+      return error('could not find project', res);
     });
 
 };
@@ -143,7 +143,7 @@ Samples.show = function (req, res) {
   }).filter({project: {safeName: projectSN, group: {safeName: groupSN}}}).run().then(function (results) {
 
       if (results.length < 1) {
-        return error('could not find sample ' + sampleSafeName, req, res);
+        return error('could not find sample ' + sampleSafeName, res);
 
       }
       var sample = results[0];
@@ -160,7 +160,7 @@ Samples.show = function (req, res) {
     })
     .error(function (err) {
       console.error(err);
-      return error('could not find sample', req, res);
+      return error('could not find sample', res);
     });
 };
 
