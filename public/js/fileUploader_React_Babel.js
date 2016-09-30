@@ -70,8 +70,8 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
 
             console.log('called, removeGroup');
 
+            console.log(Files);
             var filesToRemove = Files.filter(function (f) {
-
                 console.log(f);
                 return f.guuid == group.props.guuid;
             });
