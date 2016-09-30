@@ -6,7 +6,7 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
     var CHUNK_SIZE = 1024 * 100; //100kb
 
     var socket = io(window.location.host);
-    var Files = [];
+    var Files = {};
 
     function generateUUID() {
         var d = new Date().getTime();
@@ -72,9 +72,10 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
 
             console.log('files', Files);
 
-            Files.forEach(function (f) {
-                console.log('file', f);
-            });
+
+            for (var key in Files) {
+                console.log(Files[key].guuid == group.props.guuid);
+            }
 
             // var filesToRemove = Files.filter(function (f) {
             //     console.log('file', f);
@@ -391,7 +392,7 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
     });
 
     function reset() {
-        Files = [];
+        Files = {};
         socket.emit('reset');
     }
 
