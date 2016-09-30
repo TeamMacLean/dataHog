@@ -75,6 +75,7 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
                 console.log(f);
                 return f.guuid == group.props.guuid;
             });
+            console.log('finished loop');
 
             filesToRemove.map(function (f) {
 
