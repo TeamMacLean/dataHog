@@ -68,6 +68,8 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
 
             event.preventDefault();
 
+            console.log('called, removeGroup');
+
             // console.log('removing group, stopping any uploads');
 
 
