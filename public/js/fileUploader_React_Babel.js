@@ -75,6 +75,8 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
             });
 
             //TODO stop that upload!!!
+            console.log('TELL MARTIN',
+                group.props);
             socket.emit('Stop', group.props.guuid);
 
             delete Files[group.props.guuid];
