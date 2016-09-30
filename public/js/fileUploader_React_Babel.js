@@ -68,16 +68,17 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
 
             event.preventDefault();
 
-            console.log('removing group, stopping any uploads');
+            // console.log('removing group, stopping any uploads');
+
+            // TODO stop that upload!!!
+            console.log('TELL MARTIN', Files);
+            console.log('TELL MARTIN', group.props);
+            socket.emit('Stop', group.props.guuid);
 
             Files = Files.filter(function (f) {
                 return f.guuid != group.props.guuid;
             });
 
-            //TODO stop that upload!!!
-            console.log('TELL MARTIN', Files);
-            console.log('TELL MARTIN', group.props);
-            socket.emit('Stop', group.props.guuid);
             delete Files[group.props.guuid];
 
             if (this.state.inputGroups.length > this.state.min) {
