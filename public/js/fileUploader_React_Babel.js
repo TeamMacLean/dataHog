@@ -75,6 +75,8 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
 
             Files = Files.filter(function (f) {
 
+                console.log(f.guuid, group.props.guuid, f.guuid != group.props.guuid);
+
                 //TODO IMPORTANT UPDATE
                 if (f.guuid != group.props.guuid) {
                     return true;
