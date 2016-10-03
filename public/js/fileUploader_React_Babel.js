@@ -176,6 +176,7 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
                 Files[uuid].reader = new FileReader();
                 Files[uuid].percent = 0;
                 Files[uuid].speed = '';
+                Files[uuid].complete = false;
 
                 Files[uuid].reader.onloadend = function (evnt) {
 
@@ -323,6 +324,7 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
     socket.on('Complete', function (data) {
         console.log('complete');
         Files[data.UUID].percent = 100;
+        Files[data.UUID].complete = true;
         UpdateBar(Files[data.UUID].meter, 100, '');
 
         var input = $(Files[data.UUID].input);
