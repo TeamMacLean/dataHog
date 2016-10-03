@@ -175,7 +175,7 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
                 Files[uuid].meter.show();
                 Files[uuid].reader = new FileReader();
                 Files[uuid].percent = 0;
-                File.speed = '';
+                Files[uuid].speed = '';
 
                 Files[uuid].reader.onloadend = function (evnt) {
 
@@ -202,7 +202,7 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
 
                 var meter = $input.parent().find('.meter');
 
-                UpdateBar(meter, 0);
+                UpdateBar(meter, 0, '');
                 meter.hide();
             }
         },
@@ -319,7 +319,7 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
     socket.on('Complete', function (data) {
         console.log('complete');
         Files[data.UUID].percent = 100;
-        UpdateBar(Files[data.UUID].meter, 100);
+        UpdateBar(Files[data.UUID].meter, 100, '');
 
         var input = $(Files[data.UUID].input);
         var nmval = input.data('input-name');
@@ -354,7 +354,7 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
 
 
             File.percent = data.Percent;
-            UpdateBar(File.meter, Files[data.UUID].percent, File.speed);
+            UpdateBar(File.meter, File.percent, File.speed);
             var Place = data['Place'] * CHUNK_SIZE; //The Next Blocks Starting Position
             var NewFile; //The Variable that will hold the new Block of Data
             if (File.slice) {
@@ -381,7 +381,7 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
     }
 
     function UpdateBar(bar, percent, speed) {
-        bar.find('span').width(percent + '%' + speed).text(Math.round(percent) + '%');
+        bar.find('span').width(percent + '%').text(Math.round(percent) + '%' + ' at ' + speed);
     }
 
     var out = ReactDOM.render(React.createElement(App, null), mountNode);
