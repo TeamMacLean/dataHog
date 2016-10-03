@@ -650,6 +650,7 @@ Runs.show = function (req, res) {
                 }
 
                 var rawFiles = fs.readdirSync(rawPath);
+                console.log('files in raw', rawFiles);
                 rawFiles = rawFiles.filter(function (rfilter) {
                     return rfilter != '.fastqc' && rfilter.indexOf('.txt') < 0;
                 });
@@ -666,6 +667,7 @@ Runs.show = function (req, res) {
                         }
                     });
                     if (!found) {
+                        console.log('UNKNOWN', rf);
                         unknownRaw.push(rf);
                     }
                 });
@@ -700,6 +702,7 @@ Runs.show = function (req, res) {
                         }
                     });
                     if (!found) {
+                        console.log('UNKNOWN', pf);
                         unknownProcessed.push(pf);
                     }
                 });
