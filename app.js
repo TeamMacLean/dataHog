@@ -49,7 +49,7 @@ app.use(multer({
   dest: config.tmpDir
 }));
 
-app.use(morgan('combined'))
+app.use(morgan('combined'));
 
 var options = {
   servers: [
