@@ -643,70 +643,58 @@ Runs.show = function (req, res) {
         var processedPath = path.join(config.dataDir, run.path, 'processed');
 
         try {
-            // fs.accessSync(rawPath, fs.F_OK);
-            fs.ensureDir(rawPath, function (err) {
-                if (err) {
-                    return renderError(err, res)
-                }
+            fs.ensureDirSync(rawPath);
 
-                var rawFiles = fs.readdirSync(rawPath);
-                console.log('files in raw', rawFiles);
-                rawFiles = rawFiles.filter(function (rfilter) {
-                    return rfilter != '.fastqc' && rfilter.indexOf('.txt') < 0;
-                });
+            var rawFiles = fs.readdirSync(rawPath);
+            console.log('files in raw', rawFiles);
+            rawFiles = rawFiles.filter(function (rfilter) {
+                return rfilter != '.fastqc' && rfilter.indexOf('.txt') < 0;
+            });
 
-                rawFiles.map(function (rf) {
-                    var found = false;
-                    raw.map(function (r) {
-                        if (r.filter(function (rr) {
-                                // console.log(rf, rr);
-                                return rf.trim().toUpperCase() == rr.name.trim().toUpperCase();
-                                // return rf.name.trim().toUpperCase() == rr.trim().toUpperCase();
-                            }).length > 0) {
-                            found = true;
-                        }
-                    });
-                    if (!found) {
-                        console.log('UNKNOWN', rf);
-                        unknownRaw.push(rf);
+            rawFiles.map(function (rf) {
+                var found = false;
+                raw.map(function (r) {
+                    if (r.filter(function (rr) {
+                            // console.log(rf, rr);
+                            return rf.trim().toUpperCase() == rr.name.trim().toUpperCase();
+                            // return rf.name.trim().toUpperCase() == rr.trim().toUpperCase();
+                        }).length > 0) {
+                        found = true;
                     }
                 });
+                if (!found) {
+                    console.log('UNKNOWN', rf);
+                    unknownRaw.push(rf);
+                }
             });
         } catch (err) {
             return renderError(err, res)
         }
 
         try {
-            // fs.accessSync(processedPath, fs.F_OK);
+            fs.ensureDirSync(processedPath);
 
-            fs.ensureDir(processedPath, function (err) {
+            var processedFiles = fs.readdirSync(processedPath);
+            processedFiles = processedFiles.filter(function (pfilter) {
+                return pfilter != '.fastqc' && pfilter.indexOf('.txt') < 0;
+            });
 
-                if (err) {
-                    return renderError(err, res)
-                }
-
-                var processedFiles = fs.readdirSync(processedPath);
-                processedFiles = processedFiles.filter(function (pfilter) {
-                    return pfilter != '.fastqc' && pfilter.indexOf('.txt') < 0;
-                });
-
-                processedFiles.map(function (pf) {
-                    var found = false;
-                    processed.map(function (p) {
-                        if (p.filter(function (pp) {
-                                // console.log(pf, pp);
-                                return pf.trim().toUpperCase() == pp.name.trim().toUpperCase();
-                                // return pf.name.trim().toUpperCase() == pp.trim().toUpperCase();
-                            }).length > 0) {
-                            found = true;
-                        }
-                    });
-                    if (!found) {
-                        console.log('UNKNOWN', pf);
-                        unknownProcessed.push(pf);
+            processedFiles.map(function (pf) {
+                var found = false;
+                processed.map(function (p) {
+                    if (p.filter(function (pp) {
+                            // console.log(pf, pp);
+                            return pf.trim().toUpperCase() == pp.name.trim().toUpperCase();
+                            // return pf.name.trim().toUpperCase() == pp.trim().toUpperCase();
+                        }).length > 0) {
+                        found = true;
                     }
                 });
-            })
+                if (!found) {
+                    console.log('UNKNOWN', pf);
+                    unknownProcessed.push(pf);
+                }
+            });
         } catch (err) {
             return renderError(err, res)
         }
