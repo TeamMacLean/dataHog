@@ -351,7 +351,7 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
                 var scaledSize = CHUNK_SIZE * scale;
                 var scaledTime = seconds * scale;
 
-                console.log(scaledSize, 'MB', 'per', scaledTime, 'seconds');
+                console.log(scaledSize + 'MB', 'per second');
             }
 
 
