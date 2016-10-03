@@ -353,7 +353,7 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
                 var seconds = Math.floor(difference * 1000);
                 var scale = 1 / seconds;
                 var scaledSize = CHUNK_SIZE * scale;
-                File.speed = scaledSize + 'MB/s'
+                File.speed = scaledSize.toFixed(2) + 'MB/s'
             }
 
 
