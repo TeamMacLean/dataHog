@@ -85,13 +85,10 @@
     <% } %>
 
     <div class="row">
-
-        <% console.log('ur',unknownRaw) %>
-
         <% if(unknownRaw && unknownRaw.length > 0){ %>
         <% unknownRaw.map(function(ur){ %>
         <div class="col6">
-            <a class="tile unknown" href="#"><%- ur %></a>
+            <a class="tile" href="#"><%- ur %><span class="badge danger">MD5 Unknown</span></a>
         </div>
         <% }) %>
         <% } %>
@@ -133,7 +130,7 @@
         <% if(unknownProcessed && unknownProcessed.length > 0){ %>
         <% unknownProcessed.map(function(up){ %>
         <div class="col6">
-            <a class="tile unknown" href="#"><%- up %></a>
+            <a class="tile" href="#"><%- up %><span class="badge danger">MD5 Unknown</span></a>
         </div>
         <% }) %>
         <% } %>

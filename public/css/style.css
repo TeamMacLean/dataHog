@@ -257,6 +257,23 @@ button.thin, input.thin {
     margin-left: -50px;
 }
 
+.badge {
+    background: #000000;
+    color: #FFFFFF;
+    border-radius: 4px;
+    font-size: 11px;
+    line-height: 11px;
+    display: inline-block;
+    margin: 4px;
+    padding: 4px;
+    font-weight: 900;
+    text-transform: uppercase;
+}
+
+.badge.danger {
+    background: #ED5565;
+}
+
 input[type=submit][disabled=disabled],
 button[disabled=disabled],
 input[type=submit]:disabled,
