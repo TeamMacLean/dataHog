@@ -342,7 +342,7 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
         var File = Files[data.UUID];
 
         if (File) {
-            var timeNow = new Date.now();
+            var timeNow = new Date();
             if (File.lastTime) {
                 var difference = timeNow.getTime() - File.lastTime.getTime();
                 var seconds = Math.floor((difference) / (1000));
@@ -354,7 +354,6 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
 
                 console.log(scaledSize + 'MB', 'per', scaledTime, 'seconds');
             }
-            File.lastTime = timeNow;
 
 
             Files[data.UUID].percent = data.Percent;
@@ -371,6 +370,7 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
                 alert('Sorry but your browser does not support this');
             }
             File.reader.readAsBinaryString(NewFile);
+            File.lastTime = timeNow;
         } else {
             console.log('this file', data.UUID, 'no longer exists');
         }
