@@ -353,7 +353,7 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
                 var seconds = Math.floor(difference * 1000);
                 var scale = 1 / seconds;
                 var scaledSize = CHUNK_SIZE * scale;
-                File.speed = scaledSize.toFixed(2) + 'MB/s'
+                File.speed = scaledSize.toFixed(2)
             }
 
 
@@ -386,7 +386,10 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
 
     function UpdateBar(bar, percent, speed) {
         bar.find('.bar').width(percent + '%');
-        bar.find('.value').text(Math.round(percent) + '%' + ' at ' + speed);
+
+        var speedText = speed ? 'at ' + speed + 'MB/s' : '';
+
+        bar.find('.value').text(Math.round(percent) + '%' + speedText);
     }
 
     var out = ReactDOM.render(React.createElement(App, null), mountNode);
