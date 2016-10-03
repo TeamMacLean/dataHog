@@ -175,6 +175,7 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
                 Files[uuid].meter.show();
                 Files[uuid].reader = new FileReader();
                 Files[uuid].percent = 0;
+                File.speed = '';
 
                 Files[uuid].reader.onloadend = function (evnt) {
 
@@ -347,16 +348,13 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
                 var difference = timeNow.getTime() - File.lastTime.getTime();
                 var seconds = Math.floor(difference * 1000);
                 var scale = 1 / seconds;
-                //TODO scale it up to 1 second
                 var scaledSize = CHUNK_SIZE * scale;
-                var scaledTime = seconds * scale;
-
-                console.log(scaledSize + 'MB', 'per second');
+                File.speed = scaledSize + 'MB/s'
             }
 
 
-            Files[data.UUID].percent = data.Percent;
-            UpdateBar(File.meter, Files[data.UUID].percent);
+            File.percent = data.Percent;
+            UpdateBar(File.meter, Files[data.UUID].percent, File.speed);
             var Place = data['Place'] * CHUNK_SIZE; //The Next Blocks Starting Position
             var NewFile; //The Variable that will hold the new Block of Data
             if (File.slice) {
@@ -382,8 +380,8 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
         socket.emit('reset');
     }
 
-    function UpdateBar(bar, percent) {
-        bar.find('span').width(percent + '%').text(Math.round(percent) + '%');
+    function UpdateBar(bar, percent, speed) {
+        bar.find('span').width(percent + '%' + speed).text(Math.round(percent) + '%');
     }
 
     var out = ReactDOM.render(React.createElement(App, null), mountNode);
