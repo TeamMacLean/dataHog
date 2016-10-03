@@ -233,10 +233,7 @@ button.thin, input.thin {
     border: 1px solid #d1d1d1;
 }
 
-.meter > span {
-    text-align: center;
-    line-height: 1.4rem;
-    font-size: 1.2rem;
+.meter .bar {
     height: 23px;
     width: 0;
     -moz-border-radius: 25px;
@@ -245,6 +242,12 @@ button.thin, input.thin {
     background-color: #a0d468;
     position: relative;
     overflow: hidden;
+}
+
+.meter .value {
+    text-align: center;
+    line-height: 1.4rem;
+    font-size: 1.2rem;
 }
 
 input[type=submit][disabled=disabled],
