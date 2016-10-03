@@ -342,7 +342,7 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
         var File = Files[data.UUID];
 
         if (File) {
-            var timeNow = Date.now();
+            var timeNow = new Date.now();
             if (File.lastTime) {
                 var difference = timeNow.getTime() - File.lastTime.getTime();
                 var seconds = Math.floor((difference) / (1000));
