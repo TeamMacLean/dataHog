@@ -232,6 +232,7 @@ button.thin, input.thin {
     padding: 0;
     border: 1px solid #d1d1d1;
     height: 16px;
+    overflow: hidden;
 }
 
 .meter .bar {
@@ -248,7 +249,7 @@ button.thin, input.thin {
 
 .meter .value {
     text-align: center;
-    line-height: 15px;
+    line-height: 14px;
     font-size: 16px;
     z-index: 9999;
     position: absolute;
