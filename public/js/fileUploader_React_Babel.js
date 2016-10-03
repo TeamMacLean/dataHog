@@ -342,6 +342,21 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
         var File = Files[data.UUID];
 
         if (File) {
+            var timeNow = Date.now();
+            if (File.lastTime) {
+                var difference = timeNow.getTime() - File.lastTime.getTime();
+                var seconds = Math.floor((difference) / (1000));
+                //TODO scale it up to 1 second
+                var scale = 1024000 / CHUNK_SIZE;
+
+                var scaledSize = CHUNK_SIZE * scale;
+                var scaledTime = seconds * scale;
+
+                console.log(scaledSize + 'MB', 'per', scaledTime, 'seconds');
+            }
+            File.lastTime = timeNow;
+
+
             Files[data.UUID].percent = data.Percent;
             UpdateBar(File.meter, Files[data.UUID].percent);
             var Place = data['Place'] * CHUNK_SIZE; //The Next Blocks Starting Position
