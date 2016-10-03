@@ -345,10 +345,9 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
             var timeNow = new Date();
             if (File.lastTime) {
                 var difference = timeNow.getTime() - File.lastTime.getTime();
-                var seconds = Math.floor((difference) / (1000));
+                var seconds = Math.floor(difference * 1000);
                 var scale = 1 / seconds;
                 //TODO scale it up to 1 second
-                // var scale = 1024000 / CHUNK_SIZE;
                 var scaledSize = CHUNK_SIZE * scale;
                 var scaledTime = seconds * scale;
 
