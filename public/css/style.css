@@ -253,6 +253,7 @@ button.thin, input.thin {
     z-index: 9999;
     position: absolute;
     left: 50%;
+    margin-left: -50px;
 }
 
 input[type=submit][disabled=disabled],
