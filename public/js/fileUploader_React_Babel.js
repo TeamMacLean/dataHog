@@ -297,7 +297,7 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
                     {className: 'meter hidden'},
                     React.createElement(
                         'span',
-                        {className: 'inner'}
+                        {className: 'bar'}
                     ),
                     React.createElement(
                         'span',
@@ -385,7 +385,7 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
     }
 
     function UpdateBar(bar, percent, speed) {
-        bar.find('.inner').width(percent + '%');
+        bar.find('.bar').width(percent + '%');
         bar.find('.value').text(Math.round(percent) + '%' + ' at ' + speed);
     }
 
