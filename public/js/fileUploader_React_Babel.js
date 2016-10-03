@@ -334,11 +334,14 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
 
         hiddenInput.val(data.UUID);
 
-        var incompleteUploads = Files.filter(function (f) {
-            return f.percent < 100;
-        });
-
-        if (incompleteUploads.length == 0) {
+        var allUploaded = true;
+        for (var key in Files) {
+            var f = Files[key];
+            if (f.percent && f.percent < 100) {
+                allUploaded = false;
+            }
+        }
+        if (allUploaded) {
             $('button[type=submit]').prop('disabled', false);
         }
     });
