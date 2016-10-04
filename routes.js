@@ -17,18 +17,12 @@ var config = require('./config.json');
 //get index
 router.route('/').get(Auth.index);
 
-
 router.route('/signin')
     .get(Auth.signIn)
     .post(Auth.signInPost);
 
 router.route('/signout')
     .get(Auth.signOut);
-
-router.route('/upload-test')
-    .get(function (req, res, next) {
-        return res.render('uploadTest');
-    });
 
 //router.route('/iamadmin').all([isAuthenticated, isAdmin], function (req, res, next) {
 //  res.send('<html><body><img src="http://i.imgur.com/ZMvyKk2.gif"><h1>Your an admin Harry!</h1></body></html>');

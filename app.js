@@ -156,34 +156,6 @@ Submission.getJoin({
 
 socketUploader(io);
 
-var Siofu = require("socketio-file-upload");
-app.use(Siofu.router)
-    .listen(8000);
-
-io.on("connection", function (socket) {
-    var uploader = new Siofu();
-
-    uploader.on("saved", function (event) {
-        console.log(event.file);
-        // event.file.clientDetail.base = event.file.base;
-    });
-    uploader.on("error", function (data) {
-        console.log("Error: " + data.memo);
-        console.log(data.error);
-    });
-    uploader.on("start", function (event) {
-        // if (/\.exe$/.test(event.file.name)) {
-        //     console.log("Aborting: " + event.file.id);
-        //     siofuServer.abort(event.file.id, socket);
-        // }
-    });
-    uploader.dir = "uploads";
-    // uploader.maxFileSize = 1024 * 1000;
-    uploader.listen(socket);
-
-});
-
-
 module.exports = server;
 
 

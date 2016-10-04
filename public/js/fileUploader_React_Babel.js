@@ -392,7 +392,7 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
     function UpdateBar(bar, percent, speed) {
         bar.find('.bar').width(percent + '%');
 
-        var speedText = speed ? 'at ' + speed + 'MB/s' : '';
+        var speedText = speed ? ' at ' + speed + 'MB/s' : '';
 
         bar.find('.value').text(Math.round(percent) + '%' + speedText);
     }
