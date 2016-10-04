@@ -19,11 +19,16 @@ router.route('/').get(Auth.index);
 
 
 router.route('/signin')
-  .get(Auth.signIn)
-  .post(Auth.signInPost);
+    .get(Auth.signIn)
+    .post(Auth.signInPost);
 
 router.route('/signout')
-  .get(Auth.signOut);
+    .get(Auth.signOut);
+
+router.route('/upload-test')
+    .get(function (req, res, next) {
+        return res.render('uploadTest');
+    });
 
 //router.route('/iamadmin').all([isAuthenticated, isAdmin], function (req, res, next) {
 //  res.send('<html><body><img src="http://i.imgur.com/ZMvyKk2.gif"><h1>Your an admin Harry!</h1></body></html>');
@@ -31,96 +36,96 @@ router.route('/signout')
 
 //download additional File
 router.route('/additional/:id/download')
-  .all(isAuthenticated)
-  .get(AdditionalFiles.download);
+    .all(isAuthenticated)
+    .get(AdditionalFiles.download);
 
 router.route('/groups')
-  .all(isAuthenticated)
-  .get(Groups.index);
+    .all(isAuthenticated)
+    .get(Groups.index);
 
 //show by lab name
 router.route('/:group')
-  .all(isAuthenticated)
-  .all(isPartOfGroup)
-  .get(Groups.show);
+    .all(isAuthenticated)
+    .all(isPartOfGroup)
+    .get(Groups.show);
 
 //get new project
 router.route('/:group/new')
-  .all(isAuthenticated)
-  .all(isPartOfGroup)
-  .get(Projects.new);
+    .all(isAuthenticated)
+    .all(isPartOfGroup)
+    .get(Projects.new);
 
 //post new project
 router.route('/:group/new')
-  .all(isAuthenticated)
-  .all(isPartOfGroup)
-  .post(Projects.newPost);
+    .all(isAuthenticated)
+    .all(isPartOfGroup)
+    .post(Projects.newPost);
 
 //get project
 router.route('/:group/:project')
-  .all(isAuthenticated)
-  .all(isPartOfGroup)
-  .get(Projects.show);
+    .all(isAuthenticated)
+    .all(isPartOfGroup)
+    .get(Projects.show);
 
 //get new sample
 router.route('/:group/:project/new')
-  .all(isAuthenticated)
-  .all(isPartOfGroup)
-  .get(Samples.new);
+    .all(isAuthenticated)
+    .all(isPartOfGroup)
+    .get(Samples.new);
 
 //post new sample
 router.route('/:group/:project/new')
-  .all(isAuthenticated)
-  .all(isPartOfGroup)
-  .post(Samples.newPost);
+    .all(isAuthenticated)
+    .all(isPartOfGroup)
+    .post(Samples.newPost);
 
 //get sample
 router.route('/:group/:project/:sample')
-  .all(isAuthenticated)
-  .all(isPartOfGroup)
-  .get(Samples.show);
+    .all(isAuthenticated)
+    .all(isPartOfGroup)
+    .get(Samples.show);
 
 //get new run
 router.route('/:group/:project/:sample/new')
-  .all(isAuthenticated)
-  .all(isPartOfGroup)
-  .get(Runs.new);
+    .all(isAuthenticated)
+    .all(isPartOfGroup)
+    .get(Runs.new);
 
 //post new run
 router.route('/:group/:project/:sample/new')
-  .all(isAuthenticated)
-  .all(isPartOfGroup)
-  .post(Runs.newPost);
+    .all(isAuthenticated)
+    .all(isPartOfGroup)
+    .post(Runs.newPost);
 
 //show run
 router.route('/:group/:project/:sample/:run')
-  .all(isAuthenticated)
-  .all(isPartOfGroup)
-  .get(Runs.show);
+    .all(isAuthenticated)
+    .all(isPartOfGroup)
+    .get(Runs.show);
 
 //new read
 router.route('/:group/:project/:sample/:run/add')
-  .all(isAuthenticated)
-  .all(isPartOfGroup)
-  .post(Runs.addPost);
+    .all(isAuthenticated)
+    .all(isPartOfGroup)
+    .post(Runs.addPost);
 
 //show read
 router.route('/:group/:project/:sample/:run/:read')
-  .all(isAuthenticated)
-  .all(isPartOfGroup)
-  .get(Reads.show);
+    .all(isAuthenticated)
+    .all(isPartOfGroup)
+    .get(Reads.show);
 
 //show run qc
 router.route('/:group/:project/:sample/:run/:read/fastqc')
-  .all(isAuthenticated)
-  .all(isPartOfGroup)
-  .get(Reads.fastQC);
+    .all(isAuthenticated)
+    .all(isPartOfGroup)
+    .get(Reads.fastQC);
 
 //download run file
 router.route('/:group/:project/:sample/:run/:read/download')
-  .all(isAuthenticated)
-  .all(isPartOfGroup)
-  .get(Reads.download);
+    .all(isAuthenticated)
+    .all(isPartOfGroup)
+    .get(Reads.download);
 
 
 //404 page
@@ -128,86 +133,86 @@ router.route('/:group/:project/:sample/:run/:read/download')
 
 
 function isAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) {
-    return next();
-  } else {
-    req.session.returnTo = req.path;
-    return res.redirect('/signin');
-  }
+    if (req.isAuthenticated()) {
+        return next();
+    } else {
+        req.session.returnTo = req.path;
+        return res.redirect('/signin');
+    }
 }
 
 function isPartOfGroup(req, res, next) {
 
-  if (_isAdmin(req)) {
-    return next();
-  }
-
-  if (!req.user) {
-    return next('not signed in');
-  }
-  var currentUserGroups = req.user.memberOf;
-  var reqGroup = req.params.group;
-
-  if (!reqGroup) {
-    return next('not found');
-  }
-
-
-  //currentUserGroup is an array of all groups the user is a member of
-
-  var match = config.groups.filter(function (g) {
-    var groupsGroupName = g.memberOf;
-
-    var found = false;
-    currentUserGroups.map(function (cug) {
-      if (cug == groupsGroupName) {
-        found = true;
-      }
-    });
-    return found;
-  });
-
-  //if (match.length > 1) {
-  //  return next('error, too many groups found. sorry');
-  //}
-  if (match.length < 1) {
-    return next('you could not be found in the groups list');
-  }
-
-  Group.filter({name: match[0].name.toLowerCase()}).then(function (groups) {
-    if (groups.length < 1) {
-      return next('group name ' + match[0].name + ' not found, please check that the config matches the group names in the DB');
-    } else {
-      var group = groups[0];
-      if (group.safeName.toLowerCase() == reqGroup.toLowerCase()) {
+    if (_isAdmin(req)) {
         return next();
-      } else {
-        return next('you do not have permission to view this group');
-      }
     }
-  });
+
+    if (!req.user) {
+        return next('not signed in');
+    }
+    var currentUserGroups = req.user.memberOf;
+    var reqGroup = req.params.group;
+
+    if (!reqGroup) {
+        return next('not found');
+    }
+
+
+    //currentUserGroup is an array of all groups the user is a member of
+
+    var match = config.groups.filter(function (g) {
+        var groupsGroupName = g.memberOf;
+
+        var found = false;
+        currentUserGroups.map(function (cug) {
+            if (cug == groupsGroupName) {
+                found = true;
+            }
+        });
+        return found;
+    });
+
+    //if (match.length > 1) {
+    //  return next('error, too many groups found. sorry');
+    //}
+    if (match.length < 1) {
+        return next('you could not be found in the groups list');
+    }
+
+    Group.filter({name: match[0].name.toLowerCase()}).then(function (groups) {
+        if (groups.length < 1) {
+            return next('group name ' + match[0].name + ' not found, please check that the config matches the group names in the DB');
+        } else {
+            var group = groups[0];
+            if (group.safeName.toLowerCase() == reqGroup.toLowerCase()) {
+                return next();
+            } else {
+                return next('you do not have permission to view this group');
+            }
+        }
+    });
 }
 
 function _isAdmin(req) {
-  if (req.isAuthenticated()) {
-    return config.admins.indexOf(req.user.username) > -1;
-  } else {
-    return false;
-  }
+    if (req.isAuthenticated()) {
+        return config.admins.indexOf(req.user.username) > -1;
+    } else {
+        return false;
+    }
 }
 
 function isAdmin(req, res, next) {
-  if (req.isAuthenticated()) {
-    if (isAdmin(req)) {
-      return next();
+    if (req.isAuthenticated()) {
+        if (isAdmin(req)) {
+            return next();
+        } else {
+            return res.render('error', {error: 'you must be an admin to preform that action'});
+        }
     } else {
-      return res.render('error', {error: 'you must be an admin to preform that action'});
+        //they are not signed in, cannot be an admin
+        req.session.returnTo = req.path;
+        return res.redirect('/signin');
     }
-  } else {
-    //they are not signed in, cannot be an admin
-    req.session.returnTo = req.path;
-    return res.redirect('/signin');
-  }
 }
 
 

@@ -3,9 +3,7 @@
 function fileUploader(mountNode, MD5S, fileID, MD5ID) {
 
     var socket = io(window.location.host);
-    // var socket = io.connect();
     var uploader = new SocketIOFileUpload(socket);
-    // var Files = {};
 
     function generateUUID() {
         var d = new Date().getTime();

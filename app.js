@@ -18,18 +18,18 @@ var email = require('./lib/email');
 
 
 if (!config.appName || !config.port || !config.dataDir || !config.tmpDir) {
-  console.error('please fill out config.json');
-  process.exit(1);
+    console.error('please fill out config.json');
+    process.exit(1);
 }
 
 
 if (!fs.existsSync(config.dataDir)) {
-  console.error('dataDir', config.dataDir, 'does not exist');
+    console.error('dataDir', config.dataDir, 'does not exist');
 }
 
 
 if (!fs.existsSync(config.tmpDir)) {
-  console.error('tmpDir', config.tmpDir, 'does not exist');
+    console.error('tmpDir', config.tmpDir, 'does not exist');
 }
 
 var express = require('express');
@@ -46,37 +46,37 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(multer({
-  dest: config.tmpDir
+    dest: config.tmpDir
 }));
 
 app.use(morgan('combined'));
 
 var options = {
-  servers: [
-    {host: 'localhost', port: 28015, db: 'Hog'}
-  ]
+    servers: [
+        {host: 'localhost', port: 28015, db: 'Hog'}
+    ]
 };
 
 var store = new rethinkSession(options);
 
 app.use(session({
-  secret: config.secret,
-  resave: false,
-  saveUninitialized: false,
-  store: store
+    secret: config.secret,
+    resave: false,
+    saveUninitialized: false,
+    store: store
 }));
 
 app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(function (req, res, next) {
-  if (req.user != null) {
-    res.locals.signedInUser = {};
-    res.locals.signedInUser.username = req.user.username;
-    res.locals.signedInUser.name = req.user.name;
-    res.locals.signedInUser.mail = req.user.mail;
-  }
-  next(null, req, res);
+    if (req.user != null) {
+        res.locals.signedInUser = {};
+        res.locals.signedInUser.username = req.user.username;
+        res.locals.signedInUser.name = req.user.name;
+        res.locals.signedInUser.mail = req.user.mail;
+    }
+    next(null, req, res);
 });
 
 util.setupPassport();
@@ -85,76 +85,103 @@ util.setupPassport();
 app.use(routes);
 
 app.use(function (err, req, res, next) {
-  if (err) {
-    console.error(err);
-    return res.status(500).render('error', {error: err});
-  } else {
-    return next();
-  }
+    if (err) {
+        console.error(err);
+        return res.status(500).render('error', {error: err});
+    } else {
+        return next();
+    }
 });
 
 
 Submission.getJoin({
-  run: {
-    sample: {
-      project: {
-        group: true
-      }
-    }
-  }
-}).run().then(function (subs) {
-  subs.map(function (s) {
-    var now = moment();
-    var holdTill = moment(s.holdDate);
-    var diffInDays = holdTill.diff(now, 'days');
-    console.log(diffInDays, 'days until', s.id, 'is public in ENA');
-    var FourWeeks = holdTill.subtract(4, 'weeks');
-    var ThreeWeeks = holdTill.subtract(3, 'weeks');
-    var TwoWeeks = holdTill.subtract(2, 'weeks');
-    var OneWeek = holdTill.subtract(1, 'weeks');
-    var TwoDays = holdTill.subtract(2, 'days');
-    var OneDay = holdTill.subtract(1, 'days');
-
-
-    var contacts = [s.run.sample.project.responsiblePerson, s.run.sample.project.secondaryContact];
-
-
-    config.groups.map(function (g) {
-
-      var ConfigGroupName = g["name"];
-
-      var GroupName = s.run.sample.project.group.name;
-
-      if (ConfigGroupName && GroupName && g["email"]) {
-        if (ConfigGroupName.toLowerCase() == GroupName.toLowerCase()) {
-          contacts.push(g["email"])
+    run: {
+        sample: {
+            project: {
+                group: true
+            }
         }
-      }
-    });
+    }
+}).run().then(function (subs) {
+    subs.map(function (s) {
+        var now = moment();
+        var holdTill = moment(s.holdDate);
+        var diffInDays = holdTill.diff(now, 'days');
+        console.log(diffInDays, 'days until', s.id, 'is public in ENA');
+        var FourWeeks = holdTill.subtract(4, 'weeks');
+        var ThreeWeeks = holdTill.subtract(3, 'weeks');
+        var TwoWeeks = holdTill.subtract(2, 'weeks');
+        var OneWeek = holdTill.subtract(1, 'weeks');
+        var TwoDays = holdTill.subtract(2, 'days');
+        var OneDay = holdTill.subtract(1, 'days');
 
-    schedule.scheduleJob(FourWeeks.toDate(), function () {
-      email.emailSomeone('Your data will be published on ENA soon', 'Your data will be made public on ENA in 4 weeks, the data being published can be found at ' + s.run.path, contacts)
-    });
-    schedule.scheduleJob(ThreeWeeks.toDate(), function () {
-      email.emailSomeone('Your data will be published on ENA soon', 'Your data will be made public on ENA in 3 weeks, the data being published can be found at ' + s.run.path, contacts)
-    });
-    schedule.scheduleJob(TwoWeeks.toDate(), function () {
-      email.emailSomeone('Your data will be published on ENA soon', 'Your data will be made public on ENA in 2 weeks, the data being published can be found at ' + s.run.path, contacts)
-    });
-    schedule.scheduleJob(OneWeek.toDate(), function () {
-      email.emailSomeone('Your data will be published on ENA soon', 'Your data will be made public on ENA in 1 weeks, the data being published can be found at ' + s.run.path, contacts)
-    });
-    schedule.scheduleJob(TwoDays.toDate(), function () {
-      email.emailSomeone('Your data will be published on ENA soon', 'Your data will be made public on ENA in 2 days, the data being published can be found at ' + s.run.path, contacts)
-    });
-    schedule.scheduleJob(OneDay.toDate(), function () {
-      email.emailSomeone('Your data will be published on ENA soon', 'Your data will be made public on ENA TOMORROW, the data being published can be found at ' + s.run.path, contacts)
-    });
-  })
+
+        var contacts = [s.run.sample.project.responsiblePerson, s.run.sample.project.secondaryContact];
+
+
+        config.groups.map(function (g) {
+
+            var ConfigGroupName = g["name"];
+
+            var GroupName = s.run.sample.project.group.name;
+
+            if (ConfigGroupName && GroupName && g["email"]) {
+                if (ConfigGroupName.toLowerCase() == GroupName.toLowerCase()) {
+                    contacts.push(g["email"])
+                }
+            }
+        });
+
+        schedule.scheduleJob(FourWeeks.toDate(), function () {
+            email.emailSomeone('Your data will be published on ENA soon', 'Your data will be made public on ENA in 4 weeks, the data being published can be found at ' + s.run.path, contacts)
+        });
+        schedule.scheduleJob(ThreeWeeks.toDate(), function () {
+            email.emailSomeone('Your data will be published on ENA soon', 'Your data will be made public on ENA in 3 weeks, the data being published can be found at ' + s.run.path, contacts)
+        });
+        schedule.scheduleJob(TwoWeeks.toDate(), function () {
+            email.emailSomeone('Your data will be published on ENA soon', 'Your data will be made public on ENA in 2 weeks, the data being published can be found at ' + s.run.path, contacts)
+        });
+        schedule.scheduleJob(OneWeek.toDate(), function () {
+            email.emailSomeone('Your data will be published on ENA soon', 'Your data will be made public on ENA in 1 weeks, the data being published can be found at ' + s.run.path, contacts)
+        });
+        schedule.scheduleJob(TwoDays.toDate(), function () {
+            email.emailSomeone('Your data will be published on ENA soon', 'Your data will be made public on ENA in 2 days, the data being published can be found at ' + s.run.path, contacts)
+        });
+        schedule.scheduleJob(OneDay.toDate(), function () {
+            email.emailSomeone('Your data will be published on ENA soon', 'Your data will be made public on ENA TOMORROW, the data being published can be found at ' + s.run.path, contacts)
+        });
+    })
 });
 
 
 socketUploader(io);
+
+var Siofu = require("socketio-file-upload");
+app.use(Siofu.router)
+    .listen(8000);
+
+io.on("connection", function (socket) {
+    var uploader = new Siofu();
+
+    uploader.on("saved", function (event) {
+        console.log(event.file);
+        // event.file.clientDetail.base = event.file.base;
+    });
+    uploader.on("error", function (data) {
+        console.log("Error: " + data.memo);
+        console.log(data.error);
+    });
+    uploader.on("start", function (event) {
+        // if (/\.exe$/.test(event.file.name)) {
+        //     console.log("Aborting: " + event.file.id);
+        //     siofuServer.abort(event.file.id, socket);
+        // }
+    });
+    uploader.dir = "uploads";
+    // uploader.maxFileSize = 1024 * 1000;
+    uploader.listen(socket);
+
+});
 
 
 module.exports = server;
