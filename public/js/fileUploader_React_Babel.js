@@ -3,7 +3,7 @@
 function fileUploader(mountNode, MD5S, fileID, MD5ID) {
 
 
-    var CHUNK_SIZE = 1024 * 512;
+    var CHUNK_SIZE = 102400;
 
     var socket = io(window.location.host);
     var Files = {};
