@@ -154,7 +154,17 @@ Submission.getJoin({
 });
 
 
-socketUploader(io);
+var socketsReady = socketUploader(io);
+
+app.use(function (req, res, next) {
+
+    if (socketsReady) {
+        res.locals.usersOnline = socketsReady.engine.clientsCount;
+        console.log(res.locals.usersOnline, 'online');
+    }
+    next();
+
+});
 
 module.exports = server;
 
