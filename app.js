@@ -161,6 +161,8 @@ app.use(function (req, res, next) {
     if (socketsReady) {
         res.locals.usersOnline = socketsReady.engine.clientsCount;
         console.log(res.locals.usersOnline, 'online');
+    } else {
+        console.log('sockets not ready');
     }
     next();
 
