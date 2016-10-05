@@ -183,7 +183,7 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
                     if (Files[uuid]) {
                         socket.emit('Upload', {'Name': Files[uuid].name, Data: evnt.target.result, 'UUID': uuid});
                     } else {
-                        console.log('looks like file', uuid, 'has been removed');
+                        console.log('looks like file', uuid, 'has been removed'); //todo notify user of issue
                     }
 
 
@@ -367,11 +367,15 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
             var Place = data['Place'] * CHUNK_SIZE; //The Next Blocks Starting Position
             var NewFile; //The Variable that will hold the new Block of Data
             if (File.slice) {
-                NewFile = File.slice(Place, Place + Math.min(CHUNK_SIZE, File.size - Place));
+                // NewFile = File.slice(Place, Place + Math.min(Place+CHUNK_SIZE, File.size - Place));
+                // NewFile = File.slice(Place, Place + Math.min(Place+CHUNK_SIZE, File.size - Place));
+                NewFile = File.slice(Place, Math.min(Place + CHUNK_SIZE, File.size));
             } else if (File.webkitSlice) {
-                NewFile = File.webkitSlice(Place, Place + Math.min(CHUNK_SIZE, File.size - Place));
+                // NewFile = File.webkitSlice(Place, Place + Math.min(CHUNK_SIZE, File.size - Place));
+                NewFile = File.slice(Place, Math.min(Place + CHUNK_SIZE, File.size));
             } else if (File.mozSlice) {
-                NewFile = File.mozSlice(Place, Place + Math.min(CHUNK_SIZE, File.size - Place));
+                // NewFile = File.mozSlice(Place, Place + Math.min(CHUNK_SIZE, File.size - Place));
+                NewFile = File.slice(Place, Math.min(Place + CHUNK_SIZE, File.size));
             } else {
                 alert('Sorry but your browser does not support this');
             }

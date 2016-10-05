@@ -37,20 +37,6 @@ var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 
-var socketsReady = socketUploader(io);
-app.use(function (req, res, next) {
-
-    console.log('getting user count');
-
-    if (socketsReady) {
-        res.locals.usersOnline = socketsReady.engine.clientsCount;
-        console.log(res.locals.usersOnline, 'online');
-    }
-    next();
-
-});
-
-
 app.locals.title = config.appName;
 app.use(express.static(__dirname + '/public'));
 
@@ -166,6 +152,9 @@ Submission.getJoin({
         });
     })
 });
+
+
+socketUploader(io);
 
 
 module.exports = server;
