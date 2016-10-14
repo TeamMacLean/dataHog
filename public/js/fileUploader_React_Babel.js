@@ -358,6 +358,8 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
                 var seconds = Math.floor(difference * 1000);
                 var scale = 1 / seconds;
                 var scaledSize = CHUNK_SIZE * scale;
+
+                // File.speeds.push()
                 File.speed = scaledSize.toFixed(2)
             }
 
@@ -367,14 +369,10 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
             var Place = data['Place'] * CHUNK_SIZE; //The Next Blocks Starting Position
             var NewFile; //The Variable that will hold the new Block of Data
             if (File.slice) {
-                // NewFile = File.slice(Place, Place + Math.min(Place+CHUNK_SIZE, File.size - Place));
-                // NewFile = File.slice(Place, Place + Math.min(Place+CHUNK_SIZE, File.size - Place));
                 NewFile = File.slice(Place, Math.min(Place + CHUNK_SIZE, File.size));
             } else if (File.webkitSlice) {
-                // NewFile = File.webkitSlice(Place, Place + Math.min(CHUNK_SIZE, File.size - Place));
                 NewFile = File.slice(Place, Math.min(Place + CHUNK_SIZE, File.size));
             } else if (File.mozSlice) {
-                // NewFile = File.mozSlice(Place, Place + Math.min(CHUNK_SIZE, File.size - Place));
                 NewFile = File.slice(Place, Math.min(Place + CHUNK_SIZE, File.size));
             } else {
                 alert('Sorry but your browser does not support this');

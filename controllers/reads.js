@@ -17,27 +17,27 @@ var renderError = require('../lib/error');
  */
 Reads.show = function (req, res, next) {
 
-  var projectSN = req.params.project;
-  var sampleSN = req.params.sample;
-  var runSN = req.params.run;
-  var readSN = req.params.read;
+    var projectSN = req.params.project;
+    var sampleSN = req.params.sample;
+    var runSN = req.params.run;
+    var readSN = req.params.read;
 
-  Read.filter({safeName: readSN}).getJoin({run: {sample: {project: {group: true}}}}).filter({
-    run: {
-      safeName: runSN,
-      sample: {safeName: sampleSN, project: {safeName: projectSN}}
-    }
-  }).run().then(function (results) {
+    Read.filter({safeName: readSN}).getJoin({run: {sample: {project: {group: true}}}}).filter({
+        run: {
+            safeName: runSN,
+            sample: {safeName: sampleSN, project: {safeName: projectSN}}
+        }
+    }).run().then(function (results) {
 
-    if (results.length < 1) {
-      return renderError('could not find read ' + readSN, res);
-    }
+        if (results.length < 1) {
+            return renderError('could not find read ' + readSN, res);
+        }
 
-    var read = results[0];
-    return res.render('readData/show', {read: read});
-  }).error(function (err) {
-    return renderError(err, res);
-  });
+        var read = results[0];
+        return res.render('readData/show', {read: read});
+    }).error(function (err) {
+        return renderError(err, res);
+    });
 
 };
 
@@ -48,94 +48,104 @@ Reads.show = function (req, res, next) {
  */
 Reads.fastQC = function (req, res) {
 
-  var projectSN = req.params.project;
-  var sampleSN = req.params.sample;
-  var runSN = req.params.run;
-  var readSN = req.params.read;
+    var projectSN = req.params.project;
+    var sampleSN = req.params.sample;
+    var runSN = req.params.run;
+    var readSN = req.params.read;
 
 
-  Read.filter({safeName: readSN}).getJoin({run: {sample: {project: {group: true}}}})
-    .filter({
-      run: {
-        safeName: runSN,
-        sample: {safeName: sampleSN, project: {safeName: projectSN}}
-      }
-    })
-    .run().then(function (results) {
+    Read.filter({safeName: readSN}).getJoin({run: {sample: {project: {group: true}}}})
+        .filter({
+            run: {
+                safeName: runSN,
+                sample: {safeName: sampleSN, project: {safeName: projectSN}}
+            }
+        })
+        .run().then(function (results) {
 
-    var read = results[0];
+        var read = results[0];
 
-    var strippedReadName = read.fileName.replace('.gz', '').replace('.bz2', '');
+        var strippedReadName = read.fileName.replace('.gz', '').replace('.bz2', '');
 
-    var htmlPath = path.resolve(path.join(config.dataDir, read.fastQCLocation, strippedReadName + '_fastqc.html'));
+        var htmlPath = path.resolve(path.join(config.dataDir, read.fastQCLocation, strippedReadName + '_fastqc.html'));
 
-    fs.stat(htmlPath, function (err) {
-      if (!err) {
-        return res.sendFile(htmlPath);
-      } else {
-        return renderError('could not find fast qc report', res);
-      }
+        fs.stat(htmlPath, function (err) {
+            if (!err) {
+                return res.sendFile(htmlPath);
+            } else {
+                return renderError('could not find fast qc report', res);
+            }
+        });
+
+
+    }).error(function () {
+        return renderError('could not find run', req, res);
     });
-
-
-  }).error(function () {
-    return renderError('could not find run', req, res);
-  });
 };
 
 Reads.download = function (req, res) {
-  var projectSN = req.params.project;
-  var sampleSN = req.params.sample;
-  var runSN = req.params.run;
-  var readSN = req.params.read;
+    var projectSN = req.params.project;
+    var sampleSN = req.params.sample;
+    var runSN = req.params.run;
+    var readSN = req.params.read;
 
-  Read.filter({safeName: readSN}).getJoin({run: {sample: {project: {group: true}}}})
-    .filter({
-      run: {
-        safeName: runSN,
-        sample: {safeName: sampleSN, project: {safeName: projectSN}}
-      }
-    })
-    .run().then(function (results) {
-
-    var read = results[0];
-    var absPath = path.resolve(path.join(config.dataDir, read.path));
-
-    fs.access(absPath, fs.F_OK, function (err) {
-      if (!err) {
-        // Do something
-        return res.download(absPath, read.fileName, function (err) {
-          if (err) {
-            console.error(err);
-          }
-        });
-      } else {
-        // It isn't accessible
-        //TODO check for legacy path
-
-        if (read.legacyPath) {
-          fs.access(read.legacyPath, fs.F_OK, function (err) {
-            if (!err) {
-              // Do something
-              return res.download(read.legacyPath, read.fileName, function (err) {
-                if (err) {
-                  console.error(err);
-                }
-              });
-
-            } else {
-              // It isn't accessible
-              return renderError('Could not find file ' + read.path, req, res);
+    Read.filter({safeName: readSN}).getJoin({run: {sample: {project: {group: true}}}})
+        .filter({
+            run: {
+                safeName: runSN,
+                sample: {safeName: sampleSN, project: {safeName: projectSN}}
             }
-          });
-        } else {
-          return renderError('Could not find file ' + read.path, req, res);
-        }
-      }
+        })
+        .run().then(function (results) {
+
+        var read = results[0];
+        var absPath = path.resolve(path.join(config.dataDir, read.path));
+
+        fs.access(absPath, fs.F_OK, function (err) {
+            if (!err) {
+                // Do something
+                return res.download(absPath, read.fileName, function (err) {
+                    if (err) {
+                        console.error(err);
+                    }
+                });
+            } else {
+                // It isn't accessible
+                //TODO check for legacy path
+
+                if (read.legacyPath) {
+                    fs.access(read.legacyPath, fs.F_OK, function (err) {
+                        if (!err) {
+                            // Do something
+                            return res.download(read.legacyPath, read.fileName, function (err) {
+                                if (err) {
+                                    console.error(err);
+                                }
+                            });
+
+                        } else {
+                            // It isn't accessible
+                            return renderError('Could not find file ' + read.path, req, res);
+                        }
+                    });
+                } else {
+                    return renderError('Could not find file ' + read.path, req, res);
+                }
+            }
+        });
+
+
     });
+};
 
+Reads.unknownFile = function (req, res) {
 
-  });
+    $('*[data-gif-animated-url]').hover(function () {
+        var self = $(this);
+        self.find('img').attr('src', self.data('gif-animated-url'));
+        self.parent().find('.gif-loading-area').fadeOut();
+    })
+
 };
 
 module.exports = Reads;
