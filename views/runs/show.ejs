@@ -1,4 +1,4 @@
-<% include ../head %>
+<% include ../head.ejs %>
 <div class="container">
     <h3>
         <a href="/<%- run.sample.project.group.safeName %>/<%- run.sample.project.safeName %>/<%- run.sample.safeName %>"><i
@@ -130,7 +130,7 @@
         <% if(unknownProcessed && unknownProcessed.length > 0){ %>
         <% unknownProcessed.map(function(up){ %>
         <div class="col6">
-            <a class="tile" href="#"><%- up %><span class="badge danger">MD5 Unknown</span></a>
+            <a class="tile md5ModalButton" href="#"><%- up %><span class="badge danger">MD5 Unknown</span></a>
         </div>
         <% }) %>
         <% } %>
@@ -153,6 +153,15 @@
         <button type="submit" class="button success">Submit</button>
     </form>
 
+    <div id="md5Modal" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close">x</span>
+            <p>Some text in the Modal..</p>
+        </div>
+
+    </div>
 
     <script>
 
@@ -173,4 +182,4 @@
 
 </div>
 
-<% include ../foot %>
+<% include ../foot.ejs %>
