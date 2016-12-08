@@ -97,6 +97,11 @@ router.route('/:group/:project/:sample/:run')
     .all(isPartOfGroup)
     .get(Runs.show);
 
+router.route('/:group/:project/:sample/:run')
+    .all(isAuthenticated)
+    .all(isPartOfGroup)
+    .get(Runs.show);
+
 //new read
 router.route('/:group/:project/:sample/:run/add')
     .all(isAuthenticated)
