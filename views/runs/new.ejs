@@ -220,9 +220,9 @@
                 } else if ($libType.val() === 'pacbio') {
 
 
-                    fileUploader(md5files, false, 'pb-bax').setMin(3).setMax(3);
-                    fileUploader(md5files, false, 'pb-bas').setMin(1).setMax(1);
-                    fileUploader(md5files, false, 'pb-meta').setMin(1).setMax(1);
+                    new fileUploader(md5files, false, 'pb-bax').setMin(3).setMax(3);
+                    new fileUploader(md5files, false, 'pb-bas').setMin(1).setMax(1);
+                    new fileUploader(md5files, false, 'pb-meta').setMin(1).setMax(1);
 
                     //needs input for 3 *.bax.h5, 1 *.bas.h5, 1 *metadata.xml
 
