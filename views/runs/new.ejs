@@ -204,8 +204,11 @@
             var additional = document.getElementById('additionalData');
             var addtionalLoader = fileUploader(additional, false, 'additional').setMin(0)
 
+            var FASTQ_TYPES = ['.fastq', '.fq', '.fastq.gz', '.fq.gz', '.gz'];
+            var PACBIO_TYPES = ['.bax.h5', '.bas.h5', '.metadata.xml'];
+
             var md5files = document.getElementById('filesRoot');
-            var md5Loader = fileUploader(md5files, true, 'file', 'md5').setMin(0).setAcceptedTypes(['.fastq', '.fq', '.fastq.gz', '.fq.gz', '.gz']);
+            var md5Loader = fileUploader(md5files, true, 'file', 'md5').setMin(0).setAcceptedTypes(FASTQ_TYPES);
 
             var $libType = $('#libraryType');
 
@@ -213,9 +216,21 @@
                 if ($libType.val() === 'unpaired') {
                     console.log('unpaired', md5Loader)
                     md5Loader.setPaired(false);
+                    md5Loader.setAcceptedTypes(FASTQ_TYPES);
+                } else if ($libType.val() === 'pacbio') {
+
+
+                    //needs input for 3 *.bax.h5, 1 *.bas.h5, 1 *metadata.xml
+
+//                    console.log('pacbio', md5Loader)
+//                    md5Loader.setPacBio(true);
+//                    md5Loader.setMin(3);
+//                    md5Loader.setAcceptedTypes(PACBIO_TYPES);
+                    md5Loader.killTest();
                 } else {
                     console.log('paired', md5Loader)
                     md5Loader.setPaired(true);
+                    md5Loader.setAcceptedTypes(FASTQ_TYPES);
                 }
             }
 

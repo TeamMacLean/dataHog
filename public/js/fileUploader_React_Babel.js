@@ -44,6 +44,10 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
             this.reachMinItems();
             return this;
         },
+        setMax: function (max) {
+            this.setState({max: max});
+            return this;
+        },
         setAcceptedTypes: function setAcceptedTypes(types) {
             this.setState({acceptedTypes: types});
             return this;
@@ -64,13 +68,15 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
                 }])
             });
         },
+        killTest: function killTest() {
+            this.setState({DEAD: true});
+        },
         removeGroup: function removeGroup(group, event) {
 
             event.preventDefault();
 
-            console.log('called, removeGroup');
-
-            console.log('files', Files);
+            // console.log('called, removeGroup');
+            // console.log('files', Files);
 
 
             for (var key in Files) {
@@ -94,23 +100,27 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
         render: function render() {
             var self = this;
 
-            var groups = self.state.inputGroups.map(function (ig) {
-                return React.createElement(InputGroup, {
-                    paired: self.state.paired, guuid: ig.guuid, index: ig.index, key: ig.key,
-                    acceptedTypes: self.state.acceptedTypes, removeGroup: self.removeGroup
-                });
-            });
+            if (!self.state.DEAD) {
 
-            return React.createElement(
-                'div',
-                null,
-                groups,
-                React.createElement(
-                    'button',
-                    {className: 'button primary thin', onClick: self.addInputButton},
-                    'ADD ANOTHER'
-                )
-            );
+
+                var groups = self.state.inputGroups.map(function (ig) {
+                    return React.createElement(InputGroup, {
+                        paired: self.state.paired, guuid: ig.guuid, index: ig.index, key: ig.key,
+                        acceptedTypes: self.state.acceptedTypes, removeGroup: self.removeGroup
+                    });
+                });
+
+                return React.createElement(
+                    'div',
+                    null,
+                    groups,
+                    React.createElement(
+                        'button',
+                        {className: 'button primary thin', onClick: self.addInputButton},
+                        'ADD ANOTHER'
+                    )
+                );
+            }
         }
     });
 

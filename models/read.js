@@ -33,7 +33,7 @@ Read.define("hpcPath", function () {
 Read.define("areReports", function () {
   try {
     var files = fs.readdirSync(path.join(config.dataDir, this.fastQCLocation));
-    return !!(files && files.length > 0);
+    return (files && files.length > 0);
   } catch (e) {
     return null;
   }
