@@ -21,7 +21,7 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
         displayName: 'App',
 
         getInitialState: function getInitialState() {
-            return {inputGroups: [], acceptedTypes: [], paired: false, min: 1};
+            return {inputGroups: [], acceptedTypes: [], paired: false, min: 1, DEAD: false};
         },
         reachMinItems: function reachMinItems() {
             while (this.state.inputGroups.length < out.state.min) {
