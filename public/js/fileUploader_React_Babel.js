@@ -21,7 +21,7 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
         displayName: 'App',
 
         getInitialState: function getInitialState() {
-            return {inputGroups: [], acceptedTypes: [], paired: false, min: 1, DEAD: false};
+            return {inputGroups: [], acceptedTypes: [], paired: false, min: 1, max: 100, DEAD: false};
         },
         reachMinItems: function reachMinItems() {
             while (this.state.inputGroups.length < out.state.min) {
@@ -86,7 +86,7 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
                 }
             }
 
-            if (this.state.inputGroups.length > this.state.min) {
+            if (this.state.inputGroups.length > this.state.min && this.state.inputGroups.length < this.state.max + 1) {
 
                 this.setState({
                     inputGroups: this.state.inputGroups.filter(function (g, _) {
@@ -94,7 +94,7 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
                     })
                 });
             } else {
-                alert('Must be at least ' + this.state.min + ' items');
+                alert('Must be at least ' + this.state.min + ' items, and less than ' + this.state.max + 1);
             }
         },
         render: function render() {
