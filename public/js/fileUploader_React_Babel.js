@@ -123,7 +123,12 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
             } else {
                 return React.createElement(
                     'div',
-                    null
+                    null,
+                    React.createElement(
+                        'p',
+                        {className: 'disabled'},
+                        'DISABLED'
+                    )
                 );
             }
         }
