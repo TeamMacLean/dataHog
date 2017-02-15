@@ -1,24 +1,24 @@
 "use strict";
 
-var Sample = require('../models/sample');
-var Run = require('../models/run');
-var Read = require('../models/read');
-var Upload = require('../models/upload');
-var fs = require('fs-extra');
-var path = require('path');
-var fastqc = require('../lib/fastqc');
-var zlib = require('zlib');
-var rimraf = require('rimraf');
-var config = require('../config.json');
-var util = require('../lib/util');
-var thinky = require('../lib/thinky');
-var async = require('async');
-var email = require('../lib/email');
-var Submission = require('../models/submission');
-var renderError = require('../lib/error');
+const Sample = require('../models/sample');
+const Run = require('../models/run');
+const Read = require('../models/read');
+const Upload = require('../models/upload');
+const fs = require('fs-extra');
+const path = require('path');
+const fastqc = require('../lib/fastqc');
+const zlib = require('zlib');
+const rimraf = require('rimraf');
+const config = require('../config.json');
+const util = require('../lib/util');
+const thinky = require('../lib/thinky');
+const async = require('async');
+const email = require('../lib/email');
+const Submission = require('../models/submission');
+const renderError = require('../lib/error');
 
 
-var Runs = {};
+const Runs = {};
 
 function deleteRun(run, cb) {
 
@@ -35,7 +35,7 @@ function deleteRun(run, cb) {
             });
             result.delete().then(function () {
 
-                var absPath = path.resolve(path.join(config.dataDir, run.path));
+                const absPath = path.resolve(path.join(config.dataDir, run.path));
 
                 //TODO safety check this!!!
                 rimraf(absPath, function (err) {
@@ -61,9 +61,9 @@ function deleteRun(run, cb) {
  */
 Runs.new = function (req, res) {
 
-    var groupSN = req.params.group;
-    var sampleSN = req.params.sample;
-    var projectSN = req.params.project;
+    const groupSN = req.params.group;
+    const sampleSN = req.params.sample;
+    const projectSN = req.params.project;
 
     Sample.filter({safeName: sampleSN}).getJoin({project: {group: true}}).filter({
         project: {
@@ -89,9 +89,9 @@ Runs.new = function (req, res) {
  */
 function compressFile(filename, callback) {
 
-    var compressedPath = filename + '.gz';
+    const compressedPath = filename + '.gz';
 
-    var compress = zlib.createGzip(),
+    const compress = zlib.createGzip(),
         input = fs.createReadStream(filename),
         output = fs.createWriteStream(compressedPath);
 
@@ -130,18 +130,18 @@ function isCompressed(str) {
  */
 function ensureCompressed(fileAndMD5, cb) {
 
-    //var file = fileAndMD5.file;
-    var md5er = fileAndMD5.md5;
+    //const file = fileAndMD5.file;
+    const md5er = fileAndMD5.md5;
 
-    // var fileBuff = readFileSync(fileAndMD5.path); //TODO breaking point
+    // const fileBuff = readFileSync(fileAndMD5.path); //TODO breaking point
 
-    var compressed = isCompressed(fileAndMD5.name);
-    var fileExtention = path.extname(fileAndMD5.name);
+    const compressed = isCompressed(fileAndMD5.name);
+    const fileExtention = path.extname(fileAndMD5.name);
 
-    var name = fileAndMD5.name;
+    const name = fileAndMD5.name;
 
     if (!compressed && ['.fq', '.fastq'].indexOf(fileExtention) < 0) {
-        var err = new Error('not compressed and not a fastq/fq file extention');
+        const err = new Error('not compressed and not a fastq/fq file extention');
         return cb(err);
 
     } else if (!compressed) { //not compressed
@@ -165,33 +165,33 @@ function ensureCompressed(fileAndMD5, cb) {
  */
 function processAllFiles(req, cb) {
 
-    var filesAndSums = [];
-    var additionalFiles = [];
-    //var __filesAndSums = [];
-    //var __additionalFiles = [];
-    var absTmpPath = path.resolve(config.tmpDir);
+    const filesAndSums = [];
+    const additionalFiles = [];
+    //const __filesAndSums = [];
+    //const __additionalFiles = [];
+    const absTmpPath = path.resolve(config.tmpDir);
 
 
     async.eachSeries(Object.keys(req.body), function iterator(key, theNextOne) {
 
-        var val = req.body[key];
-        var filePath = path.join(absTmpPath, val);
+        const val = req.body[key];
+        const filePath = path.join(absTmpPath, val);
 
         if (key.indexOf('file') > -1) {
-            var split = val.split('-');
+            const split = val.split('-');
             if (split.length === 3) {
                 console.log('its paired');
             } else {
                 console.log('its not paired');
             }
 
-            var num = key.substring(key.indexOf('-') + 1);
+            const num = key.substring(key.indexOf('-') + 1);
 
-            var md5Lookup = 'md5-' + num;
+            const md5Lookup = 'md5-' + num;
 
 
             Upload.filter({uuid: val}).run().then(function (foundFS) {
-                var f = foundFS[0];
+                const f = foundFS[0];
                 filesAndSums.push({
                     name: f.name,
                     uuid: f.uuid,
@@ -204,7 +204,7 @@ function processAllFiles(req, cb) {
 
         } else if (key.indexOf('additional') > -1) {
             Upload.filter({uuid: val}).run().then(function (foundAF) {
-                var a = foundAF[0];
+                const a = foundAF[0];
                 additionalFiles.push({
                     name: a.name,
                     uuid: a.uuid,
@@ -238,7 +238,7 @@ function processAllFiles(req, cb) {
  * @param cb {function}
  */
 function addReadToRun(req, processed, savedRun, pathToNewRunFolder, cb) {
-    var rootPath = pathToNewRunFolder;
+    const rootPath = pathToNewRunFolder;
 
     if (processed) {
         pathToNewRunFolder = path.join(pathToNewRunFolder, 'processed');
@@ -251,7 +251,7 @@ function addReadToRun(req, processed, savedRun, pathToNewRunFolder, cb) {
             console.error(err);
             cb(err);
         } else {
-            var savedReads = [];
+            const savedReads = [];
 
             processAllFiles(req, function (filesAndSums, additionalFiles) {
 
@@ -264,8 +264,8 @@ function addReadToRun(req, processed, savedRun, pathToNewRunFolder, cb) {
                     });
                 }
 
-                var happyFiles = [];
-                var sadFiles = [];
+                const happyFiles = [];
+                const sadFiles = [];
 
                 //TODO just changed this to process one md5 at a time
                 async.eachSeries(filesAndSums, function iterator(fsum, hhnext) {
@@ -304,27 +304,27 @@ function addReadToRun(req, processed, savedRun, pathToNewRunFolder, cb) {
                         //return cb(new Error('no read files attached'));
                     }
 
-                    var usedFileNames = [];
-                    var previousID = '';
+                    const usedFileNames = [];
+                    let previousID = '';
                     async.eachSeries(happyFiles, function iterator(fileAndMD5, nextHappyFile) {
 
-                        //var file = fileAndMD5.path;
+                        //const file = fileAndMD5.path;
 
-                        var fileName = fileAndMD5.name;
-                        var testName = fileAndMD5.name;
+                        let fileName = fileAndMD5.name;
+                        let testName = fileAndMD5.name;
 
-                        var exts = '';
+                        let exts = '';
 
                         if (testName.indexOf('.') > -1) {
 
-                            var preSplit = testName;
+                            const preSplit = testName;
 
                             testName = preSplit.substr(0, preSplit.indexOf('.'));
                             exts = preSplit.substr(preSplit.indexOf('.'));
                         }
 
                         if (usedFileNames.indexOf(testName) > -1) {
-                            var i = 0;
+                            let i = 0;
                             while (usedFileNames.indexOf(testName) > -1) {
                                 i++;
                                 testName = testName + i;
@@ -340,7 +340,7 @@ function addReadToRun(req, processed, savedRun, pathToNewRunFolder, cb) {
                                 return cb(topError);
                             }
 
-                            var newFullPath = path.join(pathToNewRunFolder, md5AndPath.name);
+                            let newFullPath = path.join(pathToNewRunFolder, md5AndPath.name);
 
                             util.safeMove(md5AndPath.path, newFullPath, function (err, newPath) {
 
@@ -351,13 +351,13 @@ function addReadToRun(req, processed, savedRun, pathToNewRunFolder, cb) {
                                 if (newPath) { //it may have found a new name!
                                     newFullPath = newPath;
                                 }
-                                var fqcPath = path.join(pathToNewRunFolder, '.fastqc');
+                                const fqcPath = path.join(pathToNewRunFolder, '.fastqc');
 
-                                var siblingID = null;
-                                var split = fileAndMD5.fieldname.split('-');
+                                let siblingID = null;
+                                const split = fileAndMD5.fieldname.split('-');
                                 if (split.length === 3) { //its paired/mated
 
-                                    var second = split[2] === '2';
+                                    const second = split[2] === '2';
                                     if (second) {
                                         siblingID = previousID;
                                     }
@@ -369,8 +369,8 @@ function addReadToRun(req, processed, savedRun, pathToNewRunFolder, cb) {
                                         return cb(err);
                                     } else {
 
-                                        var fileName = path.basename(newPath);
-                                        var read = new Read({
+                                        const fileName = path.basename(newPath);
+                                        const read = new Read({
                                             name: md5AndPath.name,
                                             runID: savedRun.id,
                                             MD5: md5AndPath.md5,
@@ -415,20 +415,20 @@ function addReadToRun(req, processed, savedRun, pathToNewRunFolder, cb) {
  */
 Runs.newPost = function (req, res) {
 
-    var projectSN = req.params.project;
-    var sampleSN = req.params.sample;
-    var groupSN = req.params.group;
-    var name = req.body.name;
+    const projectSN = req.params.project;
+    const sampleSN = req.params.sample;
+    const groupSN = req.params.group;
+    const name = req.body.name;
 
-    var sequencingProvider = req.body.sequencingProvider;
-    var sequencingTechnology = req.body.sequencingTechnology;
-    var insertSize = req.body.insertSize;
-    var libraryType = req.body.libraryType;
-    var submissionToGalaxy = req.body.submissionToGalaxy === 'on';
+    const sequencingProvider = req.body.sequencingProvider;
+    const sequencingTechnology = req.body.sequencingTechnology;
+    const insertSize = req.body.insertSize;
+    const libraryType = req.body.libraryType;
+    const submissionToGalaxy = req.body.submissionToGalaxy === 'on';
 
-    var librarySource = req.body.librarySource;
-    var librarySelection = req.body.librarySelection;
-    var libraryStrategy = req.body.libraryStrategy;
+    const librarySource = req.body.librarySource;
+    const librarySelection = req.body.librarySelection;
+    const libraryStrategy = req.body.libraryStrategy;
 
 
     Sample.filter({safeName: sampleSN}).getJoin({project: {group: true}}).filter({
@@ -440,9 +440,9 @@ Runs.newPost = function (req, res) {
         if (results.length > 1) {
             console.error('too many samples', results);
         }
-        var sample = results[0];
+        const sample = results[0];
 
-        var run = new Run({
+        const run = new Run({
             name: name,
             sampleID: sample.id,
             librarySource: librarySource,
@@ -458,7 +458,7 @@ Runs.newPost = function (req, res) {
 
         run.save().then(function (savedRun) {
 
-            var pathToNewRunFolder = path.join(config.dataDir, sample.project.group.safeName, sample.project.safeName, sample.safeName, savedRun.safeName);
+            const pathToNewRunFolder = path.join(config.dataDir, sample.project.group.safeName, sample.project.safeName, sample.safeName, savedRun.safeName);
 
             fs.ensureDir(path.join(pathToNewRunFolder, 'processed'), function (err) { //make sure the processed folder exists
                 if (err) {
@@ -469,7 +469,7 @@ Runs.newPost = function (req, res) {
                         return renderError(err, res)
                     }
 
-                    var processed = false;
+                    const processed = false;
                     //TODO disabled for now
 
                     addReadToRun(req, processed, savedRun, pathToNewRunFolder, function (err) {
@@ -483,16 +483,16 @@ Runs.newPost = function (req, res) {
 
                             if (submissionToGalaxy) {
 
-                                //var project = savedRun.sample.project;
+                                //const project = savedRun.sample.project;
 
-                                //var p1 = project.responsiblePerson;
-                                //var p2 = project.secondaryContact;
+                                //const p1 = project.responsiblePerson;
+                                //const p2 = project.secondaryContact;
 
-                                var hpcPath = path.join(config.hpcRoot, savedRun.path);
-                                var siteURL = req.protocol + '://' + req.headers.host + savedRun.path;
+                                const hpcPath = path.join(config.hpcRoot, savedRun.path);
+                                const siteURL = req.protocol + '://' + req.headers.host + savedRun.path;
 
-                                var subject = "Request for data to be added to Galaxy";
-                                var text = "Please add " + hpcPath + " to Galaxy.\n\n" + siteURL + "\n\nThanks :D\nDataHog";
+                                const subject = "Request for data to be added to Galaxy";
+                                const text = "Please add " + hpcPath + " to Galaxy.\n\n" + siteURL + "\n\nThanks :D\nDataHog";
                                 email.emailAdmin(subject, text);
                             }
 
@@ -511,13 +511,13 @@ Runs.newPost = function (req, res) {
                     reads: true
                 }).then(function (result) {
 
-                    var thisGroupConfig = config.groups.filter(function (g) {
+                    const thisGroupConfig = config.groups.filter(function (g) {
                         return g.name == result.sample.project.group.name;
                     });
 
                     if (thisGroupConfig.length > 0) {
                         if (thisGroupConfig[0].sendToENA) {
-                            var submission = new Submission({
+                            const submission = new Submission({
                                 runID: result.id
                             });
                             submission.save();
@@ -526,7 +526,7 @@ Runs.newPost = function (req, res) {
                         }
                     }
 
-                    var url = path.join('/', result.sample.project.group.safeName, result.sample.project.safeName, result.sample.safeName, result.safeName);
+                    const url = path.join('/', result.sample.project.group.safeName, result.sample.project.safeName, result.sample.safeName, result.safeName);
                     return res.redirect(url);
                 });
             }
@@ -542,10 +542,10 @@ Runs.newPost = function (req, res) {
  * @param res {response}
  */
 Runs.show = function (req, res) {
-    var runSN = req.params.run;
-    var sampleSN = req.params.sample;
-    var projectSN = req.params.project;
-    var groupSN = req.params.group;
+    const runSN = req.params.run;
+    const sampleSN = req.params.sample;
+    const projectSN = req.params.project;
+    const groupSN = req.params.group;
 
     Run.filter({safeName: runSN}).getJoin({
         sample: {project: {group: true}},
@@ -570,10 +570,10 @@ Runs.show = function (req, res) {
             console.error('too many runs!', results);
         }
 
-        var run = results[0];
+        const run = results[0];
 
         run.reads.sort(function (a, b) {
-            var nameA = a.safeName.toLowerCase(), nameB = b.safeName.toLowerCase();
+            const nameA = a.safeName.toLowerCase(), nameB = b.safeName.toLowerCase();
             if (nameA < nameB) //sort string ascending
                 return -1;
             if (nameA > nameB)
@@ -581,20 +581,20 @@ Runs.show = function (req, res) {
             return 0; //default return value (no sorting)
         });
 
-        var raw = [];
-        var processed = [];
+        const raw = [];
+        const processed = [];
 
         if (run.reads && run.reads.length > 0) {
-            var rawPRE = run.reads.filter(function (r) {
+            const rawPRE = run.reads.filter(function (r) {
                 return r.processed === false;
             });
 
-            var processedPRE = run.reads.filter(function (r) {
+            const processedPRE = run.reads.filter(function (r) {
                 return r.processed === true;
             });
 
 
-            var disposedRaw = [];
+            const disposedRaw = [];
             rawPRE.map(function (r) {
                 if (disposedRaw.filter(function (d) {
                         if (r.sibling) {
@@ -614,7 +614,7 @@ Runs.show = function (req, res) {
                 }
             });
 
-            var disposedProcessed = [];
+            const disposedProcessed = [];
             processedPRE.map(function (r) {
                 if (disposedProcessed.filter(function (d) {
                         if (r.sibling) {
@@ -636,22 +636,22 @@ Runs.show = function (req, res) {
         }
 
 
-        var unknownRaw = [];
-        var unknownProcessed = [];
+        const unknownRaw = [];
+        const unknownProcessed = [];
 
-        var rawPath = path.join(config.dataDir, run.path, 'raw');
-        var processedPath = path.join(config.dataDir, run.path, 'processed');
+        const rawPath = path.join(config.dataDir, run.path, 'raw');
+        const processedPath = path.join(config.dataDir, run.path, 'processed');
 
         try {
             fs.ensureDirSync(rawPath);
 
-            var rawFiles = fs.readdirSync(rawPath);
+            let rawFiles = fs.readdirSync(rawPath);
             rawFiles = rawFiles.filter(function (rfilter) {
                 return rfilter != '.fastqc' && rfilter.indexOf('.txt') < 0;
             });
 
             rawFiles.map(function (rf) {
-                var found = false;
+                let found = false;
                 raw.map(function (r) {
                     if (r.filter(function (rr) {
                             // console.log(rf, rr);
@@ -672,13 +672,13 @@ Runs.show = function (req, res) {
         try {
             fs.ensureDirSync(processedPath);
 
-            var processedFiles = fs.readdirSync(processedPath);
+            let processedFiles = fs.readdirSync(processedPath);
             processedFiles = processedFiles.filter(function (pfilter) {
                 return pfilter != '.fastqc' && pfilter.indexOf('.txt') < 0;
             });
 
             processedFiles.map(function (pf) {
-                var found = false;
+                let found = false;
                 processed.map(function (p) {
                     if (p.filter(function (pp) {
                             // console.log(pf, pp);
@@ -717,9 +717,9 @@ Runs.show = function (req, res) {
  */
 Runs.addPost = function (req, res) {
 
-    var runSN = req.params.run;
-    var sampleSN = req.params.sample;
-    var projectSN = req.params.project;
+    const runSN = req.params.run;
+    const sampleSN = req.params.sample;
+    const projectSN = req.params.project;
 
     Run.filter({safeName: runSN}).getJoin({sample: {project: {group: true}}, reads: true}).filter({
         sample: {
@@ -732,9 +732,9 @@ Runs.addPost = function (req, res) {
             console.error('too many runs', results);
         }
 
-        var run = results[0];
-        var pathToRunProcessedFolder = path.join(config.dataDir, run.sample.project.group.safeName, run.sample.project.safeName, run.sample.safeName, run.safeName);
-        var processed = true;
+        const run = results[0];
+        const pathToRunProcessedFolder = path.join(config.dataDir, run.sample.project.group.safeName, run.sample.project.safeName, run.sample.safeName, run.safeName);
+        const processed = true;
 
         //processed!
         addReadToRun(req, processed, run, pathToRunProcessedFolder, function (err) {
@@ -743,7 +743,7 @@ Runs.addPost = function (req, res) {
                     return renderError(new Error('had to delete the run + reads'), res)
                 });
             }
-            var url = path.join('/', run.sample.project.group.safeName, run.sample.project.safeName, run.sample.safeName, run.safeName);
+            const url = path.join('/', run.sample.project.group.safeName, run.sample.project.safeName, run.sample.safeName, run.safeName);
             return res.redirect(url);
         });
 

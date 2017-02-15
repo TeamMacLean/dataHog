@@ -21,7 +21,7 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
         displayName: 'App',
 
         getInitialState: function getInitialState() {
-            return {inputGroups: [], acceptedTypes: [], paired: false, min: 1, max: 100, DEAD: false};
+            return {inputGroups: [], acceptedTypes: [], paired: false, min: 1, max: 100, disabled: false};
         },
         reachMinItems: function reachMinItems() {
             while (this.state.inputGroups.length < out.state.min) {
@@ -31,12 +31,10 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
         },
         setPaired: function setPaired(option) {
             this.setState({paired: option});
-            console.log(this.state.paired);
             return this;
         },
-        setPacBio: function setPacBio(option) {
+        setPacBio: function setPacBio(option) { //TODO
             this.setState({pacBio: option, paired: !option});
-            console.log(this.state.paired);
             return this;
         },
         setMin: function setMin(min) {
@@ -68,8 +66,8 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
                 }])
             });
         },
-        killTest: function killTest() {
-            this.setState({DEAD: true});
+        disable: function disable() {
+            this.setState({disabled: true});
         },
         removeGroup: function removeGroup(group, event) {
 
@@ -100,7 +98,7 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
         render: function render() {
             var self = this;
 
-            if (!self.state.DEAD) {
+            if (!self.state.disabled) {
 
 
                 var groups = self.state.inputGroups.map(function (ig) {
@@ -175,6 +173,7 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
             );
         }
     });
+
 
     var InputItem = React.createClass({
         displayName: 'InputItem',

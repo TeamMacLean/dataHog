@@ -214,28 +214,20 @@
 
             function updateType() {
                 if ($libType.val() === 'unpaired') {
-                    console.log('unpaired', md5Loader)
+                    md5Loader.setPacBio(false;
                     md5Loader.setPaired(false);
                     md5Loader.setAcceptedTypes(FASTQ_TYPES);
                 } else if ($libType.val() === 'pacbio') {
 
 
-                    new fileUploader(md5files, false, 'pb-bax').setMin(3).setMax(3);
-                    new fileUploader(md5files, false, 'pb-bas').setMin(1).setMax(1);
-                    new fileUploader(md5files, false, 'pb-meta').setMin(1).setMax(1);
+//                    addtionalLoader.disable();
 
-                    //needs input for 3 *.bax.h5, 1 *.bas.h5, 1 *metadata.xml
+//                    md5Loader.isPacBio(true);
 
-//                    console.log('pacbio', md5Loader)
-//                    md5Loader.setPacBio(true);
-//                    md5Loader.setMin(3);
-//                    md5Loader.setAcceptedTypes(PACBIO_TYPES);
-
-//                    addtionalLoader.killTest();
-//                    md5Loader.killTest();
                 } else {
                     console.log('paired', md5Loader)
                     md5Loader.setPaired(true);
+                    md5Loader.setPacBio(false;
                     md5Loader.setAcceptedTypes(FASTQ_TYPES);
                 }
             }
