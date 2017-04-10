@@ -8,7 +8,7 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
         return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
             const r = (d + Math.random() * 16) % 16 | 0;
             d = Math.floor(d / 16);
-            return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+            return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
         });
     }
 
@@ -62,7 +62,7 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
             event.preventDefault();
 
             Files = Files.filter(function (f) {
-                return f.guuid != group.props.guuid;
+                return f.guuid !== group.props.guuid;
             });
 
             delete Files[group.props.guuid];
@@ -278,7 +278,7 @@ function fileUploader(mountNode, MD5S, fileID, MD5ID) {
             return f.percent < 100;
         });
 
-        if (incompleteUploads.length == 0) {
+        if (incompleteUploads.length === 0) {
             $('button[type=submit]').prop('disabled', false);
         }
 
