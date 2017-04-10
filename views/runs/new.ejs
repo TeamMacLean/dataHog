@@ -1,4 +1,4 @@
-<% include ../head %>
+<% include ../head.ejs %>
 <div class="container">
     <h3><a href="/<%- sample.project.group.safeName %>/<%- sample.project.safeName %>/<%- sample.safeName %>"><i
                     class="fa fa-chevron-left"></i> Back to sample: <%- sample.name %></a></h3>
@@ -48,7 +48,7 @@
                 <option value="Illumina Genome Analyzer">Illumina Genome Analyzer</option>
                 <option value="Illumina Genome Analyzer II">Illumina Genome Analyzer II</option>
                 <option value="Illumina Genome Analyzer IIx">Illumina Genome Analyzer IIx</option>
-		<option value="Illumina HiSeq 4000">Illumina HiSeq 4000</option>
+                <option value="Illumina HiSeq 4000">Illumina HiSeq 4000</option>
                 <option value="Illumina HiSeq 2500">Illumina HiSeq 2500</option>
                 <option value="Illumina HiSeq 2000">Illumina HiSeq 2000</option>
                 <option value="Illumina HiSeq 1500">Illumina HiSeq 1500</option>
@@ -215,7 +215,7 @@
 
             function updateType() {
                 if ($libType.val() === 'unpaired') {
-                    md5Loader.setPacBio(false;
+                    md5Loader.setPacBio(false);
                     md5Loader.setPaired(false);
                     md5Loader.setAcceptedTypes(FASTQ_TYPES);
                 } else if ($libType.val() === 'pacbio') {
@@ -244,4 +244,4 @@
 </div>
 
 
-<% include ../foot %>
+<% include ../foot.ejs %>
