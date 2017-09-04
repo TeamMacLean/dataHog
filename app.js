@@ -1,20 +1,19 @@
-var morgan = require('morgan');
-var path = require('path');
-var multer = require('multer');
-var bodyParser = require('body-parser');
-var routes = require('./routes');
-var config = require('./config.json');
-var fs = require('fs');
-var session = require('express-session');
-var passport = require('passport');
-var cookieParser = require('cookie-parser');
-var util = require('./lib/util');
-var socketUploader = require('./lib/socketUploader');
-var rethinkSession = require('session-rethinkdb')(session);
-var Submission = require('./models/submission');
-var schedule = require('node-schedule');
-var moment = require('moment');
-var email = require('./lib/email');
+const path = require('path');
+const multer = require('multer');
+const bodyParser = require('body-parser');
+const routes = require('./routes');
+const config = require('./config.json');
+const fs = require('fs');
+const session = require('express-session');
+const passport = require('passport');
+const cookieParser = require('cookie-parser');
+const util = require('./lib/util');
+const socketUploader = require('./lib/socketUploader');
+const rethinkSession = require('session-rethinkdb')(session);
+const Submission = require('./models/submission');
+const schedule = require('node-schedule');
+const moment = require('moment');
+const email = require('./lib/email');
 
 
 if (!config.appName || !config.port || !config.dataDir || !config.tmpDir) {
@@ -32,10 +31,10 @@ if (!fs.existsSync(config.tmpDir)) {
     console.error('tmpDir', config.tmpDir, 'does not exist');
 }
 
-var express = require('express');
-var app = express();
-var server = require('http').createServer(app);
-var io = require('socket.io')(server);
+const express = require('express');
+const app = express();
+const server = require('http').createServer(app);
+const io = require('socket.io')(server);
 
 app.locals.title = config.appName;
 app.use(express.static(__dirname + '/public'));
@@ -49,15 +48,13 @@ app.use(multer({
     dest: config.tmpDir
 }));
 
-app.use(morgan('combined'));
-
-var options = {
+const options = {
     servers: [
         {host: 'localhost', port: 28015, db: 'Hog'}
     ]
 };
 
-var store = new rethinkSession(options);
+const store = new rethinkSession(options);
 
 app.use(session({
     secret: config.secret,
@@ -70,7 +67,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(function (req, res, next) {
-    if (req.user != null) {
+    if (req.user) {
         res.locals.signedInUser = {};
         res.locals.signedInUser.username = req.user.username;
         res.locals.signedInUser.name = req.user.name;
@@ -80,7 +77,6 @@ app.use(function (req, res, next) {
 });
 
 util.setupPassport();
-
 
 app.use(routes);
 
@@ -104,29 +100,29 @@ Submission.getJoin({
     }
 }).run().then(function (subs) {
     subs.map(function (s) {
-        var now = moment();
-        var holdTill = moment(s.holdDate);
-        var diffInDays = holdTill.diff(now, 'days');
+        const now = moment();
+        const holdTill = moment(s.holdDate);
+        const diffInDays = holdTill.diff(now, 'days');
         console.log(diffInDays, 'days until', s.id, 'is public in ENA');
-        var FourWeeks = holdTill.subtract(4, 'weeks');
-        var ThreeWeeks = holdTill.subtract(3, 'weeks');
-        var TwoWeeks = holdTill.subtract(2, 'weeks');
-        var OneWeek = holdTill.subtract(1, 'weeks');
-        var TwoDays = holdTill.subtract(2, 'days');
-        var OneDay = holdTill.subtract(1, 'days');
+        const FourWeeks = holdTill.subtract(4, 'weeks');
+        const ThreeWeeks = holdTill.subtract(3, 'weeks');
+        const TwoWeeks = holdTill.subtract(2, 'weeks');
+        const OneWeek = holdTill.subtract(1, 'weeks');
+        const TwoDays = holdTill.subtract(2, 'days');
+        const OneDay = holdTill.subtract(1, 'days');
 
 
-        var contacts = [s.run.sample.project.responsiblePerson, s.run.sample.project.secondaryContact];
+        const contacts = [s.run.sample.project.responsiblePerson, s.run.sample.project.secondaryContact];
 
 
         config.groups.map(function (g) {
 
-            var ConfigGroupName = g["name"];
+            const ConfigGroupName = g["name"];
 
-            var GroupName = s.run.sample.project.group.name;
+            const GroupName = s.run.sample.project.group.name;
 
             if (ConfigGroupName && GroupName && g["email"]) {
-                if (ConfigGroupName.toLowerCase() == GroupName.toLowerCase()) {
+                if (ConfigGroupName.toLowerCase() === GroupName.toLowerCase()) {
                     contacts.push(g["email"])
                 }
             }

@@ -1,12 +1,12 @@
 "use strict";
 
-var thinky = require('../lib/thinky.js');
-var type = thinky.type;
-var util = require('../lib/util');
-var config = require('../config.json');
-var js2xmlparser = require('js2xmlparser');
+const thinky = require('../lib/thinky.js');
+const type = thinky.type;
+const util = require('../lib/util');
+const config = require('../config.json');
+const js2xmlparser = require('js2xmlparser');
 
-var Run = thinky.createModel('Run', {
+const Run = thinky.createModel('Run', {
     id: type.string(),
     sampleID: type.string().required(),
     name: type.string().required(),
@@ -24,6 +24,13 @@ var Run = thinky.createModel('Run', {
     alias: type.string()
 });
 
+Run.libraryTypes = {
+    paired: 'paired',
+    mate: 'mate',
+    unpaired: 'unpaired',
+    pacbio: 'pacbio'
+};
+
 Run.define("hpcPath", function () {
     if (config.hpcRoot) {
         return config.hpcRoot + this.path;
@@ -33,8 +40,8 @@ Run.define("hpcPath", function () {
 });
 
 Run.pre('save', function (next) {
-    var run = this;
-    var unsafeName = run.name;
+    const run = this;
+    const unsafeName = run.name;
     if (!run.safeName) {
 
         run.additionalFiles = [];
@@ -57,7 +64,7 @@ Run.pre('save', function (next) {
 
 Run.define('toENA', function () {
 
-    var runObj = {
+    const runObj = {
         "RUN": {
             "@": {
                 "alias": this.safeName,
@@ -163,9 +170,9 @@ Run.define('toENA', function () {
 
 module.exports = Run;
 
-var Sample = require('./sample');
-var Read = require('./read');
-var AdditionalFile = require('./additionalFile');
+const Sample = require('./sample');
+const Read = require('./read');
+const AdditionalFile = require('./additionalFile');
 Run.hasMany(Read, 'reads', 'id', 'runID');
 Run.belongsTo(Sample, 'sample', 'sampleID', 'id');
 Run.hasMany(AdditionalFile, 'additionalFiles', 'id', 'parentID');

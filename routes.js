@@ -92,21 +92,16 @@ router.route('/:group/:project/:sample/new')
     .post(Runs.newPost);
 
 //show run
-router.route('/:group/:project/:sample/:run')
-    .all(isAuthenticated)
-    .all(isPartOfGroup)
-    .get(Runs.show);
-
-router.route('/:group/:project/:sample/:run')
-    .all(isAuthenticated)
-    .all(isPartOfGroup)
-    .get(Runs.show);
+// router.route('/:group/:project/:sample/:run')
+//     .all(isAuthenticated)
+//     .all(isPartOfGroup)
+//     .get(Runs.show);
 
 //new read
-router.route('/:group/:project/:sample/:run/add')
-    .all(isAuthenticated)
-    .all(isPartOfGroup)
-    .post(Runs.addPost);
+// router.route('/:group/:project/:sample/:run/add')
+//     .all(isAuthenticated)
+//     .all(isPartOfGroup)
+//     .post(Runs.addPost);
 
 //show read
 router.route('/:group/:project/:sample/:run/:read')

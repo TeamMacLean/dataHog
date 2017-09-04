@@ -3,6 +3,10 @@ html {
     min-height: 100%;
 }
 
+.italic{
+    font-style: italic;
+}
+
 body {
     -webkit-font-smoothing: antialiased;
     height: auto;

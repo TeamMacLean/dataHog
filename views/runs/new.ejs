@@ -3,6 +3,9 @@
     <h3><a href="/<%- sample.project.group.safeName %>/<%- sample.project.safeName %>/<%- sample.safeName %>"><i
                     class="fa fa-chevron-left"></i> Back to sample: <%- sample.name %></a></h3>
 
+
+    <a href="/projects-and-technology/projects/late-blight-potato-africa/">Link to this apge</a>
+
     <h2>Add read data set</h2>
 
     <form action="/<%- sample.project.group.safeName %>/<%- sample.project.safeName %>/<%- sample.safeName %>/new"
@@ -45,6 +48,7 @@
                 <option value="454 GS FLX+">454 GS FLX+</option>
                 <option value="454 GS FLX Titanium">454 GS FLX Titanium</option>
                 <option value="454 GS Junior">454 GS Junior</option>
+                <option value="Oxford Nanopore">Oxford Nanopore</option>
                 <option value="Illumina Genome Analyzer">Illumina Genome Analyzer</option>
                 <option value="Illumina Genome Analyzer II">Illumina Genome Analyzer II</option>
                 <option value="Illumina Genome Analyzer IIx">Illumina Genome Analyzer IIx</option>
@@ -205,31 +209,20 @@
             var additional = document.getElementById('additionalData');
             var addtionalLoader = fileUploader(additional, false, 'additional').setMin(0)
 
-            var FASTQ_TYPES = ['.fastq', '.fq', '.fastq.gz', '.fq.gz', '.gz'];
-            var PACBIO_TYPES = ['.bax.h5', '.bas.h5', '.metadata.xml'];
 
             var md5files = document.getElementById('filesRoot');
-            var md5Loader = fileUploader(md5files, true, 'file', 'md5').setMin(0).setAcceptedTypes(FASTQ_TYPES);
+            var md5Loader = fileUploader(md5files, true, 'file', 'md5').setMin(0);
 
             var $libType = $('#libraryType');
 
             function updateType() {
                 if ($libType.val() === 'unpaired') {
-                    md5Loader.setPacBio(false);
                     md5Loader.setPaired(false);
-                    md5Loader.setAcceptedTypes(FASTQ_TYPES);
                 } else if ($libType.val() === 'pacbio') {
-
-
-//                    addtionalLoader.disable();
-
-//                    md5Loader.isPacBio(true);
-
+                    md5Loader.setPacBio(true);
                 } else {
                     console.log('paired', md5Loader)
                     md5Loader.setPaired(true);
-                    md5Loader.setPacBio(false);
-                    md5Loader.setAcceptedTypes(FASTQ_TYPES);
                 }
             }
 
