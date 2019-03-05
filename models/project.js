@@ -22,23 +22,25 @@ var Project = thinky.createModel('Project', {
 
 Project.pre('save', function (next) {
     var project = this;
-    if (!project.safeName) {
-        var unsafeName = project.name;
-        Project.filter({groupID: project.groupID}).run().then(function (result) {
-            util.generateSafeName(unsafeName, result, function (newSafeName) {
-                project.safeName = newSafeName;
-                util.generateUniqueName(project.name, result, function (newName) {
-                    project.name = newName;
-                    Group.get(project.groupID).run().then(function (group) {
-                        project.path = group.path + '/' + project.safeName;
-                        next();
-                    });
+    var unsafeName = project.name;
+    Project.filter({groupID: project.groupID}).run().then(function (result) {
+
+        //remove myself from the list to avoid name confilicts
+        result = result.filter(function (f) {
+            return f.id !== project.id;
+        });
+
+        util.generateSafeName(unsafeName, result, function (newSafeName) {
+            project.safeName = newSafeName;
+            util.generateUniqueName(project.name, result, function (newName) {
+                project.name = newName;
+                Group.get(project.groupID).run().then(function (group) {
+                    project.path = group.path + '/' + project.safeName;
+                    next();
                 });
             });
         });
-    } else {
-        next();
-    }
+    });
 });
 
 Project.define("hpcPath", function () {
