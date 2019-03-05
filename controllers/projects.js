@@ -153,7 +153,6 @@ Projects.save = function (req, res, next) {
         group: true,
         additionalFiles: true
     }).filter({group: {safeName: groupSN}}).run().then(function (projects) {
-
         if (projects.length < 1) {
             return error('could not find project ' + projectSN, res);
         }
@@ -166,15 +165,17 @@ Projects.save = function (req, res, next) {
         project.longDescription = req.body.longDescription;
         project.secondaryContact = req.body.secondaryContact;
 
+
         project.save()
             .then(function (savedProject) {
-                var url = path.join('/', group.safeName, project.safeName);
+                console.log(5);
+                var url = path.join('/', project.group.safeName, savedProject.safeName);
                 return res.redirect(url);
             })
             .catch(function (err) {
+                console.log(6, err);
                 return error('failed to save project', res);
             });
-
 
     })
 
