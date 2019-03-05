@@ -16,7 +16,8 @@ if (typeof project !== 'undefined') {
         <h2>New Project</h2>
     <% } %>
 
-    <form action="/<%- selectedGroup.safeName %>/save" method="POST" enctype="multipart/form-data">
+    <form action="/<%- selectedGroup.safeName %>/<%- project.safeName %>/save" method="POST"
+          enctype="multipart/form-data">
 
         <fieldset>
             <label for="name">Project name</label>
