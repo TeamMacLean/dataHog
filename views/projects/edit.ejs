@@ -1,0 +1,82 @@
+<%
+isEdit = false;
+if (typeof project !== 'undefined') {
+    selectedGroup = project.group;
+    isEdit = true;
+}
+%>
+<% include ../head.ejs %>
+
+<div class="container">
+    <h3><a href="/<%- selectedGroup.safeName %>"><i class="fa fa-chevron-left"></i> Back to projects</a></h3>
+
+    <% if(isEdit){ %>
+        <h2>Edit: <%- project.name %></h2>
+    <% } else { %>
+        <h2>New Project</h2>
+    <% } %>
+
+    <form action="/<%- selectedGroup.safeName %>/save" method="POST" enctype="multipart/form-data">
+
+        <fieldset>
+            <label for="name">Project name</label>
+            <span>Please choose a short, informative name to identify your project.</span>
+            <input type="text" id="name" name="name" value="<%- isEdit ? project.name : '' %>" required>
+        </fieldset>
+
+        <fieldset>
+            <label for="responsiblePerson">Data owner's TSL email address</label>
+            <span>If you are submitting this project on behalf of somebody else, please provide their TSL email address.</span>
+
+            <input type="email" id="responsiblePerson" name="responsiblePerson"
+                   value="<%- isEdit ? project.secondaryContact : locals.signedInUser.mail %>"
+                   required>
+        </fieldset>
+
+        <fieldset>
+            <label for="secondaryContact">Secondary contact's TSL email address</label>
+            <span>This should be your closest collaborator on the project. Alternatively, name the RA/lab manager of your group.</span>
+
+            <input type="email" id="secondaryContact" name="secondaryContact"
+                   value="<%- isEdit ? project.secondaryContact : '' %>"
+                   required>
+        </fieldset>
+
+        <fieldset>
+            <label for="shortDescription">Short description of the project</label>
+            <span>One short, descriptive sentence of what the project is about."</span>
+            <input type="text" id="shortDescription" name="shortDescription"
+                   value="<%- isEdit ? project.shortDescription : '' %>"
+                   required></textarea>
+        </fieldset>
+
+        <fieldset>
+            <label for="longDescription">Long description of the project</label>
+            <span>Please provide a longer description/abstract of what the project is about.</span>
+            <textarea rows="3" id="longDescription" name="longDescription"
+                      required><%- isEdit ? project.longDescription : '' %></textarea>
+        </fieldset>
+
+        <% if(!isEdit){ %>
+            <fieldset class="file-group" id="additionalDataDiv">
+                <label>Supporting files</label>
+                <span>Please upload any documentation obtained from the sequencing provider, including copies of the communication. If the documentation pertains only to a certain sample or data set, then please add it there instead."</span>
+                <div id="additionalData"></div>
+            </fieldset>
+        <% } %>
+
+        <button type="submit" class="button success">Save</button>
+    </form>
+
+</div>
+
+<script>
+    $(function () {
+        var additional = document.getElementById('additionalData');
+        var addtionalLoader = fileUploader(additional, false, 'additional').setMin(0);
+    });
+
+</script>
+
+
+<% include ../foot.ejs %>

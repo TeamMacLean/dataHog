@@ -61,6 +61,12 @@ router.route('/:group/:project')
     .all(isPartOfGroup)
     .get(Projects.show);
 
+router.route('/:group/:project/edit')
+    .all(isAuthenticated)
+    .all(isPartOfGroup)
+    .get(Projects.edit)
+    .post(Projects.save);
+
 //get new sample
 router.route('/:group/:project/new')
     .all(isAuthenticated)

@@ -42,6 +42,9 @@
     <a class="button success" href="/<%- project.group.safeName %>/<%- project.safeName %>/new"><i
                 class="fa fa-plus"></i> Add sample</a>
 
+    <a class="button warning" href="/<%- project.group.safeName %>/<%- project.safeName %>/edit"><i
+                class="fa fa-plus"></i> Edit projeect</a>
+
     <div class="row">
         <% var i = 0; %>
         <% if(project.samples) project.samples.map(function(sample){ %>
