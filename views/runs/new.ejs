@@ -221,27 +221,34 @@
             var $libType = $('#libraryType');
 
             function updateType() {
+               	console.log($libType.val());
                 if ($libType.val() === 'unpaired') {
-                    md5Loader.setPacBio(false);
-                    md5Loader.setPaired(false);
-                    md5Loader.setAcceptedTypes(FASTQ_TYPES);
+                       	md5Loader.state.pacBio = false;
+                       	md5Loader.state.paired = false;
+                       	md5Loader.state.acceptedTypes = FASTQ_TYPES;
+//                    md5Loader.setPaired(false);
+//             	      md5Loader.setPacBio(false);
+//                    md5Loader.setAcceptedTypes(FASTQ_TYPES);
                 } else if ($libType.val() === 'pacbio') {
-
-
-//                    addtionalLoader.disable();
-
+//             	      addtionalLoader.disable();
 //                    md5Loader.isPacBio(true);
-
-                } else if($libType.val() === 'nanopore'){
-                    md5Loader.setPaired(false);
-                    md5Loader.setPacBio(false);
-                    md5Loader.setAcceptedTypes(FASTQ_TYPES);
+               	} else if($libType.val() === 'nanopore'){
+                       	md5Loader.state.pacBio = false;
+                       	md5Loader.state.paired = false;
+                       	md5Loader.state.acceptedTypes = FASTQ_TYPES;
+//                      md5Loader.setPaired(false);
+//                      md5Loader.setPacBio(false);
+//                      md5Loader.setAcceptedTypes(FASTQ_TYPES);
                 } else {
-                    console.log('paired', md5Loader)
-                    md5Loader.setPaired(true);
-                    md5Loader.setPacBio(false);
-                    md5Loader.setAcceptedTypes(FASTQ_TYPES);
-                }
+                       	md5Loader.state.pacBio = false;
+                       	md5Loader.state.paired = true;
+                       	md5Loader.state.acceptedTypes = FASTQ_TYPES;
+//                      md5Loader.setPaired(true);
+//                      md5Loader.setPacBio(false);
+//                      md5Loader.setAcceptedTypes(FASTQ_TYPES);
+               	}
+            console.log(md5Loader)
+                md5Loader.setState({})
             }
 
             $libType.on('change', function () {
