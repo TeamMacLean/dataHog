@@ -232,6 +232,10 @@
 
 //                    md5Loader.isPacBio(true);
 
+                } else if($libType.val() === 'nanopore'){
+                    md5Loader.setPaired(false);
+                    md5Loader.setPacBio(false);
+                    md5Loader.setAcceptedTypes(FASTQ_TYPES);
                 } else {
                     console.log('paired', md5Loader)
                     md5Loader.setPaired(true);
