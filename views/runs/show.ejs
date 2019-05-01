@@ -165,7 +165,7 @@
             console.log('type', type);
 
             if (type !== 'unpaired' || type !== 'nanopore') {
-                md5Loader.state.paired = false;
+                md5Loader.state.paired = true;
                 md5Loader.setState({})
                 //md5Loader.setPaired(true);
             }
