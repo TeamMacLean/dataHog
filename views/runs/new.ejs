@@ -221,7 +221,7 @@
             var $libType = $('#libraryType');
 
             function updateType() {
-            var type = $('#typePasser').val();
+            var type = $libType.val();
             console.log(type)
                 if (type === 'unpaired') {
                        	md5Loader.state.pacBio = false;
