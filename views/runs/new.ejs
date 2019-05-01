@@ -219,35 +219,25 @@
             var md5Loader = fileUploader(md5files, true, 'file', 'md5').setMin(0).setAcceptedTypes(FASTQ_TYPES);
 
             var $libType = $('#libraryType');
-
+            var type = $('#typePasser').val();
+            
             function updateType() {
-               	console.log($libType.val());
-                if ($libType.val() === 'unpaired') {
+                if (type === 'unpaired') {
                        	md5Loader.state.pacBio = false;
                        	md5Loader.state.paired = false;
                        	md5Loader.state.acceptedTypes = FASTQ_TYPES;
-//                    md5Loader.setPaired(false);
-//             	      md5Loader.setPacBio(false);
-//                    md5Loader.setAcceptedTypes(FASTQ_TYPES);
-                } else if ($libType.val() === 'pacbio') {
+                } else if (type === 'pacbio') {
 //             	      addtionalLoader.disable();
 //                    md5Loader.isPacBio(true);
-               	} else if($libType.val() === 'nanopore'){
+               	} else if(type === 'nanopore'){
                        	md5Loader.state.pacBio = false;
                        	md5Loader.state.paired = false;
                        	md5Loader.state.acceptedTypes = FASTQ_TYPES;
-//                      md5Loader.setPaired(false);
-//                      md5Loader.setPacBio(false);
-//                      md5Loader.setAcceptedTypes(FASTQ_TYPES);
                 } else {
                        	md5Loader.state.pacBio = false;
                        	md5Loader.state.paired = true;
                        	md5Loader.state.acceptedTypes = FASTQ_TYPES;
-//                      md5Loader.setPaired(true);
-//                      md5Loader.setPacBio(false);
-//                      md5Loader.setAcceptedTypes(FASTQ_TYPES);
                	}
-            console.log(md5Loader)
                 md5Loader.setState({})
             }
 
