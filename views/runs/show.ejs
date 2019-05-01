@@ -164,8 +164,10 @@
             var type = $('#typePasser').val();
             console.log('type', type);
 
-            if (type !== 'unpaired') {
-                md5Loader.setPaired(true);
+            if (type !== 'unpaired' || type !== 'nanopore') {
+                md5Loader.state.paired = false;
+                md5Loader.setState({})
+                //md5Loader.setPaired(true);
             }
         })
 
