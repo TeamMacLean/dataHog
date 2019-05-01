@@ -219,10 +219,10 @@
             var md5Loader = fileUploader(md5files, true, 'file', 'md5').setMin(0).setAcceptedTypes(FASTQ_TYPES);
 
             var $libType = $('#libraryType');
-            var type = $('#typePasser').val();
-            console.log(type)
 
             function updateType() {
+            var type = $('#typePasser').val();
+
                 if (type === 'unpaired') {
                        	md5Loader.state.pacBio = false;
                        	md5Loader.state.paired = false;
