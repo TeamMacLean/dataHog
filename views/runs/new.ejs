@@ -221,23 +221,25 @@
             var $libType = $('#libraryType');
 
             function updateType() {
-                if ($libType.val() === 'unpaired') {
-                    md5Loader.setPacBio(false);
-                    md5Loader.setPaired(false);
-                    md5Loader.setAcceptedTypes(FASTQ_TYPES);
-                } else if ($libType.val() === 'pacbio') {
-
-
-//                    addtionalLoader.disable();
-
+            var type = $libType.val();
+            console.log(type)
+                if (type === 'unpaired') {
+                       	md5Loader.state.pacBio = false;
+                       	md5Loader.state.paired = false;
+                       	md5Loader.state.acceptedTypes = FASTQ_TYPES;
+                } else if (type === 'pacbio') {
+//             	      addtionalLoader.disable();
 //                    md5Loader.isPacBio(true);
-
+               	} else if(type === 'nanopore'){
+                       	md5Loader.state.pacBio = false;
+                       	md5Loader.state.paired = false;
+                       	md5Loader.state.acceptedTypes = FASTQ_TYPES;
                 } else {
-                    console.log('paired', md5Loader)
-                    md5Loader.setPaired(true);
-                    md5Loader.setPacBio(false);
-                    md5Loader.setAcceptedTypes(FASTQ_TYPES);
-                }
+                       	md5Loader.state.pacBio = false;
+                       	md5Loader.state.paired = true;
+                       	md5Loader.state.acceptedTypes = FASTQ_TYPES;
+               	}
+                md5Loader.setState({})
             }
 
             $libType.on('change', function () {

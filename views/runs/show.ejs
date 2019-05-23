@@ -159,14 +159,28 @@
         $(function () {
 
             var md5files = document.getElementById('filesRoot');
-            var md5Loader = fileUploader(md5files, true, 'file', 'md5').setMin(1).setAcceptedTypes(['.fastq', '.fq', '.fastq.gz', '.fq.gz', '.gz']);
+            var md5Loader = fileUploader(md5files, false, 'file', 'md5').setMin(1).setAcceptedTypes(['.fastq', '.fq', '.fastq.gz', '.fq.gz', '.gz']);
 
             var type = $('#typePasser').val();
-            console.log('type', type);
 
-            if (type !== 'unpaired') {
-                md5Loader.setPaired(true);
-            }
+
+            if (type === 'unpaired') {
+                       	md5Loader.state.pacBio = false;
+                       	md5Loader.state.paired = false;
+                       	md5Loader.state.acceptedTypes = FASTQ_TYPES;
+                } else if (type === 'pacbio') {
+//             	      addtionalLoader.disable();
+//                    md5Loader.isPacBio(true);
+               	} else if(type === 'nanopore'){
+                       	md5Loader.state.pacBio = false;
+                       	md5Loader.state.paired = false;
+                       	md5Loader.state.acceptedTypes = FASTQ_TYPES;
+                } else {
+                       	md5Loader.state.pacBio = false;
+                       	md5Loader.state.paired = true;
+                       	md5Loader.state.acceptedTypes = FASTQ_TYPES;
+               	}
+                md5Loader.setState({})
         })
 
     </script>
