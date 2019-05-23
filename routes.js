@@ -163,39 +163,22 @@ function isPartOfGroup(req, res, next) {
     }
 
 
-    //currentUserGroup is an array of all groups the user is a member of
-
-    var match = config.groups.filter(function (g) {
-        var groupsGroupName = g.memberOf;
-
-        var found = false;
-        currentUserGroups.map(function (cug) {
-            if (cug == groupsGroupName) {
-                found = true;
-            }
-        });
-        return found;
+    var foundGroupsInConfig = config.groups.filter(function(g){
+        return g.name === reqGroup
     });
 
-    //if (match.length > 1) {
-    //  return next('error, too many groups found. sorry');
-    //}
-    if (match.length < 1) {
-        return next('you could not be found in the groups list');
+    if(!foundGroupsInConfig || foundGroupsInConfig.length < 1){
+        return next('you do not have permission to view this group');
     }
 
-    Group.filter({name: match[0].name.toLowerCase()}).then(function (groups) {
-        if (groups.length < 1) {
-            return next('group name ' + match[0].name + ' not found, please check that the config matches the group names in the DB');
-        } else {
-            var group = groups[0];
-            if (group.safeName.toLowerCase() == reqGroup.toLowerCase()) {
-                return next();
-            } else {
-                return next('you do not have permission to view this group');
-            }
-        }
-    });
+    var foundGroupInConfig = foundGroupsInConfig[0];
+    var userIsInGroup = currentUserGroups.indexOf(foundGroupInConfig.memberOf) > -1;
+
+    if(userIsInGroup){
+        return next();
+    } else {
+        return next('you do not have permission to view this group');
+    }
 }
 
 function _isAdmin(req) {
