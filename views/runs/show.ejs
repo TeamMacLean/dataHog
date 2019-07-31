@@ -170,6 +170,7 @@
                        	md5Loader.state.acceptedTypes = FASTQ_TYPES;
                 } else if (type === 'pacbio') {
 //             	      addtionalLoader.disable();
+                      md5Loader.state.paired = false;
 //                    md5Loader.isPacBio(true);
                	} else if(type === 'nanopore'){
                        	md5Loader.state.pacBio = false;
