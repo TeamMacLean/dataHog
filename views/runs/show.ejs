@@ -162,6 +162,10 @@
             var md5Loader = fileUploader(md5files, false, 'file', 'md5').setMin(1).setAcceptedTypes(['.fastq', '.fq', '.fastq.gz', '.fq.gz', '.gz']);
 
             var type = $('#typePasser').val();
+            
+            
+            var FASTQ_TYPES = ['.fastq', '.fq', '.fastq.gz', '.fq.gz', '.gz'];
+            var PACBIO_TYPES = ['.bax.h5', '.bas.h5', '.metadata.xml'];
 
 
             if (type === 'unpaired') {
