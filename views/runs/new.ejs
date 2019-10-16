@@ -1,256 +1,271 @@
 <% include ../head.ejs %>
 <div class="container">
-    <h3><a href="/<%- sample.project.group.safeName %>/<%- sample.project.safeName %>/<%- sample.safeName %>"><i
-                    class="fa fa-chevron-left"></i> Back to sample: <%- sample.name %></a></h3>
+  <h3><a href="/<%- sample.project.group.safeName %>/<%- sample.project.safeName %>/<%- sample.safeName %>"><i
+    class="fa fa-chevron-left"></i> Back to sample: <%- sample.name %></a></h3>
 
-    <h2>Add read data set</h2>
+  <h2>Add read data set</h2>
 
-    <form action="/<%- sample.project.group.safeName %>/<%- sample.project.safeName %>/<%- sample.safeName %>/new"
-          method="POST"
-          enctype="multipart/form-data">
+  <form action="/<%- sample.project.group.safeName %>/<%- sample.project.safeName %>/<%- sample.safeName %>/new"
+        method="POST"
+        enctype="multipart/form-data">
 
-        <fieldset>
-            <label for="name">Data set name</label>
-            <span>Please choose a short, informative name to identify your data set.</span>
+    <fieldset>
+      <label for="name">Data set name</label>
+      <span>Please choose a short, informative name to identify your data set.</span>
 
-            <input type="text" id="name" name="name" required>
-        </fieldset>
+      <input type="text" id="name" name="name" required>
+    </fieldset>
 
-        <fieldset>
-            <label for="libraryType">Library type</label>
-            <span>Do you have unpaired, paired, or mate-pair reads?</span>
+    <fieldset>
+      <label for="libraryType">Library type</label>
+      <span>Do you have unpaired, paired, or mate-pair reads?</span>
 
-            <select id="libraryType" name="libraryType" required>
-                <option value="paired">Paired</option>
-                <option value="mate">Mate</option>
-                <option value="unpaired">Unpaired</option>
-                <option value="pacbio">PacBio</option>
-                <option value="nanopore">Nanopore</option>
-            </select>
-        </fieldset>
+      <select id="libraryType" name="libraryType" required>
+        <option value="paired">Paired</option>
+        <option value="mate">Mate</option>
+        <option value="unpaired">Unpaired</option>
+        <option value="pacbio">PacBio</option>
+        <option value="nanopore">Nanopore</option>
+      </select>
+    </fieldset>
 
-        <fieldset>
-            <label for="sequencingProvider">Sequencing provider</label>
-            <span>Which company/institute did your sequencing? Please provide at least the name.</span>
-            <input type="text" id="sequencingProvider" name="sequencingProvider" required>
-        </fieldset>
+    <fieldset>
+      <label for="sequencingProvider">Sequencing provider</label>
+      <span>Which company/institute did your sequencing? Please provide at least the name.</span>
+      <input type="text" id="sequencingProvider" name="sequencingProvider" required>
+    </fieldset>
 
-        <fieldset>
-            <label for="sequencingTechnology">Sequencing technology</label>
-            <span>What was the technology used for sequencing? This should be in the communication with your provider.</span>
-            <select id="sequencingTechnology" name="sequencingTechnology" required>
-                <option value=""></option>
-                <option value="454 GS">454 GS</option>
-                <option value="454 GS 20">454 GS 20</option>
-                <option value="454 GS FLX">454 GS FLX</option>
-                <option value="454 GS FLX+">454 GS FLX+</option>
-                <option value="454 GS FLX Titanium">454 GS FLX Titanium</option>
-                <option value="454 GS Junior">454 GS Junior</option>
-                <option value="Illumina Genome Analyzer">Illumina Genome Analyzer</option>
-                <option value="Illumina Genome Analyzer II">Illumina Genome Analyzer II</option>
-                <option value="Illumina Genome Analyzer IIx">Illumina Genome Analyzer IIx</option>
-                <option value="Illumina HiSeq 4000">Illumina HiSeq 4000</option>
-                <option value="Illumina HiSeq 2500">Illumina HiSeq 2500</option>
-                <option value="Illumina HiSeq 2000">Illumina HiSeq 2000</option>
-                <option value="Illumina HiSeq 1500">Illumina HiSeq 1500</option>
-                <option value="Illumina HiSeq 1000">Illumina HiSeq 1000</option>
-                <option value="Illumina HiScanSQ">Illumina HiScanSQ</option>
-                <option value="Illumina MiSeq">Illumina MiSeq</option>
-                <option value="Illumina HiSeq X Ten">Illumina HiSeq X Ten</option>
-                <option value="Illumina NextSeq 500">Illumina NextSeq 500</option>
-                <option value="Illumina Novoseq 6000">Illumina Novoseq 6000</option>
-                <option value="AB SOLiD System">AB SOLiD System</option>
-                <option value="AB SOLiD System 2.0">AB SOLiD System 2.0</option>
-                <option value="AB SOLiD System 3.0">AB SOLiD System 3.0</option>
-                <option value="AB SOLiD 3 Plus System">AB SOLiD 3 Plus System</option>
-                <option value="AB SOLiD 4 System">AB SOLiD 4 System</option>
-                <option value="AB SOLiD 4hq System">AB SOLiD 4hq System</option>
-                <option value="AB SOLiD PI System">AB SOLiD PI System</option>
-                <option value="AB 5500 Genetic Analyzer">AB 5500 Genetic Analyzer</option>
-                <option value="AB 5500xl Genetic Analyzer">AB 5500xl Genetic Analyzer</option>
-                <option value="Ion Torrent PGM">Ion Torrent PGM</option>
-                <option value="Ion Torrent Proton">Ion Torrent Proton</option>
-                <option value="PacBio RS">PacBio RS</option>
-                <option value="PacBio RS II">PacBio RS II</option>
-                <option value="PacBio Sequel">PacBio Sequel</option>
-                <option value="AB 3730xL Genetic Analyzer">AB 3730xL Genetic Analyzer</option>
-                <option value="AB 3730 Genetic Analyzer">AB 3730 Genetic Analyzer</option>
-                <option value="AB 3500xL Genetic Analyzer">AB 3500xL Genetic Analyzer</option>
-                <option value="AB 3500 Genetic Analyzer">AB 3500 Genetic Analyzer</option>
-                <option value="AB 3130xL Genetic Analyzer">AB 3130xL Genetic Analyzer</option>
-                <option value="AB 3130 Genetic Analyzer">AB 3130 Genetic Analyzer</option>
-                <option value="AB 310 Genetic Analyzer">AB 310 Genetic Analyzer</option>
-                <option value="Nanopore">Nanopore - SmidgION</option>
-                <option value="Nanopore">Nanopore - Flongle</option>
-                <option value="Nanopore">Nanopore - MinION</option>
-                <option value="Nanopore">Nanopore - GridION</option>
-                <option value="Nanopore">Nanopore - PromethION</option>
-            </select>
-        </fieldset>
+    <fieldset>
+      <label for="sequencingTechnology">Sequencing technology</label>
+      <span>What was the technology used for sequencing? This should be in the communication with your provider.</span>
+      <select id="sequencingTechnology" name="sequencingTechnology" required>
+        <option value=""></option>
+        <option value="MinION">MinION</option>
+        <option value="GridION">GridION</option>
+        <option value="PromethION">PromethION</option>
+        <option value="454 GS">454 GS</option>
+        <option value="454 GS 20">454 GS 20</option>
+        <option value="454 GS FLX">454 GS FLX</option>
+        <option value="454 GS FLX+">454 GS FLX+</option>
+        <option value="454 GS FLX Titanium">454 GS FLX Titanium</option>
+        <option value="454 GS Junior">454 GS Junior</option>
+        <option value="Illumina Genome Analyzer">Illumina Genome Analyzer</option>
+        <option value="Illumina Genome Analyzer II">Illumina Genome Analyzer II</option>
+        <option value="Illumina Genome Analyzer IIx">Illumina Genome Analyzer IIx</option>
+        <option value="Illumina HiSeq 1000">Illumina HiSeq 1000</option>
+        <option value="Illumina HiSeq 1500">Illumina HiSeq 1500</option>
+        <option value="Illumina HiSeq 2000">Illumina HiSeq 2000</option>
+        <option value="Illumina HiSeq 2500">Illumina HiSeq 2500</option>
+        <option value="Illumina HiSeq 3000">Illumina HiSeq 3000</option>
+        <option value="Illumina HiSeq 4000">Illumina HiSeq 4000</option>
+        <option value="Illumina HiScanSQ">Illumina HiScanSQ</option>
+        <option value="Illumina NextSeq 500">Illumina NextSeq 500</option>
+        <option value="Illumina NextSeq 550">Illumina NextSeq 550</option>
+        <option value="Illumina NovaSeq 6000">Illumina NovaSeq 6000</option>
+        <option value="Illumina HiSeq X Five">Illumina HiSeq X Five</option>
+        <option value="Illumina HiSeq X Ten">Illumina HiSeq X Ten</option>
+        <option value="Illumina MiSeq">Illumina MiSeq</option>
+        <option value="Illumina MiniSeq">Illumina MiniSeq</option>
+        <option value="AB SOLiD System">AB SOLiD System</option>
+        <option value="AB SOLiD System 2.0">AB SOLiD System 2.0</option>
+        <option value="AB SOLiD System 3.0">AB SOLiD System 3.0</option>
+        <option value="AB SOLiD 3 Plus System">AB SOLiD 3 Plus System</option>
+        <option value="AB SOLiD 4 System">AB SOLiD 4 System</option>
+        <option value="AB SOLiD 4hq System">AB SOLiD 4hq System</option>
+        <option value="AB SOLiD PI System">AB SOLiD PI System</option>
+        <option value="AB 5500 Genetic Analyzer">AB 5500 Genetic Analyzer</option>
+        <option value="AB 5500xl Genetic Analyzer">AB 5500xl Genetic Analyzer</option>
+        <option value="AB 5500xl-W Genetic Analysis System">AB 5500xl-W Genetic Analysis System</option>
+        <option value="Ion Torrent PGM">Ion Torrent PGM</option>
+        <option value="Ion Torrent Proton">Ion Torrent Proton</option>
+        <option value="Ion Torrent S5">Ion Torrent S5</option>
+        <option value="Ion Torrent S5 XL">Ion Torrent S5 XL</option>
+        <option value="Complete Genomics">Complete Genomics</option>
+        <option value="PacBio RS">PacBio RS</option>
+        <option value="PacBio RS II">PacBio RS II</option>
+        <option value="Sequel">Sequel</option>
+        <option value="AB 3730xL Genetic Analyzer">AB 3730xL Genetic Analyzer</option>
+        <option value="AB 3730 Genetic Analyzer">AB 3730 Genetic Analyzer</option>
+        <option value="AB 3500xL Genetic Analyzer">AB 3500xL Genetic Analyzer</option>
+        <option value="AB 3500 Genetic Analyzer">AB 3500 Genetic Analyzer</option>
+        <option value="AB 3130xL Genetic Analyzer">AB 3130xL Genetic Analyzer</option>
+        <option value="AB 3130 Genetic Analyzer">AB 3130 Genetic Analyzer</option>
+        <option value="AB 310 Genetic Analyzer">AB 310 Genetic Analyzer</option>
+        <option value="BGISEQ-500">BGISEQ-500</option>
+      </select>
+    </fieldset>
 
-        <fieldset>
-            <label for="librarySource">Library source</label>
-            <span>From what kind of material was your library prepared?</span>
-            <select id="librarySource" name="librarySource" class="textBox" required>
-                <option value=""></option>
-                <option value="GENOMIC">GENOMIC</option>
-                <option value="TRANSCRIPTOMIC">TRANSCRIPTOMIC</option>
-                <option value="METAGENOMIC">METAGENOMIC</option>
-                <option value="METATRANSCRIPTOMIC">METATRANSCRIPTOMIC</option>
-                <option value="SYNTHETIC">SYNTHETIC</option>
-                <option value="VIRAL RNA">VIRAL RNA</option>
-                <option value="OTHER">OTHER</option>
-            </select>
-        </fieldset>
+    <fieldset>
+      <label for="librarySource">Library source</label>
+      <span>From what kind of material was your library prepared?</span>
+      <select id="librarySource" name="librarySource" class="textBox" required>
+        <option value=""></option>
+        <option value="GENOMIC">GENOMIC</option>
+        <option value="TRANSCRIPTOMIC">TRANSCRIPTOMIC</option>
+        <option value="METAGENOMIC">METAGENOMIC</option>
+        <option value="METATRANSCRIPTOMIC">METATRANSCRIPTOMIC</option>
+        <option value="SYNTHETIC">SYNTHETIC</option>
+        <option value="VIRAL RNA">VIRAL RNA</option>
+        <option value="OTHER">OTHER</option>
+      </select>
+    </fieldset>
 
-        <fieldset>
-            <label for="librarySelection">Library selection</label>
-            <span>Which protocol was used when creating the library?</span>
-            <select id="librarySelection" name="librarySelection" class="textBox" required>
-                <option value=""></option>
-                <option value="RANDOM">RANDOM</option>
-                <option value="PCR">PCR</option>
-                <option value="RANDOM PCR">RANDOM PCR</option>
-                <option value="RT-PCR">RT-PCR</option>
-                <option value="HMPR">HMPR</option>
-                <option value="MF">MF</option>
-                <option value="repeat fractionation">repeat fractionation</option>
-                <option value="size fractionation">size fractionation</option>
-                <option value="MSLL">MSLL</option>
-                <option value="cDNA">cDNA</option>
-                <option value="ChIP">ChIP</option>
-                <option value="MNase">MNase</option>
-                <option value="DNase">DNase</option>
-                <option value="Hybrid Selection">Hybrid Selection</option>
-                <option value="Reduced Representation">Reduced Representation</option>
-                <option value="Restriction Digest">Restriction Digest</option>
-                <option value="5-methylcytidine antibody">5-methylcytidine antibody</option>
-                <option value="MBD2 protein methyl-CpG binding domain">MBD2 protein methyl-CpG binding domain</option>
-                <option value="CAGE">CAGE</option>
-                <option value="RACE">RACE</option>
-                <option value="MDA">MDA</option>
-                <option value="padlock probes capture method">padlock probes capture method</option>
-                <option value="Oligo-dT">Oligo-dT</option>
-                <option value="Inverse rRNA selection">Inverse rRNA selection</option>
-                <option value="other">other</option>
-                <option value="unspecified">unspecified</option>
-            </select>
-        </fieldset>
+    <fieldset>
+      <label for="librarySelection">Library selection</label>
+      <span>Which protocol was used when creating the library?</span>
+      <select id="librarySelection" name="librarySelection" class="textBox" required>
+        <option value=""></option>
+        <option value="RANDOM">RANDOM</option>
+        <option value="PCR">PCR</option>
+        <option value="RANDOM PCR">RANDOM PCR</option>
+        <option value="RT-PCR">RT-PCR</option>
+        <option value="HMPR">HMPR</option>
+        <option value="MF">MF</option>
+        <option value="repeat fractionation">repeat fractionation</option>
+        <option value="size fractionation">size fractionation</option>
+        <option value="MSLL">MSLL</option>
+        <option value="cDNA">cDNA</option>
+        <option value="ChIP">ChIP</option>
+        <option value="MNase">MNase</option>
+        <option value="DNase">DNase</option>
+        <option value="Hybrid Selection">Hybrid Selection</option>
+        <option value="Reduced Representation">Reduced Representation</option>
+        <option value="Restriction Digest">Restriction Digest</option>
+        <option value="5-methylcytidine antibody">5-methylcytidine antibody</option>
+        <option value="MBD2 protein methyl-CpG binding domain">MBD2 protein methyl-CpG binding domain</option>
+        <option value="CAGE">CAGE</option>
+        <option value="RACE">RACE</option>
+        <option value="MDA">MDA</option>
+        <option value="padlock probes capture method">padlock probes capture method</option>
+        <option value="Oligo-dT">Oligo-dT</option>
+        <option value="Inverse rRNA selection">Inverse rRNA selection</option>
+        <option value="ChIP-Seq">ChIP-Seq</option>
+        <option value="other">other</option>
+        <option value="unspecified">unspecified</option>
+      </select>
+    </fieldset>
 
-        <fieldset>
-            <label for="libraryStrategy">Library strategy</label>
-            <span>What kind of sequencing experiment was performed?</span>
-            <select id="libraryStrategy" name="libraryStrategy" class="textBox" required>
-                <option value=""></option>
-                <option value="WGS">WGS</option>
-                <option value="WGA">WGA</option>
-                <option value="WXS">WXS</option>
-                <option value="RNA-Seq">RNA-Seq</option>
-                <option value="miRNA-Seq">miRNA-Seq</option>
-                <option value="ncRNA-Seq">ncRNA-Seq</option>
-                <option value="WCS">WCS</option>
-                <option value="CLONE">CLONE</option>
-                <option value="POOLCLONE">POOLCLONE</option>
-                <option value="AMPLICON">AMPLICON</option>
-                <option value="CLONEEND">CLONEEND</option>
-                <option value="FINISHING">FINISHING</option>
-                <option value="ChIP-Seq">ChIP-Seq</option>
-                <option value="MNase-Seq">MNase-Seq</option>
-                <option value="DNase-Hypersensitivity">DNase-Hypersensitivity</option>
-                <option value="Bisulfite-Seq">Bisulfite-Seq</option>
-                <option value="EST">EST</option>
-                <option value="FL-cDNA">FL-cDNA</option>
-                <option value="CTS">CTS</option>
-                <option value="MRE-Seq">MRE-Seq</option>
-                <option value="MeDIP-Seq">MeDIP-Seq</option>
-                <option value="MBD-Seq">MBD-Seq</option>
-                <option value="Tn-Seq">Tn-Seq</option>
-                <option value="VALIDATION">VALIDATION</option>
-                <option value="FAIRE-seq">FAIRE-seq</option>
-                <option value="SELEX">SELEX</option>
-                <option value="RIP-Seq">RIP-Seq</option>
-                <option value="ChIA-PET">ChIA-PET</option>
-                <option value="RAD-Seq">RAD-Seq</option>
-                <option value="OTHER">OTHER</option>
-            </select>
-        </fieldset>
+    <fieldset>
+      <label for="libraryStrategy">Library strategy</label>
+      <span>What kind of sequencing experiment was performed?</span>
+      <select id="libraryStrategy" name="libraryStrategy" class="textBox" required>
+        <option value=""></option>
+        <option value="WGS">WGS</option>
+        <option value="WGA">WGA</option>
+        <option value="WXS">WXS</option>
+        <option value="RNA-Seq">RNA-Seq</option>
+        <option value="ssRNA-seq">ssRNA-seq</option>
+        <option value="miRNA-Seq">miRNA-Seq</option>
+        <option value="ncRNA-Seq">ncRNA-Seq</option>
+        <option value="FL-cDNA">FL-cDNA</option>
+        <option value="EST">EST</option>
+        <option value="Hi-C">Hi-C</option>
+        <option value="ATAC-seq">ATAC-seq</option>
+        <option value="WCS">WCS</option>
+        <option value="RAD-Seq">RAD-Seq</option>
+        <option value="CLONE">CLONE</option>
+        <option value="POOLCLONE">POOLCLONE</option>
+        <option value="AMPLICON">AMPLICON</option>
+        <option value="CLONEEND">CLONEEND</option>
+        <option value="FINISHING">FINISHING</option>
+        <option value="ChIP-Seq">ChIP-Seq</option>
+        <option value="MNase-Seq">MNase-Seq</option>
+        <option value="DNase-Hypersensitivity">DNase-Hypersensitivity</option>
+        <option value="Bisulfite-Seq">Bisulfite-Seq</option>
+        <option value="CTS">CTS</option>
+        <option value="MRE-Seq">MRE-Seq</option>
+        <option value="MeDIP-Seq">MeDIP-Seq</option>
+        <option value="MBD-Seq">MBD-Seq</option>
+        <option value="Tn-Seq">Tn-Seq</option>
+        <option value="VALIDATION">VALIDATION</option>
+        <option value="FAIRE-seq">FAIRE-seq</option>
+        <option value="SELEX">SELEX</option>
+        <option value="RIP-Seq">RIP-Seq</option>
+        <option value="ChIA-PET">ChIA-PET</option>
+        <option value="Synthetic-Long-Read">Synthetic-Long-Read</option>
+        <option value="Targeted-Capture">Targeted-Capture</option>
+        <option value="Tethered Chromatin Conformation Capture">Tethered Chromatin Conformation Capture</option>
+        <option value="OTHER">OTHER</option>
 
-        <fieldset>
-            <label for="insertSize">Insert size</label>
-            <span>What is the average insert size covered by your read pairs? This should be in the communication with your provider.</span>
-            <input type="number" id="insertSize" name="insertSize" min="0" required>
-        </fieldset>
+      </select>
+    </fieldset>
 
-        <fieldset class="file-group" id="additionalDataDiv">
-            <label>Supporting files</label>
-            <span>Please upload any documentation obtained from the sequencing provider, including copies of the communication. If the documentation pertains to the whole project or only to a certain sample, then please add it there instead.</span>
-            <div id="additionalData"></div>
-        </fieldset>
+    <fieldset>
+      <label for="insertSize">Insert size</label>
+      <span>What is the average insert size covered by your read pairs? This should be in the communication with your provider.</span>
+      <input type="number" id="insertSize" name="insertSize" min="0" required>
+    </fieldset>
 
-        <fieldset id="md5Inputs" class="file-group">
-            <label>Raw read data</label>
-            <div id="filesRoot"></div>
-        </fieldset>
+    <fieldset class="file-group" id="additionalDataDiv">
+      <label>Supporting files</label>
+      <span>Please upload any documentation obtained from the sequencing provider, including copies of the communication. If the documentation pertains to the whole project or only to a certain sample, then please add it there instead.</span>
+      <div id="additionalData"></div>
+    </fieldset>
 
-        <fieldset>
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox" id="submissionToGalaxy" name="submissionToGalaxy"> Add data to <a
-                            href="http://galaxy.tsl.ac.uk" target="_blank">Galaxy
-                    </a>
-                </label>
-                <span>This notifies the Bioinformatics Team to make your data available on the TSL Galaxy Server. We will get in touch with you.</span>
-            </div>
-        </fieldset>
+    <fieldset id="md5Inputs" class="file-group">
+      <label>Raw read data</label>
+      <div id="filesRoot"></div>
+    </fieldset>
 
-        <button type="submit" class="button success" id="socketUpload">Submit</button>
-    </form>
+    <fieldset>
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" id="submissionToGalaxy" name="submissionToGalaxy"> Add data to <a
+          href="http://galaxy.tsl.ac.uk" target="_blank">Galaxy
+        </a>
+        </label>
+        <span>This notifies the Bioinformatics Team to make your data available on the TSL Galaxy Server. We will get in touch with you.</span>
+      </div>
+    </fieldset>
 
-    <script>
+    <button type="submit" class="button success" id="socketUpload">Submit</button>
+  </form>
 
-        $(function () {
+  <script>
 
-            var additional = document.getElementById('additionalData');
-            var addtionalLoader = fileUploader(additional, false, 'additional').setMin(0)
+      $(function () {
 
-            var FASTQ_TYPES = ['.fastq', '.fq', '.fastq.gz', '.fq.gz', '.gz'];
-            var PACBIO_TYPES = ['.bax.h5', '.bas.h5', '.metadata.xml'];
+          var additional = document.getElementById('additionalData');
+          var addtionalLoader = fileUploader(additional, false, 'additional').setMin(0)
 
-            var md5files = document.getElementById('filesRoot');
-            var md5Loader = fileUploader(md5files, true, 'file', 'md5').setMin(0).setAcceptedTypes(FASTQ_TYPES);
+          var FASTQ_TYPES = ['.fastq', '.fq', '.fastq.gz', '.fq.gz', '.gz'];
+          var PACBIO_TYPES = ['.bax.h5', '.bas.h5', '.metadata.xml'];
 
-            var $libType = $('#libraryType');
+          var md5files = document.getElementById('filesRoot');
+          var md5Loader = fileUploader(md5files, true, 'file', 'md5').setMin(0).setAcceptedTypes(FASTQ_TYPES);
 
-            function updateType() {
-            var type = $libType.val();
-            console.log(type)
-                if (type === 'unpaired') {
-                       	md5Loader.state.pacBio = false;
-                       	md5Loader.state.paired = false;
-                       	md5Loader.state.acceptedTypes = FASTQ_TYPES;
-                } else if (type === 'pacbio') {
-                      md5Loader.state.pacBio = true;
-                      md5Loader.state.paired = false;
-                      md5Loader.state.acceptedTypes = PACBIO_TYPES;
-               	} else if(type === 'nanopore'){
-                       	md5Loader.state.pacBio = false;
-                       	md5Loader.state.paired = false;
-                       	md5Loader.state.acceptedTypes = FASTQ_TYPES;
-                } else {
-                       	md5Loader.state.pacBio = false;
-                       	md5Loader.state.paired = true;
-                       	md5Loader.state.acceptedTypes = FASTQ_TYPES;
-               	}
-                md5Loader.setState({})
-            }
+          var $libType = $('#libraryType');
 
-            $libType.on('change', function () {
-                updateType();
-            });
+          function updateType() {
+              var type = $libType.val();
+              console.log(type)
+              if (type === 'unpaired') {
+                  md5Loader.state.pacBio = false;
+                  md5Loader.state.paired = false;
+                  md5Loader.state.acceptedTypes = FASTQ_TYPES;
+              } else if (type === 'pacbio') {
+                  md5Loader.state.pacBio = true;
+                  md5Loader.state.paired = false;
+                  md5Loader.state.acceptedTypes = PACBIO_TYPES;
+              } else if (type === 'nanopore') {
+                  md5Loader.state.pacBio = false;
+                  md5Loader.state.paired = false;
+                  md5Loader.state.acceptedTypes = FASTQ_TYPES;
+              } else {
+                  md5Loader.state.pacBio = false;
+                  md5Loader.state.paired = true;
+                  md5Loader.state.acceptedTypes = FASTQ_TYPES;
+              }
+              md5Loader.setState({})
+          }
 
-            updateType();
-        })
-    </script>
+          $libType.on('change', function () {
+              updateType();
+          });
+
+          updateType();
+      })
+  </script>
 
 </div>
 
