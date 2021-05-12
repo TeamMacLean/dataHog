@@ -36,7 +36,7 @@
     "morgan": "^1.5.3",
     "multer": "^0.1.8",
     "node-schedule": "^0.6.0",
-    "nodemailer": "^1.10.0",
+    "nodemailer": "^6.4.16",
     "nodemailer-smtp-transport": "^1.0.4",
     "passport": "^0.3.2",
     "passport-ldapauth": "^0.4.0",
