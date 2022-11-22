@@ -43,7 +43,7 @@
     "request": "^2.64.0",
     "rimraf": "^2.4.3",
     "session-rethinkdb": "^1.0.8",
-    "socket.io": "^1.4.4",
+    "socket.io": "^4.5.3",
     "thinky": "^2.2.1",
     "xml2js": "^0.4.16"
   },
